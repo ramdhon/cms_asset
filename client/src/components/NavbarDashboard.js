@@ -28,12 +28,12 @@ function NavbarHeader(props) {
             <Container fluid>
                 <Row className='shadow-sm'>
                     <Col lg={2} style={{ textAlign:'center', background:'#00b894' }} className='d-flex align-items-center justify-content-center'>
-                        <div className="LogoDashboard"> <Link to="/dashboard"><h4 style={{  color:'white', verticalAlign:'center', fontWeight:'200', letterSpacing:'2px'}}><b>SULAP</b>-JS</h4> </Link></div>
+                        <div className="LogoDashboard"> <Link to="/dashboard"><h4 style={{  color:'white', verticalAlign:'center', fontWeight:'200', letterSpacing:'2px'}}><b>Trans</b>-Pacific</h4> </Link></div>
                     </Col>
                     <Col lg={10}>
                         <Navbar>
                             <Nav className='d-flex align-items-center'>
-                                <h5> <b> Helloo, </b> { decode ? decode.name : null } </h5>
+                                <h5> <b> Welcome, </b> { decode ? decode.name : null } </h5>
                             </Nav>
                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                             <Navbar.Collapse id="basic-navbar-nav">
