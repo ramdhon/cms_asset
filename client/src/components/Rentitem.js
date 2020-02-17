@@ -10,7 +10,7 @@ function Rentitem (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"daily":"number","weekly":"number","monthly":"number","anually":"number","currency":"string","tax":"number","discount":"number","carid":"string"}
+    const stateType ={"daily":"number","weekly":"number","monthly":"number","anually":"number","currency":"string","tax":"number","discount":"number","carId":"string"}
     const [ search, setSearch ] = useState('')
     const [ daily, setDaily] = useState(0) 
     const [ weekly, setWeekly] = useState(0) 
@@ -19,7 +19,7 @@ function Rentitem (props) {
     const [ currency, setCurrency] = useState('') 
     const [ tax, setTax] = useState(0) 
     const [ discount, setDiscount] = useState(0) 
-    const [ carid, setCarid] = useState('') 
+    const [ carId, setCarId] = useState('') 
     
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
@@ -27,9 +27,9 @@ function Rentitem (props) {
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
-    const funcLoop = [setDaily,setWeekly,setMonthly,setAnually,setCurrency,setTax,setDiscount,setCarid] 
+    const funcLoop = [setDaily,setWeekly,setMonthly,setAnually,setCurrency,setTax,setDiscount,setCarId] 
 
-    const stateObj = { daily,weekly,monthly,anually,currency,tax,discount,carid } 
+    const stateObj = { daily,weekly,monthly,anually,currency,tax,discount,carId } 
 
 
     //toast

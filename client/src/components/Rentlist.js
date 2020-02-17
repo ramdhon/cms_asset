@@ -10,7 +10,7 @@ function Rentlist (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"customer":"string","type":"string","startperiod":"string","endperiod":"string","rentitemid":"string"}
+    const stateType ={"customer":"string","type":"string","startPeriod":"string","endPeriod":"string","rentItemId":"string"}
     const [ search, setSearch ] = useState('')
     const [ customer, setCustomer] = useState('') 
     const [ type, setType] = useState('') 

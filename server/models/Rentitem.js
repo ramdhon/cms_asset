@@ -8,7 +8,9 @@ const rentitemSchema = new Schema({
     currency: { type: String },
     tax: { type: Number },
     discount: { type: Number },
-    carId: { type: String },
+    carId: {
+        type: Schema.Types.ObjectId, ref: 'Car'
+    },
     //sulap-add-models
     //please do not delete comment above
     created: {
