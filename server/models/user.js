@@ -51,7 +51,6 @@ const UserSchema = new Schema({
 });
 
 UserSchema.pre('save', function (next) {
-    console.log('this',this)
     if (this.password) {
         this.password = encrypt(this.password);
     }
