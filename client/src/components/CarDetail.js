@@ -3,7 +3,7 @@ import { Row, Col, Table } from 'react-bootstrap';
 
 function CarDetail(props) {
     
-    const modelInfo = {"Brand":"String","Type":"String","Year":"Number","Policeno":"String","Vin":"String","Price":"Number","Currency":"String","Status":"String"} 
+    const modelInfo = {"Brand":"String","Type":"String","Year":"Number","PoliceNo":"String","Vin":"String","Price":"Number","Currency":"String","Status":"String"} 
 
 
     return (

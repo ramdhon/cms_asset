@@ -6,9 +6,9 @@ import { server } from '../api/database'
 export default function RowTableNewModel(props) {
 
     let { value, index, key_model, type } = props
-    key_model = key_model.map( el=> {
-        return el.toLowerCase()
-    })
+    // key_model = key_model.map( el=> {
+    //     return el.toLowerCase()
+    // })
 
     function showModalImage(e, el){
         e.preventDefault()

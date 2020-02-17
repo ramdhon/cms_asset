@@ -10,12 +10,12 @@ function Car (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","type":"string","year":"number","policeno":"string","vin":"string","price":"number","currency":"string","status":"string"}
+    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","vin":"string","price":"number","currency":"string","status":"string"}
     const [ search, setSearch ] = useState('')
     const [ brand, setBrand] = useState('') 
     const [ type, setType] = useState('') 
     const [ year, setYear] = useState(0) 
-    const [ policeno, setPoliceno] = useState('') 
+    const [ policeNo, setPoliceNo] = useState('') 
     const [ vin, setVin] = useState('') 
     const [ price, setPrice] = useState(0) 
     const [ currency, setCurrency] = useState('') 
@@ -27,9 +27,9 @@ function Car (props) {
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
-    const funcLoop = [setBrand,setType,setYear,setPoliceno,setVin,setPrice,setCurrency,setStatus] 
+    const funcLoop = [setBrand,setType,setYear,setPoliceNo,setVin,setPrice,setCurrency,setStatus] 
 
-    const stateObj = { brand,type,year,policeno,vin,price,currency,status } 
+    const stateObj = { brand,type,year,policeNo,vin,price,currency,status } 
 
 
     //toast
