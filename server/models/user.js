@@ -5,7 +5,7 @@ const { encrypt } = require('../helpers/bcrypt');
 const UserSchema = new Schema({
     name: {
         type: String,
-        required: [true, 'Username is required']
+        required: [true, 'Full name is required']
     },
     email: {
         type: String,
@@ -51,7 +51,10 @@ const UserSchema = new Schema({
 });
 
 UserSchema.pre('save', function (next) {
-    this.password = encrypt(this.password);
+    console.log('this',this)
+    if (this.password) {
+        this.password = encrypt(this.password);
+    }
     next();
 });
 

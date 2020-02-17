@@ -22,6 +22,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}))
 
 app.use('/uploads',express.static('uploads'))
+
+app.get('/', (req, res, next) => {
+    res.json({ message: `Welcome to ${process.env.COMPANY}` })
+})
+
 app.use('/', router)
 
 app.use(errorHandler);
