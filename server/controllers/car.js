@@ -1,4 +1,4 @@
-const Car = require('../models/Car')
+const Car = require('../models/Car');
 class CarController {
     static create(req,res, next) {
         let createObj = {}

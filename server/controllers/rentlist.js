@@ -1,4 +1,4 @@
-const Rentlist = require('../models/Rentlist')
+const Rentlist = require('../models/Rentlist');
 class RentlistController {
     static create(req,res, next) {
         let createObj = {}

@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const rentlistSchema = new Schema({
-    customer: { type: String }, 
- type: { type: String }, 
- startPeriod: { type: String }, 
- endPeriod: { type: String }, 
- rentItemId: { type: String }, 
- //sulap-add-models
+    customer: { type: String },
+    type: { type: String },
+    startPeriod: { type: String },
+    endPeriod: { type: String },
+    rentItemId: { type: String },
+    //sulap-add-models
     //please do not delete comment above
     created: {
         type: Date,

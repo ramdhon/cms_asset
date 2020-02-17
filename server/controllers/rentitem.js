@@ -1,4 +1,4 @@
-const Rentitem = require('../models/Rentitem')
+const Rentitem = require('../models/Rentitem');
 class RentitemController {
     static create(req,res, next) {
         let createObj = {}

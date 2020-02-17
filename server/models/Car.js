@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const carSchema = new Schema({
-    brand: { type: String }, 
- type: { type: String }, 
- year: { type: Number }, 
- policeNo: { type: String }, 
- vin: { type: String }, 
- price: { type: Number }, 
- currency: { type: String }, 
- status: { type: String }, 
- //sulap-add-models
+    brand: { type: String },
+    type: { type: String },
+    year: { type: Number },
+    policeNo: { type: String },
+    vin: { type: String },
+    price: { type: Number },
+    currency: { type: String },
+    status: { type: String },
+    //sulap-add-models
     //please do not delete comment above
     created: {
         type: Date,
