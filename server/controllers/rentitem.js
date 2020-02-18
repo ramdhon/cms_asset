@@ -1,4 +1,5 @@
 const Rentitem = require('../models/Rentitem');
+const { Types } = require('mongoose');
 class RentitemController {
     static create(req,res, next) {
         let createObj = {}
@@ -80,7 +81,7 @@ class RentitemController {
             let search = new RegExp(req.query.search)
             query = { $or: [
                 {currency: { $regex: search, $options: 'i' }}, 
-                {carId: { $regex: search, $options: 'i' }}, 
+                {carId: Types.ObjectId.isValid(req.query.search) ? req.query.search : undefined}, 
                 //sulap-add-query
             ]}
         }

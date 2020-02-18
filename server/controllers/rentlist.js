@@ -1,4 +1,5 @@
 const Rentlist = require('../models/Rentlist');
+const { Types } = require('mongoose');
 class RentlistController {
     static create(req,res, next) {
         let createObj = {}
@@ -66,21 +67,22 @@ class RentlistController {
     static findAll(req,res, next) {
         //add query above, alter below as needed
         let query = {};
-        const { populateUser, populateCar, populateItem } = req.query
+        const { decoded } = req;
+        const { populateUser, populateCar, populateItem, full } = req.query
 
         if(req.query.search) {
             let search = new RegExp(req.query.search)
             query = { $or: [
                 {customer: { $regex: search, $options: 'i' }}, 
                 {type: { $regex: search, $options: 'i' }}, 
-                {startPeriod: { $regex: search, $options: 'i' }}, 
-                {endPeriod: { $regex: search, $options: 'i' }}, 
-                {rentItemId: { $regex: search, $options: 'i' }}, 
+                // {startPeriod: new Date(req.query.search)},
+                // {endPeriod: new Date(req.query.search)},
+                {rentItemId: Types.ObjectId.isValid(req.query.search) ? req.query.search : undefined}, 
                 //sulap-add-query
             ]}
         }
 
-        Rentlist.find(query)
+        Rentlist.find(full !== 'true' ? { ...query, refId: decoded._id } : query)
             .populate({
                 path: populateUser === 'true' ? 'refId' : '',
                 select: populateUser && ['_id', 'name', 'email']
