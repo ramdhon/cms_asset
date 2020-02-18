@@ -7,7 +7,7 @@ class AuthController {
     const { name, email, password } = req.body;
     
     User
-      .create({ name, email, password, role: 'admin' })
+      .create({ name, email, password, role: 'admin', created: new Date(), updated: new Date(), lastLogin: null })
       .then(newUser => {
         res
           .status(201)
@@ -25,7 +25,7 @@ class AuthController {
     const { name, email, password } = req.body;
 
     User
-      .create({ name, email, password, role: 'user' })
+      .create({ name, email, password, role: 'user', created: new Date(), updated: new Date(), lastLogin: null })
       .then(newUser => {
         res
           .status(201)
@@ -41,7 +41,6 @@ class AuthController {
 
   static login(req, res, next) {
     const { email, password } = req.body;
-
     User
       .findOne({
         email
@@ -61,6 +60,10 @@ class AuthController {
               email: foundUser.email,
               role: foundUser.role
             });
+
+            const newDate = new Date();
+            foundUser.lastLogin = newDate;
+            foundUser.update({ lastLogin: newDate }).then((info) => console.log('LOGGED IN', { foundUser, info }));
 
             res
               .status(200)
@@ -86,7 +89,7 @@ class AuthController {
     const { name, email, password, role } = req.body;
 
     User
-      .create({ name, email, password, role })
+      .create({ name, email, password, role, created: new Date(), updated: new Date(), lastLogin: null })
       .then(newUser => {
         res
           .status(201)
@@ -153,12 +156,15 @@ class AuthController {
     user.name = name || user.name;
     user.email = email || user.email;
     user.role = role || user.role;
+    const newDate = new Date();
+    user.updated = newDate;
     
     user
       .update({
         name: name || user.name,
         email: email || user.email,
-        role: role || user.role
+        role: role || user.role,
+        updated: newDate
       })
       .then(info => {
         res
@@ -176,7 +182,8 @@ class AuthController {
     const { user } = req;
 
     user.password = password;
-    
+    user.updated = new Date();
+
     user
       .save()
       .then(updatedUser => {

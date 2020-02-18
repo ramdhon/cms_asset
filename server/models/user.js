@@ -47,6 +47,15 @@ const UserSchema = new Schema({
     role: {
         type: String,
         required: [true, 'Role is required']
+    },
+    created: {
+        type: Date,
+    },
+    updated: {
+        type: Date,
+    },
+    lastLogin: {
+        type: Date,
     }
 });
 
