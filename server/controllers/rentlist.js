@@ -41,6 +41,20 @@ class RentlistController {
         const { id } = req.params
 
         Rentlist.findOne({_id: id})
+            .populate({
+                path: populateUser === 'true' ? 'refId' : '',
+                select: populateUser && ['_id', 'name', 'email']
+            })
+            .populate({
+                path: populateItem === 'true' ? 'rentItemId' : '',
+                populate: [{
+                    path: populateUser === 'true' ? 'refId' : '',
+                    select: populateUser && ['_id', 'name', 'email']
+                },
+                {
+                    path: populateCar === 'true' ? 'carId' : ''
+                }]
+            })
             .then(rentlistFindOne => {
                 if(!rentlistFindOne) {
                     const err = {
