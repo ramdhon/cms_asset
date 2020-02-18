@@ -14,9 +14,9 @@ function Rentlist (props) {
     const [ search, setSearch ] = useState('')
     const [ customer, setCustomer] = useState('') 
     const [ type, setType] = useState('') 
-    const [ startperiod, setStartperiod] = useState('') 
-    const [ endperiod, setEndperiod] = useState('') 
-    const [ rentitemid, setRentitemid] = useState('') 
+    const [ startPeriod, setStartPeriod] = useState('') 
+    const [ endPeriod, setEndPeriod] = useState('') 
+    const [ rentItemId, setRentItemId] = useState('') 
     
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
@@ -24,9 +24,9 @@ function Rentlist (props) {
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
-    const funcLoop = [setCustomer,setType,setStartperiod,setEndperiod,setRentitemid] 
+    const funcLoop = [setCustomer,setType,setStartPeriod,setEndPeriod,setRentItemId] 
 
-    const stateObj = { customer,type,startperiod,endperiod,rentitemid } 
+    const stateObj = { customer,type,startPeriod,endPeriod,rentItemId } 
 
 
     //toast

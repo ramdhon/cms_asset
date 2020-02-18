@@ -17,21 +17,21 @@ mongoose.connect(mongoUrl, {useNewUrlParser:true})
     })
 
 //body parser
-app.use(cors())
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({extended: false}));
 
-app.use('/uploads',express.static('uploads'))
+app.use('/uploads',express.static('uploads'));
 
 app.get('/', (req, res, next) => {
-    res.json({ message: `Welcome to ${process.env.COMPANY}` })
+    res.json({ message: `Welcome to ${process.env.COMPANY}` });
 })
 
-app.use('/', router)
+app.use('/', router);
 
 app.use(errorHandler);
 
-module.exports = app
+module.exports = app;
 
 app.listen(PORT, () => {
     console.log('app is listening on port ,', PORT)

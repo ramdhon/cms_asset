@@ -5,31 +5,31 @@ module.exports = (req, res, next) => {
     const { id } = req.params;
 
     Rentlist.findById(id)
-    .populate({
-        path: 'refId',
-        // select: ['_id', 'name', 'email']
-    })
-    .then(Rentlist => {
-        if (!Rentlist) {
-            const err = {
-                status: 404,
-                message: 'data not found'
-            }
-            next(err);
-        } else {
-            if (Rentlist.refId._id != decoded._id) {
+        .populate({
+            path: 'refId',
+            // select: ['_id', 'name', 'email']
+        })
+        .then(Rentlist => {
+            if (!Rentlist) {
                 const err = {
-                    status: 401,
-                    message: 'unauthorized to access'
+                    status: 404,
+                    message: 'data not found'
                 }
                 next(err);
             } else {
-                req.Rentlist = Rentlist;
-                next();
+                if (Rentlist.refId._id != decoded._id) {
+                    const err = {
+                        status: 401,
+                        message: 'unauthorized to access'
+                    }
+                    next(err);
+                } else {
+                    req.Rentlist = Rentlist;
+                    next();
+                }
             }
-        }
-    })
-    .catch(err => {
-        next(err);
-    })
+        })
+        .catch(err => {
+            next(err);
+        })
 }
