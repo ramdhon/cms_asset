@@ -96,7 +96,7 @@ class RentlistController {
             ]}
         }
 
-        Rentlist.find(full !== 'true' ? { ...query, refId: decoded._id } : query)
+        Rentlist.find(!(full === 'true' || decoded.role === 'admin') ? { ...query, refId: decoded._id } : query)
             .populate({
                 path: populateUser === 'true' ? 'refId' : '',
                 select: populateUser && ['_id', 'name', 'email']

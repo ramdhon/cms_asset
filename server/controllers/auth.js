@@ -177,6 +177,7 @@ class AuthController {
       })
       .catch()
   }
+  
   static resetPassword(req, res, next) {
     const { password } = req.body;
     const { user } = req;
