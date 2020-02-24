@@ -1,10 +1,10 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
-const router = require('./routes');
-const PORT = 3000;
-const cors = require('cors')
 const mongoose = require('mongoose');
+const cors = require('cors')
+const app = express();
+const { PORT = 3000, COMPANY } = process.env;
+const router = require('./routes');
 const { mongoUrl } = require('./config');
 const errorHandler = require('./middlewares/errorhandler');
 
@@ -24,7 +24,7 @@ app.use(express.urlencoded({extended: false}));
 app.use('/uploads',express.static('uploads'));
 
 app.get('/', (req, res, next) => {
-    res.json({ message: `Welcome to ${process.env.COMPANY}` });
+    res.json({ message: `Welcome to ${COMPANY}` });
 })
 
 app.use('/', router);
