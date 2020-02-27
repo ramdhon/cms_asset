@@ -8,54 +8,62 @@ import RentitemDetail from './RentitemDetail'
         
 import Rentlist from './Rentlist' 
 import RentlistDetail from './RentlistDetail'
+
+import CarList from './CarList'
         
 //new-component
 
 function DashBoardContent(props) {
     const linkPath = props.match.params.id
 
-    if(linkPath === '') {
-        return ( null)
-     }  else if(linkPath === 'car') {
+    switch (linkPath) {
+        case '':
+            return null;
+        case 'car':
             return (
                 <>
-                    <Car  />
+                    <Car />
                 </>
-            )
-         } else if(linkPath === 'car-detail') {
+            );
+        case 'car-detail':
             return (
                 <>
                     <CarDetail />
                 </>
-            )
-         }else if(linkPath === 'rentitem') {
+            );
+        case 'rentitem':
             return (
                 <>
-                    <Rentitem  />
+                    <Rentitem />
                 </>
-            )
-         } else if(linkPath === 'rentitem-detail') {
+            );
+        case 'rentitem-detail':
             return (
                 <>
                     <RentitemDetail />
                 </>
-            )
-         }else if(linkPath === 'rentlist') {
+            );
+        case 'rentlist':
             return (
                 <>
-                    <Rentlist  />
+                    <Rentlist />
                 </>
-            )
-         } else if(linkPath === 'rentlist-detail') {
+            );
+        case 'rentlist-detail':
             return (
                 <>
                     <RentlistDetail />
                 </>
+            );
+        case 'car-list':
+            return (
+                <>
+                    <CarList />
+                </>
             )
-         }//add-new-route
-     else {
-         return null
-     }
+        default:
+            return null;
+    }
 }
 
 export default withRouter(DashBoardContent)
