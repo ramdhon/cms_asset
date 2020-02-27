@@ -125,7 +125,7 @@ function Car (props) {
         e.preventDefault()
         axios.get(`/cars?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
         .then(({ data }) =>{
-            setRowTable([...data.Cars])
+            setRowTable(data.Cars ? [...data.Cars] : [])
         })
         .catch(err => {
             setTextToast(err.response.data.message)

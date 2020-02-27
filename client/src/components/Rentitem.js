@@ -125,7 +125,7 @@ function Rentitem (props) {
         e.preventDefault()
         axios.get(`/rentitems?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
         .then(({ data }) =>{
-            setRowTable([...data.Rentitems])
+            setRowTable(data.Rentitems ? [...data.Rentitems] : [])
         })
         .catch(err => {
             setTextToast(err.response.data.message)

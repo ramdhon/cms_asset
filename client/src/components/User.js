@@ -121,7 +121,7 @@ function User (props) {
         e.preventDefault()
         axios.get(`/admin/users/?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
         .then(({ data }) =>{
-            setRowTable([...data.users])
+            setRowTable(data.users ? [...data.users] : [])
         })
         .catch(err => {
             setTextToast(err.response.data.message)

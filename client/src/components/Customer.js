@@ -122,7 +122,7 @@ function Customer (props) {
         e.preventDefault()
         axios.get(`/rentlists?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
         .then(({ data }) =>{
-            setRowTable([...data.Rentlists])
+            setRowTable(data.Rentlists ? [...data.Rentlists] : [])
         })
         .catch(err => {
             setTextToast(err.response.data.message)
