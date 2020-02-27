@@ -8,7 +8,9 @@ import ImageModal from './ImageModal'
 
 function User (props) {
 
+    const [ decode, setDecode ] = useState({});
     const [ showModal, setShowModal ] = useState(false)
+    const [ showModalPass, setShowModalPass ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
     const stateType ={"name":"string","email":"string","password":"string","role":"string"}
     const [ search, setSearch ] = useState('')
@@ -40,12 +42,19 @@ function User (props) {
             axios.patch(`/admin/users/${id}`, stateObj  ,{ headers:{ token:localStorage.getItem('token')}})
             .then(({data}) => {
                 let tempTable = rowTable.map((el,index) => {
-                    if(el._id === data.updatedCar._id){
-                        el = data.updatedCar
+                    if(el._id === data.updatedUser._id){
+                        el = data.updatedUser
                     }
                     return el;
                 })
                 setRowTable(tempTable)
+                setTextToast('data updated')
+                setStatusToast(true)
+                setShowToast(true)
+                if (decode._id === data.updatedUser._id) {
+                    localStorage.clear()
+                    props.history.push('/')
+                }
             })
             .catch(err =>{
                 setTextToast(err.response.data.message)
@@ -55,7 +64,7 @@ function User (props) {
         } else {
             axios.post('/admin/users', stateObj, { headers: { token:localStorage.getItem('token')}})
             .then(({data}) => {
-                setRowTable([...rowTable, data.newCar])
+                setRowTable([...rowTable, data.newUser])
                 setTextToast('success add')
                 setStatusToast(true)
                 setShowToast(true)
@@ -64,11 +73,37 @@ function User (props) {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
                 setShowToast(true)
-            })
-    
-            let tempRow = [ ...rowTable, stateObj ]
-            setRowTable(tempRow)
+            })    
         }
+        handleClose()
+    }
+
+    function resetPassword(e) {
+        e.preventDefault()
+
+        axios.patch(`/admin/users/${id}/resetPassword`, { password }  ,{ headers:{ token:localStorage.getItem('token')}})
+            .then(({data}) => {
+                let tempTable = rowTable.map((el,index) => {
+                    if(el._id === data.updatedUser._id){
+                        el = data.updatedUser
+                    }
+                    return el;
+                })
+                console.log('password resetted', decode._id === data.updatedUser._id)
+                setRowTable(tempTable)
+                setTextToast('password successfully reset')
+                setStatusToast(true)
+                setShowToast(true)
+                if (decode._id === data.updatedUser._id) {
+                    localStorage.clear()
+                    props.history.push('/')
+                }
+            })
+            .catch(err =>{
+                setTextToast(err.response.data.message)
+                setStatusToast(false)
+                setShowToast(true)
+            })
         handleClose()
     }
 
@@ -92,6 +127,7 @@ function User (props) {
 
     function handleClose() {
         setShowModal(false);
+        setShowModalPass(false);
         let tempKey = Object.keys(stateType)
         funcLoop.map((func,index) => {
             if(''+stateType[tempKey[index]] === 'boolean'){
@@ -111,6 +147,11 @@ function User (props) {
         })
         setId(rowData._id)
         handleShow()
+    }
+
+    function handleShowPass(id) {
+        setId(id);
+        setShowModalPass(true);
     }
 
     function handleShow() {
@@ -172,6 +213,13 @@ function User (props) {
 
     useEffect(() => {
         fetchData()
+        axios.get('/user/decode', { headers: { token:localStorage.getItem('token')}})
+            .then(({data}) => {
+                setDecode(data.decoded)
+            })
+            .catch(err=> {
+                console.log(err)
+            })
     }, [])
 
     return (
@@ -231,11 +279,21 @@ function User (props) {
                                         key_model={ Object.keys(stateType) } 
                                         edit={ editData } 
                                         delete={ deleteData }
+                                        handleShowPass={ handleShowPass }
                                         type={ stateType }
+                                        decode={ decode }
                                         />
                                     }) }
                                 </tbody>
                             </Table>
+                            {
+                                !rowTable.length &&
+                                <Row>
+                                    <Col className='d-flex justify-content-center'>
+                                        <h3> No Data </h3>
+                                    </Col>
+                                </Row>
+                            }
                         </div>
                     </div>
                 </Container>
@@ -285,11 +343,24 @@ function User (props) {
                             </Form.Group> )
                     }
                     else if ( !id || el !== 'password' ){
-                        return (
-                        <Form.Group key={ index } className='mt-2'>
-                            <Form.Label>Enter {el}</Form.Label>
-                            <Form.Control type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
-                        </Form.Group> )
+                        if ( el === 'role' ) {
+                            return (
+                                <Form.Group key={ index } className='mt-2'>
+                                    <Form.Label>Enter {el}</Form.Label>
+                                    <Form.Control as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
+                                        <option>admin</option>
+                                        <option>user</option>
+                                    </Form.Control>
+                                </Form.Group>
+                            )
+                        } else {
+                            return (
+                                <Form.Group key={ index } className='mt-2'>
+                                    <Form.Label>Enter {el}</Form.Label>
+                                    <Form.Control type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                                </Form.Group>
+                            )
+                        }
                     }
                     else {
                         return null
@@ -308,7 +379,33 @@ function User (props) {
                 </Row>
                 </Form>   
             </Modal.Body>
-        </Modal>                                   
+        </Modal>  
+
+        <Modal show={showModalPass} onHide={handleClose} size="lg">
+            <Modal.Header closeButton>
+                <Modal.Title>Reset Password</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <Form onSubmit={ resetPassword }>
+                {
+                    <Form.Group className='mt-2'>
+                        <Form.Label>New password</Form.Label>
+                        <Form.Control type="text" placeholder={`Enter password`} onChange={ e => setPassword( e.target.value)} value={ password }/>
+                    </Form.Group>
+                }
+                <Row className='mt-5'>
+                    <Col className='d-flex justify-content-end'>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button variant="primary" type='submit' className='ml-2'>
+                            Save Changes
+                        </Button>
+                    </Col>
+                </Row>
+                </Form>   
+            </Modal.Body>
+        </Modal>  
         </>
     );
 }

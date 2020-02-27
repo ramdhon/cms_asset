@@ -10,8 +10,8 @@ function App() {
   return (
     <>
         <Route path="/" exact component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
+        <PublicRoute path="/login" component={Login} />
+        <PublicRoute path="/register" component={Register} />
         <PrivateRoute path="/dashboard" component={Dashboard} />
     </>
   );
@@ -28,6 +28,25 @@ function PrivateRoute({ component: Component, ...rest }) {
           <Redirect
             to={{
               pathname: "/login",
+            }}
+          />
+        )
+      }
+    />
+  );
+}
+
+function PublicRoute({ component: Component, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+          !localStorage.getItem('token') ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/",
             }}
           />
         )

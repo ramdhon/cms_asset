@@ -66,9 +66,6 @@ function Customer (props) {
                 setStatusToast(false)
                 setShowToast(true)
             })
-    
-            let tempRow = [ ...rowTable, stateObj ]
-            setRowTable(tempRow)
         }
         handleClose()
     }
@@ -237,6 +234,14 @@ function Customer (props) {
                                     }) }
                                 </tbody>
                             </Table>
+                            {
+                                !rowTable.length &&
+                                <Row>
+                                    <Col className='d-flex justify-content-center'>
+                                        <h3> No Data </h3>
+                                    </Col>
+                                </Row>
+                            }
                         </div>
                     </div>
                 </Container>

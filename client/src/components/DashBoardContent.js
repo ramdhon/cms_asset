@@ -24,55 +24,55 @@ function DashBoardContent(props) {
         case 'car':
             return (
                 <>
-                    <Car />
+                    <Car {...props} />
                 </>
             );
         case 'car-detail':
             return (
                 <>
-                    <CarDetail />
+                    <CarDetail {...props} />
                 </>
             );
         case 'rentitem':
             return (
                 <>
-                    <Rentitem />
+                    <Rentitem {...props} />
                 </>
             );
         case 'rentitem-detail':
             return (
                 <>
-                    <RentitemDetail />
+                    <RentitemDetail {...props} />
                 </>
             );
         case 'rentlist':
             return (
                 <>
-                    <Rentlist />
+                    <Rentlist {...props} />
                 </>
             );
         case 'rentlist-detail':
             return (
                 <>
-                    <RentlistDetail />
+                    <RentlistDetail {...props} />
                 </>
             );
         case 'car-list':
             return (
                 <>
-                    <CarList />
+                    <CarList {...props} />
                 </>
             );
         case 'customers':
             return (
                 <>
-                    <Customer />
+                    <Customer {...props} />
                 </>
             );
         case 'users':
             return (
                 <>
-                    <User />
+                    <User {...props} />
                 </>
             );
         default:

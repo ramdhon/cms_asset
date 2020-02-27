@@ -52,7 +52,7 @@ export default function Login(props) {
             <Row className='justify-content-center'>
                 <Col lg={6}>
                     <div  style={ styles.headerForm }>
-                    <Link to='/'><h3 style={ styles.fontHeader }> SULAP-JS <b>LOGIN</b> </h3></Link>
+                    <Link to='/'><h3 style={ styles.fontHeader }> Trans-Pacific <b>LOGIN</b> </h3></Link>
                     </div>
                 </Col>
             </Row>
