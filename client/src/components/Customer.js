@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap'
-import RowTable from './RowTableModelCarList';
+import RowTable from './RowTableModelCustomer';
 import axios from '../api/database';
 import Toast from './ToastComponent';
 import { server } from '../api/database';
 import ImageModal from './ImageModal'
 
-function CarList (props) {
+function Customer (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","vin":"string","status":"string","daily":"number","weekly":"number","monthly":"number","anually":"number","currency":"string","tax":"number","discount":"number"}
+    const stateType ={"customer":"string","type":"string","startPeriod":"string","endPeriod":"string"}
     const [ search, setSearch ] = useState('')
-    const [ daily, setDaily] = useState(0) 
-    const [ weekly, setWeekly] = useState(0) 
-    const [ monthly, setMonthly] = useState(0) 
-    const [ anually, setAnually] = useState(0) 
-    const [ currency, setCurrency] = useState('') 
-    const [ tax, setTax] = useState(0) 
-    const [ discount, setDiscount] = useState(0) 
-    // const [ carId, setCarId] = useState('') 
+    const [ customer, setCustomer] = useState('') 
+    const [ type, setType] = useState('') 
+    const [ startPeriod, setStartPeriod] = useState('') 
+    const [ endPeriod, setEndPeriod] = useState('') 
+    const [ rentItemId, setRentItemId] = useState('') 
     
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
@@ -27,9 +24,9 @@ function CarList (props) {
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
-    const funcLoop = [setDaily,setWeekly,setMonthly,setAnually,setCurrency,setTax,setDiscount] 
+    const funcLoop = [setCustomer,setType,setStartPeriod,setEndPeriod,setRentItemId] 
 
-    const stateObj = { daily,weekly,monthly,anually,currency,tax,discount } 
+    const stateObj = { customer,type,startPeriod,endPeriod,rentItemId } 
 
 
     //toast
@@ -41,11 +38,11 @@ function CarList (props) {
         e.preventDefault()
        
         if(id){
-            axios.patch(`/rentitems/${id}`, stateObj  ,{ headers:{ token:localStorage.getItem('token')}})
+            axios.patch(`/rentlists/${id}`, stateObj  ,{ headers:{ token:localStorage.getItem('token')}})
             .then(({data}) => {
                 let tempTable = rowTable.map((el,index) => {
-                    if(el._id === data.updatedRentitem._id){
-                        el = data.updatedRentitem
+                    if(el._id === data.updatedRentlist._id){
+                        el = data.updatedRentlist
                     }
                     return el;
                 })
@@ -57,9 +54,9 @@ function CarList (props) {
                 setShowToast(true)
             })
         } else {
-            axios.post('/rentitems', stateObj, { headers: { token:localStorage.getItem('token')}})
+            axios.post('/rentlists', stateObj, { headers: { token:localStorage.getItem('token')}})
             .then(({data}) => {
-                setRowTable([...rowTable, data.newRentitem])
+                setRowTable([...rowTable, data.newRentlist])
                 setTextToast('success add')
                 setStatusToast(true)
                 setShowToast(true)
@@ -77,7 +74,7 @@ function CarList (props) {
     }
 
     function deleteData(id){
-        axios.delete(`/rentitems/${id}`, { headers: { token:localStorage.getItem('token')}})
+        axios.delete(`/rentlists/${id}`, { headers: { token:localStorage.getItem('token')}})
             .then(({data}) => {
                 let tempTable = rowTable.filter((el,index) => {
                     return el._id !== id
@@ -123,9 +120,9 @@ function CarList (props) {
     
     function submitSearch(e){
         e.preventDefault()
-        axios.get(`/rentitems?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
+        axios.get(`/rentlists?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
         .then(({ data }) =>{
-            setRowTable([...data.Rentitems])
+            setRowTable([...data.Rentlists])
         })
         .catch(err => {
             setTextToast(err.response.data.message)
@@ -152,10 +149,10 @@ function CarList (props) {
 
     function fetchData(){
         setLoading(true)
-        axios.get('/rentitems?populateCar=true', { headers: { token: localStorage.getItem('token')}})
+        axios.get('/rentlists', { headers: { token: localStorage.getItem('token')}})
         .then(({data}) => {
-            if(data.Rentitems){
-                setRowTable(data.Rentitems)
+            if(data.Rentlists){
+                setRowTable(data.Rentlists)
             }
         })
         .catch(err =>{
@@ -192,7 +189,7 @@ function CarList (props) {
                     <div style={{ padding:'30px' }}>
                         <Row>
                             <Col>
-                                <h3> <span style={{ color:'grey' }}>#</span> Car List </h3>
+                                <h3> <span style={{ color:'grey' }}>#</span> Customer </h3>
                             </Col>
                             <Col className='d-flex justify-content-end'>
                                 <Button variant='outline-primary' onClick={ handleShow }> <i className="fas fa-plus"></i> Add New </Button>
@@ -214,7 +211,7 @@ function CarList (props) {
                             </Row>
                         </Form>
                 
-                        <div className='shadow-sm mt-3' style={{ overflowX: 'scroll' }} >
+                        <div className='shadow-sm mt-3' style={{ overflowX: 'scroll' }}>
                             <Table striped bordered hover>
                                 <thead>
                                     <tr>
@@ -249,7 +246,7 @@ function CarList (props) {
 
         <Modal show={showModal} onHide={handleClose} size="lg">
             <Modal.Header closeButton>
-                <Modal.Title>Add Car List </Modal.Title>
+                <Modal.Title>Add Customer </Modal.Title>
             </Modal.Header>
             <Modal.Body>
             <Form onSubmit={ submitForm }>
@@ -314,4 +311,4 @@ function CarList (props) {
     );
 }
 
-export default CarList
+export default Customer
