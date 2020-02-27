@@ -11,6 +11,7 @@ import RentlistDetail from './RentlistDetail'
 
 import CarList from './CarList'
 import Customer from './Customer'
+import User from './User'
         
 //new-component
 
@@ -67,7 +68,13 @@ function DashBoardContent(props) {
                 <>
                     <Customer />
                 </>
-            )
+            );
+        case 'users':
+            return (
+                <>
+                    <User />
+                </>
+            );
         default:
             return null;
     }
