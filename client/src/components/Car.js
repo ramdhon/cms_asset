@@ -211,7 +211,7 @@ function Car (props) {
                             </Row>
                         </Form>
                 
-                        <div className='shadow-sm mt-3'>
+                        <div className='shadow-sm mt-3' style={{ overflowX: 'scroll' }}>
                             <Table striped bordered hover>
                                 <thead>
                                     <tr>

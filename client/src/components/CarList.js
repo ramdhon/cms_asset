@@ -10,17 +10,24 @@ function CarList (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","vin":"string","status":"string","daily":"number","weekly":"number","monthly":"number","anually":"number","currency":"string","tax":"number","discount":"number"}
+    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","vin":"string","status":"string","daily":"number","weekly":"number","monthly":"number","anually":"number","tax":"number","discount":"number"}
     const [ search, setSearch ] = useState('')
     const [ daily, setDaily] = useState(0) 
     const [ weekly, setWeekly] = useState(0) 
     const [ monthly, setMonthly] = useState(0) 
     const [ anually, setAnually] = useState(0) 
-    const [ currency, setCurrency] = useState('') 
+    const [ currency, setCurrency] = useState('IDR') 
     const [ tax, setTax] = useState(0) 
     const [ discount, setDiscount] = useState(0) 
-    // const [ carId, setCarId] = useState('') 
+    const [ carId, setCarId] = useState('')
     
+    const [ validated, setValidated] = useState(false)
+
+    const [ selectedCar, setSelectedCar ] = useState({})
+
+    const [ carList, setCarList ] = useState([])
+    const [ master, setMaster ] = useState([])
+        
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
     
@@ -39,6 +46,14 @@ function CarList (props) {
 
    function submitForm(e){
         e.preventDefault()
+
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        setValidated(true);
        
         if(id){
             axios.patch(`/rentitems/${id}`, stateObj  ,{ headers:{ token:localStorage.getItem('token')}})
@@ -114,21 +129,68 @@ function CarList (props) {
         handleShow()
     }
 
+    function fetchCar() {
+        axios.get('/cars', { headers: { token: localStorage.getItem('token')}})
+            .then(({ data }) => {
+                if (data.Cars) {
+                    setCarList(data.Cars);
+                }
+            })
+            .catch((err) => {
+                setTextToast(err.response.data.message)
+                setStatusToast(false)
+                setShowToast(true)
+            })
+    }
+
     function handleShow() {
         setShowModal(true);
+        fetchCar();
     }
     
     function submitSearch(e){
-        e.preventDefault()
-        axios.get(`/rentitems?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
-        .then(({ data }) =>{
-            setRowTable(data.Rentitems ? [...data.Rentitems] : [])
-        })
-        .catch(err => {
-            setTextToast(err.response.data.message)
-            setStatusToast(false)
-            setShowToast(true)
-        })
+        e.preventDefault();
+
+        axios.get('/rentitems?populateCar=true', { headers: { token: localStorage.getItem('token')}})
+            .then(({data}) => {
+                if(data.Rentitems){
+                    const regex = new RegExp(search, 'gi');
+                    let tmp = data.Rentitems.map((el) => {
+                        Object.assign(el, el.carId);
+                        delete el.carId;
+                        return el;
+                    }).filter((el) => {
+                        return (
+                            regex.test(String(el.daily)) ||
+                            regex.test(String(el.weekly)) ||
+                            regex.test(String(el.annually)) ||
+                            regex.test(String(el.tax)) ||
+                            regex.test(String(el.discount)) ||
+                            regex.test(String(el.year)) ||
+                            regex.test(el.brand) ||
+                            regex.test(el.type) ||
+                            regex.test(el.policeNo) ||
+                            regex.test(el.vin) ||
+                            regex.test(el.status)
+                        )
+                    });
+                    setRowTable(tmp);
+                }
+            })
+            .catch(err =>{
+                setTextToast(err.response.data.message)
+                setStatusToast(false)
+                setShowToast(true)
+            })
+        // axios.get(`/rentitems?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
+        //     .then(({ data }) =>{
+        //         setRowTable(data.Rentitems ? [...data.Rentitems] : [])
+        //     })
+        //     .catch(err => {
+        //         setTextToast(err.response.data.message)
+        //         setStatusToast(false)
+        //         setShowToast(true)
+        //     })
     }
 
      //function-upload-image
@@ -152,7 +214,13 @@ function CarList (props) {
         axios.get('/rentitems?populateCar=true', { headers: { token: localStorage.getItem('token')}})
         .then(({data}) => {
             if(data.Rentitems){
-                setRowTable(data.Rentitems)
+                const tmp = data.Rentitems.map((el) => {
+                    Object.assign(el, el.carId);
+                    delete el.carId;
+                    return el;
+                })
+                setRowTable(tmp);
+                setMaster(data.Rentitems);
             }
         })
         .catch(err =>{
@@ -172,6 +240,19 @@ function CarList (props) {
     }, [search])
 
     useEffect(() => {
+        setSelectedCar(carList.find((el) => el._id === carId) || {
+            brand: null,
+            type: null,
+            year: null,
+            policeNo: null,
+            vin: null,
+            price: null,
+            currency: 'IDR',
+            status: null
+        })
+    }, [carId])
+
+    useEffect(() => {
         fetchData()
     }, [])
 
@@ -189,7 +270,7 @@ function CarList (props) {
                     <div style={{ padding:'30px' }}>
                         <Row>
                             <Col>
-                                <h3> <span style={{ color:'grey' }}>#</span> Car List </h3>
+                                <h3> <span style={{ color:'grey' }}>#</span> Car Rental List </h3>
                             </Col>
                             <Col className='d-flex justify-content-end'>
                                 <Button variant='outline-primary' onClick={ handleShow }> <i className="fas fa-plus"></i> Add New </Button>
@@ -216,7 +297,7 @@ function CarList (props) {
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        { [...Object.keys(stateType), 'CreatedAt', 'UpdatedAt', 'Actions'].map((el, index) =>{
+                                        { [...Object.keys(stateType), 'Currency', 'CreatedAt', 'UpdatedAt', 'Actions'].map((el, index) =>{
                                             return <th key={ index }> {el} </th>
                                         })}
                                     </tr>
@@ -254,10 +335,36 @@ function CarList (props) {
 
         <Modal show={showModal} onHide={handleClose} size="lg">
             <Modal.Header closeButton>
-                <Modal.Title>Add Car List </Modal.Title>
+                <Modal.Title>Add Car List</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <Form onSubmit={ submitForm }>
+            <Form noValidate validated={validated} onSubmit={ submitForm }>
+                <Form.Group className='mt-2'>
+                    <Form.Label>Select Car</Form.Label>
+                    <Form.Control required disabled={!carList.length} as="select" placeholder={`Enter Car Id`} onChange={ e => setCarId( e.target.value)} value={ carId }>
+                        <option value={null}>Select a car</option>
+                        {
+                            carList.map((el, index) => (
+                                <option key={index} value={el._id}>
+                                    {el.brand} - {el.type} - {el.policeNo} - {el.vin}
+                                </option>
+                            ))
+                        }
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        Please select a car.
+                    </Form.Control.Feedback>
+                </Form.Group>
+                {
+                    Object.keys(selectedCar).map((el, index) => (
+                        el !== 'created' && el !== 'updated' && el !== 'refId' && el !== '__v' ?
+                        <Form.Group key={index} className='mt-2'>
+                            <Form.Label>{el}</Form.Label>
+                            <Form.Control disabled type="text" placeholder={el} value={selectedCar[el] || '-'} />
+                        </Form.Group>
+                        : null
+                    ))
+                }
                 { Object.keys(stateObj).map((el, index) => {
                     if ( stateType[el] === 'boolean') {
                         return (<Form.Group key={ index }>
@@ -297,7 +404,7 @@ function CarList (props) {
                         return (
                         <Form.Group key={ index } className='mt-2'>
                             <Form.Label>Enter {el}</Form.Label>
-                            <Form.Control type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                            <Form.Control disabled={el === 'currency'} type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
                         </Form.Group> )
                     }
                     }) 

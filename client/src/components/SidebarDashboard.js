@@ -16,7 +16,10 @@ function SidebarDashboard(props) {
                 <Link to={`/dashboard/users`} style={{ width:'100%' }}> <Button style={{ width:'100%' }} variant="light" className='shadow-sm'> Users </Button> </Link>
             </div>
             <div className='d-flex justify-content-center' style={{ textAlign:'center', paddingTop:'10px', width:'100%', paddingLeft:'15px', paddingRight:'5px' }}>
-                <Link to={`/dashboard/car-list`} style={{ width:'100%' }}> <Button style={{ width:'100%' }} variant="light" className='shadow-sm'> Cars </Button> </Link>
+                <Link to={`/dashboard/car`} style={{ width:'100%' }}> <Button style={{ width:'100%' }} variant="light" className='shadow-sm'> Cars </Button> </Link>
+            </div>
+            <div className='d-flex justify-content-center' style={{ textAlign:'center', paddingTop:'10px', width:'100%', paddingLeft:'15px', paddingRight:'5px' }}>
+                <Link to={`/dashboard/car-list`} style={{ width:'100%' }}> <Button style={{ width:'100%' }} variant="light" className='shadow-sm'> Car Rental List </Button> </Link>
             </div>
             <div className='d-flex justify-content-center' style={{ textAlign:'center', paddingTop:'10px', width:'100%', paddingLeft:'15px', paddingRight:'5px' }}>
                 <Link to={`/dashboard/customers`} style={{ width:'100%' }}> <Button style={{ width:'100%' }} variant="light" className='shadow-sm'> Customers </Button> </Link>

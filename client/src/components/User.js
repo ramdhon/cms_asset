@@ -348,8 +348,8 @@ function User (props) {
                                 <Form.Group key={ index } className='mt-2'>
                                     <Form.Label>Enter {el}</Form.Label>
                                     <Form.Control as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
-                                        <option>admin</option>
-                                        <option>user</option>
+                                        <option value="admin">admin</option>
+                                        <option value="user">user</option>
                                     </Form.Control>
                                 </Form.Group>
                             )
