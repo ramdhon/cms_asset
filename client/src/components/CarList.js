@@ -56,7 +56,7 @@ function CarList (props) {
         setValidated(true);
        
         if(id){
-            axios.patch(`/rentitems/${id}`, stateObj  ,{ headers:{ token:localStorage.getItem('token')}})
+            axios.patch(`/rentitems/${id}`, { ...stateObj, carId }  ,{ headers:{ token:localStorage.getItem('token')}})
             .then(({data}) => {
                 let tempTable = rowTable.map((el,index) => {
                     if(el._id === data.updatedRentitem._id){
@@ -65,6 +65,7 @@ function CarList (props) {
                     return el;
                 })
                 setRowTable(tempTable)
+                handleClose()
             })
             .catch(err =>{
                 setTextToast(err.response.data.message)
@@ -72,12 +73,13 @@ function CarList (props) {
                 setShowToast(true)
             })
         } else {
-            axios.post('/rentitems', stateObj, { headers: { token:localStorage.getItem('token')}})
+            axios.post('/rentitems', { ...stateObj, carId }, { headers: { token:localStorage.getItem('token')}})
             .then(({data}) => {
                 setRowTable([...rowTable, data.newRentitem])
                 setTextToast('success add')
                 setStatusToast(true)
                 setShowToast(true)
+                handleClose()
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
@@ -85,7 +87,6 @@ function CarList (props) {
                 setShowToast(true)
             })
         }
-        handleClose()
     }
 
     function deleteData(id){
@@ -125,6 +126,7 @@ function CarList (props) {
         Object.keys(stateObj).map((el, index) => {
             funcLoop[index](rowData[el])
         })
+        setCarId(rowData.carId)
         setId(rowData._id)
         handleShow()
     }
@@ -133,7 +135,11 @@ function CarList (props) {
         axios.get('/cars', { headers: { token: localStorage.getItem('token')}})
             .then(({ data }) => {
                 if (data.Cars) {
-                    setCarList(data.Cars);
+                    let tmp = [...data.Cars];
+                    rowTable.forEach((el) => {
+                        tmp = tmp.filter((subel) => subel._id !== el.carId || (id && el.carId === rowTable.find((item) => item._id === id).carId))
+                    })
+                    setCarList(tmp);
                 }
             })
             .catch((err) => {
@@ -157,7 +163,7 @@ function CarList (props) {
                     const regex = new RegExp(search, 'gi');
                     let tmp = data.Rentitems.map((el) => {
                         Object.assign(el, el.carId);
-                        delete el.carId;
+                        el.carId = el.carId._id;
                         return el;
                     }).filter((el) => {
                         return (
@@ -216,7 +222,7 @@ function CarList (props) {
             if(data.Rentitems){
                 const tmp = data.Rentitems.map((el) => {
                     Object.assign(el, el.carId);
-                    delete el.carId;
+                    el.carId = el.carId._id;
                     return el;
                 })
                 setRowTable(tmp);
@@ -240,7 +246,8 @@ function CarList (props) {
     }, [search])
 
     useEffect(() => {
-        setSelectedCar(carList.find((el) => el._id === carId) || {
+        const obj = carList.find((el) => el._id === carId);
+        setSelectedCar( obj || {
             brand: null,
             type: null,
             year: null,
@@ -250,7 +257,7 @@ function CarList (props) {
             currency: 'IDR',
             status: null
         })
-    }, [carId])
+    })
 
     useEffect(() => {
         fetchData()
@@ -342,7 +349,7 @@ function CarList (props) {
                 <Form.Group className='mt-2'>
                     <Form.Label>Select Car</Form.Label>
                     <Form.Control required disabled={!carList.length} as="select" placeholder={`Enter Car Id`} onChange={ e => setCarId( e.target.value)} value={ carId }>
-                        <option value={null}>Select a car</option>
+                        <option value={''}>Select a car</option>
                         {
                             carList.map((el, index) => (
                                 <option key={index} value={el._id}>
@@ -354,6 +361,10 @@ function CarList (props) {
                     <Form.Control.Feedback type="invalid">
                         Please select a car.
                     </Form.Control.Feedback>
+                    {
+                        !carList.length &&
+                            <span>No available cars.</span>
+                    }
                 </Form.Group>
                 {
                     Object.keys(selectedCar).map((el, index) => (
