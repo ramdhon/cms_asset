@@ -94,7 +94,7 @@ function Car (props) {
     function handleClose() {
         setShowModal(false);
         let tempKey = Object.keys(stateType)
-        funcLoop.map((func,index) => {
+        funcLoop.forEach((func,index) => {
             if(''+stateType[tempKey[index]] === 'boolean'){
                 func(false)
             } else if (''+stateType[tempKey[index]] === 'number'){
@@ -107,7 +107,7 @@ function Car (props) {
     }
     
     function editData(rowData){
-        Object.keys(stateObj).map((el, index) => {
+        Object.keys(stateObj).forEach((el, index) => {
             funcLoop[index](rowData[el])
         })
         setId(rowData._id)
@@ -278,7 +278,7 @@ function Car (props) {
                         return (
                             <div key={ index } className='shadow-sm p-2 border'>
                                 <div style={{ overflow:'hidden', width:'100%', height:'200px', backgroundColor:'#dedede' }} className='mb-2'>
-                                    <img width='100%' src={ stateObj[el] ? `${server}/uploads/${stateObj[el]}` : null} />
+                                    <img width='100%' alt={`image_${index}`} src={ stateObj[el] ? `${server}/uploads/${stateObj[el]}` : null} />
                                 </div>
                                 <Form.Label>Attach {el}</Form.Label>
                                 <input type='file' onChange={ (e) => uploadImage(e, funcLoop[index])} className='mb-2 border p-1' style={{ width:'100%' }}/>

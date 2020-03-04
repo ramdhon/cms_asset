@@ -14,7 +14,7 @@ function ImageModal(props) {
                 { props.title }
             </Modal.Header>
             <Modal.Body>
-                <img src={ props.title }  width='100%' />
+                <img alt={props.title} src={ props.title }  width='100%' />
             </Modal.Body>
             <Modal.Footer>
             <Button onClick={(e) => props.onHide(false)}>Close</Button>

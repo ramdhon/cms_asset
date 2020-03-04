@@ -26,7 +26,6 @@ function CarList (props) {
     const [ selectedCar, setSelectedCar ] = useState({})
 
     const [ carList, setCarList ] = useState([])
-    const [ master, setMaster ] = useState([])
         
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
@@ -49,7 +48,6 @@ function CarList (props) {
 
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
-            e.preventDefault();
             e.stopPropagation();
         }
 
@@ -110,7 +108,7 @@ function CarList (props) {
     function handleClose() {
         setShowModal(false);
         let tempKey = Object.keys(stateType)
-        funcLoop.map((func,index) => {
+        funcLoop.forEach((func,index) => {
             if(''+stateType[tempKey[index]] === 'boolean'){
                 func(false)
             } else if (''+stateType[tempKey[index]] === 'number'){
@@ -120,25 +118,27 @@ function CarList (props) {
             }
         })
         setId('')
+        setCarId('')
+        setValidated(false);
     }
     
     function editData(rowData){
-        Object.keys(stateObj).map((el, index) => {
+        Object.keys(stateObj).forEach((el, index) => {
             funcLoop[index](rowData[el])
         })
         setCarId(rowData.carId)
         setId(rowData._id)
-        handleShow()
+        handleShow(rowData._id)
     }
 
-    function fetchCar() {
+    function fetchCar(rowId) {
         axios.get('/cars', { headers: { token: localStorage.getItem('token')}})
             .then(({ data }) => {
                 if (data.Cars) {
                     let tmp = [...data.Cars];
-                    rowTable.forEach((el) => {
-                        tmp = tmp.filter((subel) => subel._id !== el.carId || (id && el.carId === rowTable.find((item) => item._id === id).carId))
-                    })
+                    // rowTable.forEach((el) => {
+                    //     tmp = tmp.filter((subel) => subel._id !== el.carId || (id && el.carId === rowTable.find((item) => item._id === id).carId))
+                    // })
                     setCarList(tmp);
                 }
             })
@@ -149,9 +149,9 @@ function CarList (props) {
             })
     }
 
-    function handleShow() {
+    function handleShow(id) {
         setShowModal(true);
-        fetchCar();
+        fetchCar(id);
     }
     
     function submitSearch(e){
@@ -226,7 +226,6 @@ function CarList (props) {
                     return el;
                 })
                 setRowTable(tmp);
-                setMaster(data.Rentitems);
             }
         })
         .catch(err =>{
@@ -257,7 +256,7 @@ function CarList (props) {
             currency: 'IDR',
             status: null
         })
-    })
+    }, [carId, carList])
 
     useEffect(() => {
         fetchData()
@@ -396,7 +395,7 @@ function CarList (props) {
                         return (
                             <div key={ index } className='shadow-sm p-2 border'>
                                 <div style={{ overflow:'hidden', width:'100%', height:'200px', backgroundColor:'#dedede' }} className='mb-2'>
-                                    <img width='100%' src={ stateObj[el] ? `${server}/uploads/${stateObj[el]}` : null} />
+                                    <img width='100%' alt={`image_${index}`} src={ stateObj[el] ? `${server}/uploads/${stateObj[el]}` : null} />
                                 </div>
                                 <Form.Label>Attach {el}</Form.Label>
                                 <input type='file' onChange={ (e) => uploadImage(e, funcLoop[index])} className='mb-2 border p-1' style={{ width:'100%' }}/>

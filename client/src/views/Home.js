@@ -8,6 +8,7 @@ export default function Home(props) {
         if(localStorage.getItem('token')){
             props.history.push('/dashboard')
         }
+    // eslint-disable-next-line
     }, [])
 
     return (
