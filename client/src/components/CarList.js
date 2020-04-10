@@ -70,6 +70,9 @@ function CarList (props) {
                 setStatusToast(false)
                 setShowToast(true)
             })
+            .finally(() => {
+                fetchData();
+            })
         } else {
             axios.post('/rentitems', { ...stateObj, carId }, { headers: { token:localStorage.getItem('token')}})
             .then(({data}) => {
@@ -83,6 +86,9 @@ function CarList (props) {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
                 setShowToast(true)
+            })
+            .finally(() => {
+                fetchData();
             })
         }
     }
@@ -123,6 +129,7 @@ function CarList (props) {
     }
     
     function editData(rowData){
+        console.log({rowData});
         Object.keys(stateObj).forEach((el, index) => {
             funcLoop[index](rowData[el])
         })
@@ -136,9 +143,10 @@ function CarList (props) {
             .then(({ data }) => {
                 if (data.Cars) {
                     let tmp = [...data.Cars];
-                    // rowTable.forEach((el) => {
-                    //     tmp = tmp.filter((subel) => subel._id !== el.carId || (id && el.carId === rowTable.find((item) => item._id === id).carId))
-                    // })
+                    
+                    rowTable.forEach((el) => {
+                        tmp = tmp.filter((sub_el) => rowId ? el._id === rowId || sub_el._id !== el.carId : sub_el._id !== el.carId);
+                    })
                     setCarList(tmp);
                 }
             })
@@ -151,7 +159,11 @@ function CarList (props) {
 
     function handleShow(id) {
         setShowModal(true);
-        fetchCar(id);
+        if (typeof id === 'string') {
+            fetchCar(id);
+        } else {
+            fetchCar();
+        }
     }
     
     function submitSearch(e){
@@ -162,7 +174,12 @@ function CarList (props) {
                 if(data.Rentitems){
                     const regex = new RegExp(search, 'gi');
                     let tmp = data.Rentitems.map((el) => {
+                        const { _id, created, updated } = el;
+
                         Object.assign(el, el.carId);
+                        el._id = _id;
+                        el.created = created;
+                        el.updated = updated;
                         el.carId = el.carId._id;
                         return el;
                     }).filter((el) => {
@@ -221,7 +238,12 @@ function CarList (props) {
         .then(({data}) => {
             if(data.Rentitems){
                 const tmp = data.Rentitems.map((el) => {
+                    const { _id, created, updated } = el;
+
                     Object.assign(el, el.carId);
+                    el._id = _id;
+                    el.created = created;
+                    el.updated = updated;
                     el.carId = el.carId._id;
                     return el;
                 })
@@ -407,7 +429,13 @@ function CarList (props) {
                         return (
                             <Form.Group key={ index } className='mt-2'>
                                 <Form.Label>Enter {el}</Form.Label>
-                                <Form.Control required type="number" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                                <Form.Control
+                                    required
+                                    type='number'
+                                    placeholder={`Enter ${ el }`}
+                                    onChange={ e => funcLoop[index]( e.target.value)}
+                                    value={ stateObj[el] }
+                                    />
                             </Form.Group> )
                     }
                     else {
