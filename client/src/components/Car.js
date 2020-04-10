@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap'
-import RowTable from './RowTableNewModel';
+import RowTable from './RowTableModelCar';
 import axios from '../api/database';
 import Toast from './ToastComponent';
 import { server } from '../api/database';
@@ -267,6 +267,18 @@ function Car (props) {
                                 <option value='false'>false</option>
                             </Form.Control> 
                         </Form.Group>)
+                    } else if(el === 'status'){
+                        return ( 
+                            <Form.Group key={ index } >
+                                <Form.Label>Enter {el}</Form.Label>
+                                <Form.Control required as="select" onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el]}>
+                                    <option value=''>Select status</option>
+                                    <option value='On field'>On Field</option>
+                                    <option value='On pool'>On Pool</option>
+                                    <option value='On customer'>On Customer</option>
+                                </Form.Control>
+                            </Form.Group>
+                        )
                     } else if(stateType[el] === 'text'){
                         return ( 
                             <Form.Group key={ index } >
