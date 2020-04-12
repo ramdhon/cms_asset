@@ -66,6 +66,7 @@ function Customer (props) {
                     return el;
                 })
                 setRowTable(tempTable)
+                handleClose()
             })
             .catch(err =>{
                 setTextToast(err.response.data.message)
@@ -86,6 +87,7 @@ function Customer (props) {
             })
             .then(({data}) => {
                 fetchData();
+                handleClose()
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
@@ -96,7 +98,6 @@ function Customer (props) {
                 fetchData();
             })
         }
-        handleClose()
     }
 
     function deleteData(id){
@@ -485,6 +486,9 @@ function Customer (props) {
                                     <option value='monthly'>Monthly</option>
                                     <option value='annually'>Annually</option>
                                 </Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    Please select type of customer.
+                                </Form.Control.Feedback>
                             </Form.Group> )
                     } else if( stateType[el] === 'date' ){
                         return (
