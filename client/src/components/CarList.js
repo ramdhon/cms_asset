@@ -113,14 +113,13 @@ function CarList (props) {
 
     function handleClose() {
         setShowModal(false);
-        let tempKey = Object.keys(stateType)
-        funcLoop.forEach((func,index) => {
-            if(''+stateType[tempKey[index]] === 'boolean'){
-                func(false)
-            } else if (''+stateType[tempKey[index]] === 'number'){
-                func(0)
+        Object.keys(stateObj).forEach((el_state,index) => {
+            if(''+stateType[el_state] === 'boolean'){
+                funcLoop[index](false)
+            } else if (''+stateType[el_state] === 'number'){
+                funcLoop[index](0)
             } else {
-                func('')
+                funcLoop[index]('')
             }
         })
         setId('')
@@ -441,7 +440,7 @@ function CarList (props) {
                         return (
                         <Form.Group key={ index } className='mt-2'>
                             <Form.Label>Enter {el}</Form.Label>
-                            <Form.Control disabled={el === 'currency'} type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                            <Form.Control required disabled={el === 'currency'} type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
                         </Form.Group> )
                     }
                     }) 

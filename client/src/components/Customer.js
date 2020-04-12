@@ -19,6 +19,8 @@ function Customer (props) {
     const [ endPeriod, setEndPeriod] = useState(new Date()) 
     const [ rentItemId, setRentItemId] = useState('') 
     
+    const [ validated, setValidated] = useState(false)
+
     const [ selectedItem, setSelectedItem ] = useState({})
 
     const [ rentItemList, setRentItemList ] = useState([])
@@ -46,6 +48,13 @@ function Customer (props) {
 
    function submitForm(e){
         e.preventDefault()
+
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+            e.stopPropagation();
+        }
+
+        setValidated(true);
        
         if(id){
             axios.patch(`/rentlists/${id}`, { ...stateObj, rentItemId }  ,{ headers:{ token:localStorage.getItem('token')}})
@@ -73,7 +82,7 @@ function Customer (props) {
                 setTextToast('success add')
                 setStatusToast(true)
                 setShowToast(true)
-                return axios.patch(`/cars/${selectedItem.carId}`, { status: 'On customer' }, { headers:{ token:localStorage.getItem('token')}})
+                return axios.patch(`/cars/${selectedItem.carId}?editGranted=true`, { status: 'On customer' }, { headers:{ token:localStorage.getItem('token')}})
             })
             .then(({data}) => {
                 fetchData();
@@ -103,7 +112,7 @@ function Customer (props) {
                 setTextToast('delete success')
                 setStatusToast(true)
                 setShowToast(true)
-                return axios.patch(`/cars/${deleted.carId}`, { status: 'On pool' }, { headers:{ token:localStorage.getItem('token')}})
+                return axios.patch(`/cars/${deleted.carId}?editGranted=true`, { status: 'On pool' }, { headers:{ token:localStorage.getItem('token')}})
             })
             .then(({data}) => {
                 //
@@ -117,18 +126,20 @@ function Customer (props) {
 
     function handleClose() {
         setShowModal(false);
-        let tempKey = Object.keys(stateType)
-        funcLoop.forEach((func,index) => {
-            if(''+stateType[tempKey[index]] === 'boolean'){
-                func(false)
-            } else if (''+stateType[tempKey[index]] === 'number'){
-                func(0)
+        Object.keys(stateObj).forEach((el_state,index) => {
+            if(''+stateType[el_state] === 'boolean'){
+                funcLoop[index](false)
+            } else if (''+stateType[el_state] === 'number'){
+                funcLoop[index](0)
+            } else if (''+stateType[el_state] === 'date'){
+                funcLoop[index](new Date());
             } else {
-                func('')
+                funcLoop[index]('')
             }
         })
         setId('')
         setRentItemId('')
+        setValidated(false);
     }
     
     function editData(rowData){
@@ -261,7 +272,7 @@ function Customer (props) {
 
     function status(rowData) {
         const id = rowData.carId;
-        axios.patch(`/cars/${id}`, { status: 'On pool' }, { headers:{ token:localStorage.getItem('token')}})
+        axios.patch(`/cars/${id}?editGranted=true`, { status: 'On pool' }, { headers:{ token:localStorage.getItem('token')}})
             .then(({data}) => {
                 fetchData();
             })
@@ -398,7 +409,7 @@ function Customer (props) {
                 <Modal.Title>Add Customer </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <Form onSubmit={ submitForm }>
+            <Form noValidate validated={validated} onSubmit={ submitForm }>
                 <Form.Group className='mt-2'>
                     <Form.Label>Select Car</Form.Label>
                     <Form.Control required disabled={!rentItemList.length} as="select" placeholder={`Enter Car Id`} onChange={ e => setRentItemId( e.target.value)} value={ rentItemId }>
@@ -499,7 +510,10 @@ function Customer (props) {
                         return (
                         <Form.Group key={ index } className='mt-2'>
                             <Form.Label>Enter {el}</Form.Label>
-                            <Form.Control type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                            <Form.Control required type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                            <Form.Control.Feedback type="invalid">
+                                Please enter customer name.
+                            </Form.Control.Feedback>
                         </Form.Group> )
                     }
                     }) 
