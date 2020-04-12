@@ -5,23 +5,29 @@ import axios from '../api/database';
 import Toast from './ToastComponent';
 import { server } from '../api/database';
 import ImageModal from './ImageModal'
+import Calendar from 'react-calendar';
 
 function Customer (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","model":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"string","endPeriod":"string"}
+    const stateType ={"brand":"string","model":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"date","endPeriod":"date"}
     const [ search, setSearch ] = useState('')
     const [ customer, setCustomer] = useState('') 
     const [ type, setType] = useState('') 
-    const [ startPeriod, setStartPeriod] = useState('') 
-    const [ endPeriod, setEndPeriod] = useState('') 
+    const [ startPeriod, setStartPeriod] = useState(new Date()) 
+    const [ endPeriod, setEndPeriod] = useState(new Date()) 
     const [ rentItemId, setRentItemId] = useState('') 
     
     const [ selectedItem, setSelectedItem ] = useState({})
 
     const [ rentItemList, setRentItemList ] = useState([])
     
+    const [ calendarShow, setCalendarShow ] = useState({
+        startPeriod: false,
+        endPeriod: false
+    });
+
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
     
@@ -266,6 +272,19 @@ function Customer (props) {
             })
     }
 
+    function handleShowCalendar(state) {
+        setCalendarShow({
+            ...calendarShow,
+            [state]: true
+        });
+    }
+    function handleCloseCalendar(state) {
+        setCalendarShow({
+            ...calendarShow,
+            [state]: false
+        });
+    }
+
     useEffect(() => {
         if(!search){
             fetchData()
@@ -443,6 +462,37 @@ function Customer (props) {
                             <Form.Group key={ index } className='mt-2'>
                                 <Form.Label>Enter {el}</Form.Label>
                                 <Form.Control required type="number" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                            </Form.Group> )
+                    } else if( el === 'type' ){
+                        return (
+                            <Form.Group key={ index } className='mt-2'>
+                                <Form.Label>Enter {el}</Form.Label>
+                                <Form.Control required as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
+                                    <option value=''>Select one</option>
+                                    <option value='daily'>Daily</option>
+                                    <option value='weekly'>Weekly</option>
+                                    <option value='monthly'>Monthly</option>
+                                    <option value='annually'>Annually</option>
+                                </Form.Control>
+                            </Form.Group> )
+                    } else if( stateType[el] === 'date' ){
+                        return (
+                            <Form.Group key={ index } className='mt-2'>
+                                <Form.Label>Enter {el}</Form.Label>
+                                <Form.Control disabled type="text" placeholder={`Enter ${ el }`} value={ stateObj[el] }/>
+                                {
+                                    !calendarShow[el] ?
+                                        <Button variant="success" onClick={(e) => handleShowCalendar(el)}>
+                                            Open Calendar
+                                        </Button>
+                                    :
+                                        <>
+                                            <Button variant="danger" onClick={(e) => handleCloseCalendar(el)}>
+                                                Close Calendar
+                                            </Button>
+                                            <Calendar onChange={(date) => funcLoop[index](date)} value={stateObj[el]} />
+                                        </>
+                                }
                             </Form.Group> )
                     }
                     else {
