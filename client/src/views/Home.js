@@ -3,13 +3,12 @@ import Navbar from '../components/NavbarHeader';
 import HomePage from '../components/Homepage';
 
 export default function Home(props) {
-
     useEffect(() => {
-        if(localStorage.getItem('token')){
+        if(props.auth.user){
             props.history.push('/dashboard')
         }
     // eslint-disable-next-line
-    }, [])
+    }, [props.auth.user])
 
     return (
         <>

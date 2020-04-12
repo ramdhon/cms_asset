@@ -69,7 +69,13 @@ class AuthController {
               .status(200)
               .json({
                 message: 'Login success',
-                token
+                token,
+                user: {
+                  _id: foundUser._id, 
+                  name: foundUser.name,
+                  email: foundUser.email,
+                  role: foundUser.role
+                }
               });
           } else {
             const err = {

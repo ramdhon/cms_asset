@@ -35,7 +35,10 @@ export default function Login(props) {
             setStatus(true)
             setShowToast(true)
             setTimeout(function(){
-                props.history.push('/dashboard')
+                props.auth.setUser({
+                    name: data.user.name,
+                    role: data.user.role
+                })
             }, 1500)
         })
         .catch(err => {
