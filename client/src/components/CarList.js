@@ -129,7 +129,6 @@ function CarList (props) {
     }
     
     function editData(rowData){
-        console.log({rowData});
         Object.keys(stateObj).forEach((el, index) => {
             funcLoop[index](rowData[el])
         })

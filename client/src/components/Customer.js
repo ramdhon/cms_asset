@@ -10,7 +10,7 @@ function Customer (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"customer":"string","type":"string","startPeriod":"string","endPeriod":"string"}
+    const stateType ={"brand":"string","model":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"string","endPeriod":"string"}
     const [ search, setSearch ] = useState('')
     const [ customer, setCustomer] = useState('') 
     const [ type, setType] = useState('') 
@@ -18,15 +18,19 @@ function Customer (props) {
     const [ endPeriod, setEndPeriod] = useState('') 
     const [ rentItemId, setRentItemId] = useState('') 
     
+    const [ selectedItem, setSelectedItem ] = useState({})
+
+    const [ rentItemList, setRentItemList ] = useState([])
+    
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
     
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
-    const funcLoop = [setCustomer,setType,setStartPeriod,setEndPeriod,setRentItemId] 
+    const funcLoop = [setCustomer,setType,setStartPeriod,setEndPeriod] 
 
-    const stateObj = { customer,type,startPeriod,endPeriod,rentItemId } 
+    const stateObj = { customer,type,startPeriod,endPeriod } 
 
 
     //toast
@@ -38,7 +42,7 @@ function Customer (props) {
         e.preventDefault()
        
         if(id){
-            axios.patch(`/rentlists/${id}`, stateObj  ,{ headers:{ token:localStorage.getItem('token')}})
+            axios.patch(`/rentlists/${id}`, { ...stateObj, rentItemId }  ,{ headers:{ token:localStorage.getItem('token')}})
             .then(({data}) => {
                 let tempTable = rowTable.map((el,index) => {
                     if(el._id === data.updatedRentlist._id){
@@ -53,8 +57,11 @@ function Customer (props) {
                 setStatusToast(false)
                 setShowToast(true)
             })
+            .finally(() => {
+                fetchData();
+            })
         } else {
-            axios.post('/rentlists', stateObj, { headers: { token:localStorage.getItem('token')}})
+            axios.post('/rentlists', { ...stateObj, rentItemId }, { headers: { token:localStorage.getItem('token')}})
             .then(({data}) => {
                 setRowTable([...rowTable, data.newRentlist])
                 setTextToast('success add')
@@ -65,6 +72,9 @@ function Customer (props) {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
                 setShowToast(true)
+            })
+            .finally(() => {
+                fetchData();
             })
         }
         handleClose()
@@ -101,31 +111,63 @@ function Customer (props) {
             }
         })
         setId('')
+        setRentItemId('')
     }
     
     function editData(rowData){
         Object.keys(stateObj).forEach((el, index) => {
             funcLoop[index](rowData[el])
         })
+        setRentItemId(rowData.rentItemId)
         setId(rowData._id)
-        handleShow()
+        handleShow(rowData._id)
     }
 
-    function handleShow() {
+    function handleShow(id) {
         setShowModal(true);
+        if (typeof id === 'string') {
+            fetchRentItems(id);
+        } else {
+            fetchRentItems();
+        }
     }
     
     function submitSearch(e){
         e.preventDefault()
-        axios.get(`/rentlists?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
-        .then(({ data }) =>{
-            setRowTable(data.Rentlists ? [...data.Rentlists] : [])
-        })
-        .catch(err => {
-            setTextToast(err.response.data.message)
-            setStatusToast(false)
-            setShowToast(true)
-        })
+        axios.get(`/rentlists?populateCar=true&populateItem=true`, { headers:{ token:localStorage.getItem('token')}})
+            .then(({ data }) =>{
+                const regex = new RegExp(search, 'gi');
+                const tmp = data.Rentlists.map((el) => {
+                    const { _id, created, updated, type } = el;
+
+                    Object.assign(el, el.rentItemId.carId);
+                    el._id = _id;
+                    el.created = created;
+                    el.updated = updated;
+                    el.type = type;
+                    el.model = el.rentItemId.carId.type;
+                    el.carId = el.rentItemId.carId._id;
+                    el.rentItemId = el.rentItemId._id;
+                    return el;
+                }).filter((el) => {
+                    return (
+                        regex.test(String(el.customer)) ||
+                        regex.test(String(el.type)) ||
+                        regex.test(String(el.startPeriod)) ||
+                        regex.test(String(el.endPeriod)) ||
+                        regex.test(el.brand) ||
+                        regex.test(el.model) ||
+                        regex.test(el.policeNo) ||
+                        regex.test(el.vin)
+                    )
+                });
+                setRowTable(tmp);
+            })
+            .catch(err => {
+                setTextToast(err.response.data.message)
+                setStatusToast(false)
+                setShowToast(true)
+            })
     }
 
      //function-upload-image
@@ -146,20 +188,71 @@ function Customer (props) {
 
     function fetchData(){
         setLoading(true)
-        axios.get('/rentlists', { headers: { token: localStorage.getItem('token')}})
-        .then(({data}) => {
-            if(data.Rentlists){
-                setRowTable(data.Rentlists)
-            }
-        })
-        .catch(err =>{
-            setTextToast(err.response.data.message)
-            setStatusToast(false)
-            setShowToast(true)
-        })
-        .finally(() => {
-            setLoading(false)
-        })
+        axios.get('/rentlists?populateCar=true&populateItem=true', { headers: { token: localStorage.getItem('token')}})
+            .then(({data}) => {
+                if(data.Rentlists){
+                    const tmp = data.Rentlists.map((el) => {
+                        const { _id, created, updated, type } = el;
+
+                        Object.assign(el, el.rentItemId.carId);
+                        el._id = _id;
+                        el.created = created;
+                        el.updated = updated;
+                        el.type = type;
+                        el.model = el.rentItemId.carId.type;
+                        el.carId = el.rentItemId.carId._id;
+                        el.rentItemId = el.rentItemId._id;
+                        return el;
+                    })
+                    setRowTable(tmp);
+                }
+            })
+            .catch(err =>{
+                setTextToast(err.response.data.message)
+                setStatusToast(false)
+                setShowToast(true)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
+    }
+
+    function fetchRentItems(rowId) {
+        axios.get('/rentitems?populateCar=true', { headers: { token: localStorage.getItem('token')}})
+            .then(({ data }) => {
+                if (data.Rentitems) {
+                    let tmp = data.Rentitems.map((el) => {
+                        const { _id, created, updated } = el;
+
+                        Object.assign(el, el.carId);
+                        el._id = _id;
+                        el.created = created;
+                        el.updated = updated;
+                        el.carId = el.carId._id;
+                        return el;
+                    })
+                    tmp = tmp.filter((el) => el.status === 'On pool');
+                    setRentItemList(tmp);
+                }
+            })
+            .catch((err) => {
+                setTextToast(err.response.data.message)
+                setStatusToast(false)
+                setShowToast(true)
+            })
+    }
+
+    function status(rowData) {
+        const id = rowData.carId;
+        axios.patch(`/cars/${id}`, { status: 'On pool' }, { headers:{ token:localStorage.getItem('token')}})
+            .then(({data}) => {
+                fetchData();
+            })
+            .catch(err =>{
+                setTextToast(err.response.data.message)
+                setStatusToast(false)
+                setShowToast(true)
+            })
     }
 
     useEffect(() => {
@@ -167,6 +260,26 @@ function Customer (props) {
             fetchData()
         }
     }, [search])
+
+    useEffect(() => {
+        const obj = rentItemList.find((el) => el._id === rentItemId);
+        setSelectedItem( obj || {
+            brand: null,
+            type: null,
+            year: null,
+            policeNo: null,
+            vin: null,
+            price: null,
+            currency: 'IDR',
+            status: null,
+            daily: null,
+            weekly: null,
+            monthly: null,
+            annually: null,
+            tax: null,
+            discount: null
+        })
+    }, [rentItemId, rentItemList])
 
     useEffect(() => {
         fetchData()
@@ -227,6 +340,7 @@ function Customer (props) {
                                         key={ index } 
                                         showImage={(e) => setModalImage(e)}//setModalImage} 
                                         key_model={ Object.keys(stateType) } 
+                                        status={ status }
                                         edit={ editData } 
                                         delete={ deleteData }
                                         type={ stateType }
@@ -255,6 +369,36 @@ function Customer (props) {
             </Modal.Header>
             <Modal.Body>
             <Form onSubmit={ submitForm }>
+                <Form.Group className='mt-2'>
+                    <Form.Label>Select Car</Form.Label>
+                    <Form.Control required disabled={!rentItemList.length} as="select" placeholder={`Enter Car Id`} onChange={ e => setRentItemId( e.target.value)} value={ rentItemId }>
+                        <option value={''}>Select a car</option>
+                        {
+                            rentItemList.map((el, index) => (
+                                <option key={index} value={el._id}>
+                                    {el.brand} - {el.type} - {el.policeNo} - {el.vin}
+                                </option>
+                            ))
+                        }
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        Please select a car.
+                    </Form.Control.Feedback>
+                    {
+                        !rentItemList.length &&
+                            <span>No available cars.</span>
+                    }
+                </Form.Group>
+                {
+                    Object.keys(selectedItem).map((el, index) => (
+                        el !== 'created' && el !== 'updated' && el !== 'refId' && el !== '__v' ?
+                        <Form.Group key={index} className='mt-2'>
+                            <Form.Label>{el}</Form.Label>
+                            <Form.Control disabled type="text" placeholder={el} value={selectedItem[el] || '-'} />
+                        </Form.Group>
+                        : null
+                    ))
+                }
                 { Object.keys(stateObj).map((el, index) => {
                     if ( stateType[el] === 'boolean') {
                         return (<Form.Group key={ index }>
