@@ -22,27 +22,56 @@ function DashboardHome(props) {
     const [ showToast, setShowToast ] = useState(false) 
         
     useEffect(() => { 
-        Promise.all([ axios.get('/cars', { headers: { token: localStorage.getItem('token')}}), axios.get('/rentitems', { headers: { token: localStorage.getItem('token')}}), axios.get('/rentlists', { headers: { token: localStorage.getItem('token')}}), /*add-axios-function*/])
-        .then((data) => {
-            let tempLabels = []
-            let tempDataChart = []
-            let tempBackground = []
-            data.forEach( item => {
-                if(Object.keys(item.data).length !== 1 ){
-                    tempDataChart.push(item.data[Object.keys(item.data)[0]].length)
-                    tempLabels.push(Object.keys(item.data)[0])
-                    tempBackground.push(randomColor())
-                }
+        axios
+            .get('/cars', { headers: { token: localStorage.getItem('token')}})
+            .then(({ data }) => {
+                let tempLabels = []
+                let tempDataChart = []    
+                let tempBackground = []
+                let counter = {};
+
+                data.Cars.forEach((car) => {
+                    if (!counter[car.status]) {
+                        counter[car.status] = 1;
+                    } else {
+                        counter[car.status]++;
+                    }
+                })
+
+                tempLabels = Object.keys(counter);
+                tempDataChart = Object.values(counter);
+                tempBackground = tempLabels.map(item => randomColor());
+                setLabels(tempLabels)
+                setBackgroundChart(tempBackground)
+                setDataChart(tempDataChart)
             })
-            setLabels(tempLabels)
-            setBackgroundChart(tempBackground)
-            setDataChart(tempDataChart)
-        })
-        .catch(err => {
-            setText(err.response.data.message)
-            setStatus(false)
-            setShowToast(true)
-        })
+            .catch(err => {
+                setText(err.response.data.message)
+                setStatus(false)
+                setShowToast(true)
+            })
+        
+        // Promise.all([ axios.get('/cars', { headers: { token: localStorage.getItem('token')}}), axios.get('/rentitems', { headers: { token: localStorage.getItem('token')}}), axios.get('/rentlists', { headers: { token: localStorage.getItem('token')}}), /*add-axios-function*/])
+        // .then((data) => {
+        //     let tempLabels = []
+        //     let tempDataChart = []
+        //     let tempBackground = []
+        //     data.forEach( item => {
+        //         if(Object.keys(item.data).length !== 1 ){
+        //             tempDataChart.push(item.data[Object.keys(item.data)[0]].length)
+        //             tempLabels.push(Object.keys(item.data)[0])
+        //             tempBackground.push(randomColor())
+        //         }
+        //     })
+        //     setLabels(tempLabels)
+        //     setBackgroundChart(tempBackground)
+        //     setDataChart(tempDataChart)
+        // })
+        // .catch(err => {
+        //     setText(err.response.data.message)
+        //     setStatus(false)
+        //     setShowToast(true)
+        // })
     }, [])
 
     return (
