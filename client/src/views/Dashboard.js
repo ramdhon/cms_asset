@@ -13,7 +13,7 @@ function Dashboard(props) {
             <Container fluid style={{ position:'absolute', height:'95vh' }}>
                 <Row style={{ height:'100%' }}>
                     <Col lg={2} style={{ height:'100%', textAlign:'center',padding:'0px', backgroundColor:'#ededed', overflow:'scroll' }} className='shadow-sm'>
-                        <SidebarDashboard />
+                        <SidebarDashboard {...props}/>
                     </Col>
                     <Col lg={10}  style={{ overflow:'scroll'}}>
                         <Container fluid style={{ height:'95vh' }}>

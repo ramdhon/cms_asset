@@ -1,6 +1,7 @@
 import axios from 'axios';
+import config from '../config';
 
-export const server = 'http://localhost:3010'
+export const server = config.serverAPI;
 
 const axiosInstance = axios.create({
     baseURL: server

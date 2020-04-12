@@ -80,7 +80,7 @@ class AuthController {
           } else {
             const err = {
               status: 400,
-              message: 'Email / password incorrect'
+              message: 'Password / email incorrect'
             }
             next(err);
           }

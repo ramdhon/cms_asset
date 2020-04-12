@@ -67,6 +67,10 @@ function Customer (props) {
                 setTextToast('success add')
                 setStatusToast(true)
                 setShowToast(true)
+                return axios.patch(`/cars/${selectedItem.carId}`, { status: 'On customer' }, { headers:{ token:localStorage.getItem('token')}})
+            })
+            .then(({data}) => {
+                fetchData();
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
@@ -83,6 +87,9 @@ function Customer (props) {
     function deleteData(id){
         axios.delete(`/rentlists/${id}`, { headers: { token:localStorage.getItem('token')}})
             .then(({data}) => {
+                const deleted = rowTable.find((el,index) => {
+                    return el._id === id
+                })
                 let tempTable = rowTable.filter((el,index) => {
                     return el._id !== id
                 })
@@ -90,6 +97,10 @@ function Customer (props) {
                 setTextToast('delete success')
                 setStatusToast(true)
                 setShowToast(true)
+                return axios.patch(`/cars/${deleted.carId}`, { status: 'On pool' }, { headers:{ token:localStorage.getItem('token')}})
+            })
+            .then(({data}) => {
+                //
             })
             .catch(err => {
                 setTextToast(err.response.data.message)

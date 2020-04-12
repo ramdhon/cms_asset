@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
                 }
                 next(err);
             } else {
-                if (Rentlist.refId._id != decoded._id && decoded.role !== 'admin') {
+                if (Rentlist.refId._id != decoded._id && decoded.role !== 'admin' && decoded.role !== 'dataAdmin') {
                     const err = {
                         status: 401,
                         message: 'unauthorized to access'
