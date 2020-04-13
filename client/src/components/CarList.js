@@ -143,7 +143,9 @@ function CarList (props) {
                     let tmp = [...data.Cars];
                     
                     rowTable.forEach((el) => {
-                        tmp = tmp.filter((sub_el) => rowId ? el._id === rowId || sub_el._id !== el.carId : sub_el._id !== el.carId);
+                        tmp = tmp.filter((sub_el) => {
+                            return rowId ? el._id === rowId || sub_el._id !== el.carId : sub_el._id !== el.carId
+                        });
                     })
                     setCarList(tmp);
                 }

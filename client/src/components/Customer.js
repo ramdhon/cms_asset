@@ -260,7 +260,12 @@ function Customer (props) {
                         el.carId = el.carId._id;
                         return el;
                     })
-                    tmp = tmp.filter((el) => el.status === 'On pool');
+
+                    const el = rowTable.find((el) => el._id === rowId);
+                    tmp = tmp.filter((sub_el) => {
+                        return rowId ? el.carId === sub_el.carId || sub_el.status === 'On pool' : sub_el.status === 'On pool'
+                    });
+
                     setRentItemList(tmp);
                 }
             })
