@@ -1,0 +1,137 @@
+{
+  "ID": {
+    "en": "ID",
+    "id": "ID",
+    "tr": "ID"
+  },
+  "name": {
+    "en": "Name",
+    "id": "Nama",
+    "tr": "Adi"
+  },
+  "email": {
+    "en": "Email",
+    "id": "Email",
+    "tr": "Eposta"
+  },
+  "password": {
+    "en": "Password",
+    "id": "Sandi",
+    "tr": "Parola"
+  },
+  "role": {
+    "en": "Role",
+    "id": "Peran",
+    "tr": "Rol"
+  },
+  "LoggedInAt": {
+    "en": "Last Login at",
+    "id": "Terakhir Masuk pada",
+    "tr": "Son oturum"
+  },
+  "CreatedAt": {
+    "en": "Created at",
+    "id": "Dibuat pada",
+    "tr": "Olusturuldu"
+  },
+  "UpdatedAt": {
+    "en": "Updated at",
+    "id": "Diperbarui pada",
+    "tr": "Guncellendi"
+  },
+  "brand": {
+    "en": "Brand",
+    "id": "Merek",
+    "tr": "Marka"
+  },
+  "model": {
+    "en": "Model",
+    "id": "TipeModel",
+    "tr": "Moda"
+  },
+  "year": {
+    "en": "Year",
+    "id": "Tahun",
+    "tr": "Yil"
+  },
+  "policeNo": {
+    "en": "Police No",
+    "id": "No Polisi",
+    "tr": "Polis Numarasi"
+  },
+  "vin": {
+    "en": "VIN",
+    "id": "No Rangka",
+    "tr": "VIN"
+  },
+  "price": {
+    "en": "Price",
+    "id": "Harga",
+    "tr": "Fiyat"
+  },
+  "currency": {
+    "en": "Currency",
+    "id": "Mata Uang",
+    "tr": "Para Birimi"
+  },
+  "status": {
+    "en": "Status",
+    "id": "Status",
+    "tr": "Durum"
+  },
+  "daily": {
+    "en": "Daily",
+    "id": "Harian",
+    "tr": "Gunluk"
+  },
+  "weekly": {
+    "en": "Weekly",
+    "id": "Mingguan",
+    "tr": "Haftalik"
+  },
+  "monthly": {
+    "en": "Monthly",
+    "id": "Bulanan",
+    "tr": "Aylik"
+  },
+  "anually": {
+    "en": "Anually",
+    "id": "Tahunan",
+    "tr": "Yillik"
+  },
+  "tax": {
+    "en": "Tax",
+    "id": "Pajak",
+    "tr": "Vergi"
+  },
+  "discount": {
+    "en": "Discount",
+    "id": "Diskon",
+    "tr": "Indirim"
+  },
+  "customer": {
+    "en": "Customer",
+    "id": "Pelanggan",
+    "tr": "Musteri"
+  },
+  "type": {
+    "en": "Type",
+    "id": "Tipe",
+    "tr": "Tip"
+  },
+  "startPeriod": {
+    "en": "Start Period",
+    "id": "Mulai Periode",
+    "tr": "Baslangic Donemi"
+  },
+  "endPeriod": {
+    "en": "End Period",
+    "id": "Akhir Periode",
+    "tr": "Bitis Donemi"
+  },
+  "Actions": {
+    "en": "Actions",
+    "id": "Aksi",
+    "tr": "Hareketler"
+  }
+}
