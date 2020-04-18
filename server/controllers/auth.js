@@ -4,10 +4,10 @@ const { decrypt } = require('../helpers/bcrypt');
 
 class AuthController {
   static registerAdmin(req, res, next) {
-    const { name, email, password } = req.body;
+    const { name, email, password, department } = req.body;
     
     User
-      .create({ name, email, password, role: 'admin', created: new Date(), updated: new Date(), lastLogin: null })
+      .create({ name, email, password, department, role: 'admin', created: new Date(), updated: new Date(), lastLogin: null })
       .then(newUser => {
         res
           .status(201)
@@ -22,10 +22,10 @@ class AuthController {
   }
 
   static register(req, res, next) {
-    const { name, email, password } = req.body;
+    const { name, email, password, department } = req.body;
 
     User
-      .create({ name, email, password, role: 'user', created: new Date(), updated: new Date(), lastLogin: null })
+      .create({ name, email, password, department, role: 'user', created: new Date(), updated: new Date(), lastLogin: null })
       .then(newUser => {
         res
           .status(201)
@@ -74,7 +74,8 @@ class AuthController {
                   _id: foundUser._id, 
                   name: foundUser.name,
                   email: foundUser.email,
-                  role: foundUser.role
+                  role: foundUser.role,
+                  department: foundUser.department
                 }
               });
           } else {
@@ -92,10 +93,10 @@ class AuthController {
   }
 
   static add(req, res, next) {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, department } = req.body;
 
     User
-      .create({ name, email, password, role, created: new Date(), updated: new Date(), lastLogin: null })
+      .create({ name, email, password, role, department, created: new Date(), updated: new Date(), lastLogin: null })
       .then(newUser => {
         res
           .status(201)
@@ -156,12 +157,13 @@ class AuthController {
   }
 
   static update(req, res, next) {
-    const { name, email, role } = req.body;
+    const { name, email, role, department } = req.body;
     const { user } = req;
 
     user.name = name || user.name;
     user.email = email || user.email;
     user.role = role || user.role;
+    user.department = department || user.department
     const newDate = new Date();
     user.updated = newDate;
     
@@ -170,6 +172,7 @@ class AuthController {
         name: name || user.name,
         email: email || user.email,
         role: role || user.role,
+        department: department || user.department,
         updated: newDate
       })
       .then(info => {

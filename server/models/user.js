@@ -48,6 +48,10 @@ const UserSchema = new Schema({
         type: String,
         required: [true, 'Role is required']
     },
+    department: {
+        type: String,
+        required: [true, 'Department is required']
+    },
     created: {
         type: Date,
     },

@@ -22,7 +22,6 @@ function formatCurrency(input, decimal = '.', thousands = ',') {
 }
 
 function currencyInput(input, decimal = '.', thousands = ',') {
-  console.log({input})
   let output = '';
   let inputstr = String(input).split(decimal).join('');
   if (inputstr.length > 3) {

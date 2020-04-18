@@ -1,0 +1,28 @@
+variable,en,id,tr
+ID,ID,ID,ID
+name,Name,Nama,Adi
+email,Email,Email,Eposta
+password,Password,Sandi,Parola
+role,Role,Peran,Rol
+LoggedInAt,Last Login at,Terakhir Masuk pada,Son oturum
+CreatedAt,Created at,Dibuat pada,Olusturuldu
+UpdatedAt,Updated at,Diperbarui pada,Guncellendi
+brand,Brand,Merek,Marka
+model,Model,TipeModel,Moda
+year,Year,Tahun,Yil
+policeNo,Police No,No Polisi,Polis Numarasi
+vin,VIN,No Rangka,VIN
+price,Price,Harga,Fiyat
+currency,Currency,Mata Uang,Para Birimi
+status,Status,Status,Durum
+daily,Daily,Harian,Gunluk
+weekly,Weekly,Mingguan,Haftalik
+monthly,Monthly,Bulanan,Aylik
+anually,Anually,Tahunan,Yillik
+tax,Tax,Pajak,Vergi
+discount,Discount,Diskon,Indirim
+customer,Customer,Pelanggan,Musteri
+type,Type,Tipe,Tip
+startPeriod,Start Period,Mulai Periode,Baslangic Donemi
+endPeriod,End Period,Akhir Periode,Bitis Donemi
+Actions,Actions,Aksi,Hareketler
