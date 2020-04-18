@@ -12,12 +12,13 @@ function User (props) {
     const [ showModal, setShowModal ] = useState(false)
     const [ showModalPass, setShowModalPass ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"name":"string","email":"string","password":"string","role":"string"}
+    const stateType ={"name":"string","email":"string","password":"string","role":"string","department":"string"}
     const [ search, setSearch ] = useState('')
     const [ name, setName] = useState('') 
     const [ email, setEmail] = useState('') 
     const [ password, setPassword] = useState('') 
     const [ role, setRole] = useState('') 
+    const [ department, setDepartment] = useState('') 
     
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
@@ -25,9 +26,9 @@ function User (props) {
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
-    const funcLoop = [setName,setEmail,setPassword,setRole] 
+    const funcLoop = [setName,setEmail,setPassword,setRole,setDepartment] 
 
-    const stateObj = { name,email,password,role } 
+    const stateObj = { name,email,password,role,department } 
 
 
     //toast
@@ -43,6 +44,10 @@ function User (props) {
             .then(({data}) => {
                 let tempTable = rowTable.map((el,index) => {
                     if(el._id === data.updatedUser._id){
+                        if (decode._id === data.updatedUser._id && data.updatedUser.role !== el.role && data.updatedUser.email !== el.email ) {
+                            localStorage.clear()
+                            props.history.push('/')
+                        }
                         el = data.updatedUser
                     }
                     return el;
@@ -51,10 +56,6 @@ function User (props) {
                 setTextToast('data updated')
                 setStatusToast(true)
                 setShowToast(true)
-                if (decode._id === data.updatedUser._id) {
-                    localStorage.clear()
-                    props.history.push('/')
-                }
             })
             .catch(err =>{
                 setTextToast(err.response.data.message)
@@ -348,9 +349,25 @@ function User (props) {
                                 <Form.Group key={ index } className='mt-2'>
                                     <Form.Label>Enter {el}</Form.Label>
                                     <Form.Control as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
+                                        <option value="">Select one</option>
                                         <option value="user">user</option>
                                         <option value="dataAdmin">dataAdmin</option>
                                         <option value="admin">admin</option>
+                                    </Form.Control>
+                                </Form.Group>
+                            )
+                        } else if ( el === 'department' ) {
+                            return (
+                                <Form.Group key={ index } className='mt-2'>
+                                    <Form.Label>Enter {el}</Form.Label>
+                                    <Form.Control as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
+                                        <option value="">Select one</option>
+                                        <option value="owner">Owner</option>
+                                        <option value="marketingBusiness">Marketing and Business</option>
+                                        <option value="finance">Finance</option>
+                                        <option value="hrd">HRD</option>
+                                        <option value="it">IT</option>
+                                        <option value="operational">Operational</option>
                                     </Form.Control>
                                 </Form.Group>
                             )
