@@ -43,12 +43,14 @@ function App() {
 }
 
 function PrivateRoute({ component: Component, auth, ...rest }) {
+  const [sideBarOn, setSideBarOn] = useState(true);
+
   return (
     <Route
       {...rest}
       render={props =>
           auth.user ? (
-          <Component auth={auth} {...props} />
+          <Component sideBarCall={[sideBarOn, setSideBarOn]} auth={auth} {...props} />
         ) : (
           <Redirect
             to={{

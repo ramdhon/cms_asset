@@ -7,15 +7,20 @@ import DashboardContent from '../components/DashBoardContent';
 import DashboardHome from '../components/DashboardHome';
 
 function Dashboard(props) {
+    const sideBarOn = props.sideBarCall[0];
+
     return (
         <>
             <NavbarDashboard {...props} className='fixed-top'/>
             <Container fluid style={{ position:'absolute', height:'95vh' }}>
                 <Row style={{ height:'100%' }}>
-                    <Col lg={2} style={{ height:'100%', textAlign:'center',padding:'0px', backgroundColor:'#ededed', overflow:'scroll' }} className='shadow-sm'>
-                        <SidebarDashboard {...props}/>
-                    </Col>
-                    <Col lg={10}  style={{ overflow:'scroll'}}>
+                    {
+                        sideBarOn &&
+                            <Col lg={2} style={{ height:'100%', textAlign:'center',padding:'0px', backgroundColor:'#ededed', overflow:'scroll' }} className='shadow-sm'>
+                                <SidebarDashboard {...props}/>
+                            </Col>
+                    }
+                    <Col lg={sideBarOn ? 10 : 12}  style={{ overflow:'scroll'}}>
                         <Container fluid style={{ height:'95vh' }}>
                             {  props.history.location.pathname === '/dashboard' ? <DashboardHome /> : 
                                 <Route path='/dashboard/:id' component={ DashboardContent }/>
