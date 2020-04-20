@@ -1,15 +1,27 @@
 import React from 'react';
-import { Navbar, Nav, Button, Row, Col, Container } from 'react-bootstrap';
+import { Navbar, Nav, Button, Row, Col, Container, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 function NavbarHeader(props) {
     const [sideBarOn, setSideBarOn] = props.sideBarCall;
 
     function logout(e){
         e.preventDefault()
-        localStorage.clear()
-        props.auth.setUser(null);
-        props.history.push('/')
+        Swal.fire({
+            title: 'Logout?',
+            text: "Are you sure to log out?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                localStorage.clear()
+                props.auth.setUser(null);
+                props.history.push('/')
+            }
+        })
     }
 
     function handleSideBar(e) {
@@ -27,7 +39,29 @@ function NavbarHeader(props) {
                     }
                     <Col lg={sideBarOn ? 10 : 12}>
                         <Navbar>
-                            <Button onClick={handleSideBar} variant='light'> <i className="fas fa-bars"></i> </Button>
+                            <OverlayTrigger
+                                placement="right"
+                                delay={{ show: 250, hide: 0 }}
+                                overlay={(props) => (
+                                    <Tooltip {...props}>
+                                        {
+                                            sideBarOn ?
+                                                'Close Menu'
+                                            :
+                                                'Open Menu'
+                                        }
+                                    </Tooltip>
+                                )}
+                            >
+                                <Button onClick={handleSideBar} variant='light'>
+                                    {
+                                        sideBarOn ?
+                                            <i className="fas fa-angle-left"></i>
+                                        :
+                                            <i className="fas fa-bars"></i>
+                                    }
+                                </Button>
+                            </OverlayTrigger>
                             <Nav className='d-flex align-items-center'>
                                 <h5> <b> Welcome, </b> { props.auth.user ? props.auth.user.name : null } </h5>
                             </Nav>

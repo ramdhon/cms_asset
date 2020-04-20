@@ -5,6 +5,7 @@ import axios from '../api/database';
 import Toast from './ToastComponent';
 import { server } from '../api/database';
 import ImageModal from './ImageModal'
+import Swal from 'sweetalert2';
 
 function User (props) {
 
@@ -20,15 +21,17 @@ function User (props) {
     const [ role, setRole] = useState('') 
     const [ department, setDepartment] = useState('') 
     
+    const [ confirmPassword, setConfirmPassword] = useState('') 
+
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
     
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
-    const funcLoop = [setName,setEmail,setPassword,setRole,setDepartment] 
+    const funcLoop = [setName,setEmail,setPassword,setRole,setDepartment,setConfirmPassword] 
 
-    const stateObj = { name,email,password,role,department } 
+    const stateObj = { name,email,password,role,department,confirmPassword } 
 
 
     //toast
@@ -82,29 +85,35 @@ function User (props) {
     function resetPassword(e) {
         e.preventDefault()
 
-        axios.patch(`/admin/users/${id}/resetPassword`, { password }  ,{ headers:{ token:localStorage.getItem('token')}})
-            .then(({data}) => {
-                let tempTable = rowTable.map((el,index) => {
-                    if(el._id === data.updatedUser._id){
-                        el = data.updatedUser
+        if (password === confirmPassword) {
+            axios.patch(`/admin/users/${id}/resetPassword`, { password }  ,{ headers:{ token:localStorage.getItem('token')}})
+                .then(({data}) => {
+                    let tempTable = rowTable.map((el,index) => {
+                        if(el._id === data.updatedUser._id){
+                            el = data.updatedUser
+                        }
+                        return el;
+                    })
+                    console.log('password resetted', decode._id === data.updatedUser._id)
+                    setRowTable(tempTable)
+                    setTextToast('password successfully reset')
+                    setStatusToast(true)
+                    setShowToast(true)
+                    if (decode._id === data.updatedUser._id) {
+                        localStorage.clear()
+                        props.history.push('/')
                     }
-                    return el;
                 })
-                console.log('password resetted', decode._id === data.updatedUser._id)
-                setRowTable(tempTable)
-                setTextToast('password successfully reset')
-                setStatusToast(true)
-                setShowToast(true)
-                if (decode._id === data.updatedUser._id) {
-                    localStorage.clear()
-                    props.history.push('/')
-                }
-            })
-            .catch(err =>{
-                setTextToast(err.response.data.message)
-                setStatusToast(false)
-                setShowToast(true)
-            })
+                .catch(err =>{
+                    setTextToast(err.response.data.message)
+                    setStatusToast(false)
+                    setShowToast(true)
+                })
+        } else {
+            setTextToast('your password is not matched!')
+            setStatusToast(false)
+            setShowToast(true)
+        }
         handleClose()
     }
 
@@ -151,8 +160,19 @@ function User (props) {
     }
 
     function handleShowPass(id) {
-        setId(id);
-        setShowModalPass(true);
+        Swal.fire({
+            title: 'Reset Password?',
+            text: "You are about to reset password, are you sure?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                setId(id);
+                setShowModalPass(true);
+            }
+        })
     }
 
     function handleShow() {
@@ -405,12 +425,14 @@ function User (props) {
             </Modal.Header>
             <Modal.Body>
             <Form onSubmit={ resetPassword }>
-                {
-                    <Form.Group className='mt-2'>
-                        <Form.Label>New password</Form.Label>
-                        <Form.Control type="text" placeholder={`Enter password`} onChange={ e => setPassword( e.target.value)} value={ password }/>
-                    </Form.Group>
-                }
+                <Form.Group className='mt-2'>
+                    <Form.Label>New password</Form.Label>
+                    <Form.Control type="text" placeholder={`Enter password`} onChange={ e => setPassword( e.target.value)} value={ password }/>
+                </Form.Group>
+                <Form.Group className='mt-2'>
+                    <Form.Label>Confirm password</Form.Label>
+                    <Form.Control type="text" placeholder={`Confirm password`} onChange={ e => setConfirmPassword( e.target.value)} value={ confirmPassword }/>
+                </Form.Group>
                 <Row className='mt-5'>
                     <Col className='d-flex justify-content-end'>
                         <Button variant="secondary" onClick={handleClose}>
