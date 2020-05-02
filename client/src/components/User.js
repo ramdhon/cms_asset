@@ -94,7 +94,6 @@ function User (props) {
                         }
                         return el;
                     })
-                    console.log('password resetted', decode._id === data.updatedUser._id)
                     setRowTable(tempTable)
                     setTextToast('password successfully reset')
                     setStatusToast(true)
