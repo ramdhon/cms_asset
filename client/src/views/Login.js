@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import axios from '../api/database'
+import { connect } from 'react-redux';
 import { Container, Button, Form, Row, Col} from 'react-bootstrap';
+
+import axios from '../api/database';
 import { Link } from 'react-router-dom';
 import Toast from '../components/ToastComponent';
+import { setUser } from '../store/actions';
 
 const styles= {
     headerForm : {
@@ -16,7 +19,7 @@ const styles= {
     }
 }
 
-export default function Login(props) {
+function Login(props) {
 
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
@@ -35,7 +38,7 @@ export default function Login(props) {
             setStatus(true)
             setShowToast(true)
             setTimeout(function(){
-                props.auth.setUser({
+                props.setUser({
                     name: data.user.name,
                     role: data.user.role
                 })
@@ -104,3 +107,13 @@ export default function Login(props) {
         </>
     )
 }
+
+const mapStateToProps = ({ user }) => ({
+    user
+})
+
+const mapDispatchToProps = {
+    setUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

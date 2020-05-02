@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react'
+import { connect } from 'react-redux';
+
 import Navbar from '../components/NavbarHeader';
 import HomePage from '../components/Homepage';
 
-export default function Home(props) {
+function Home(props) {
     useEffect(() => {
-        if(props.auth.user){
+        if(props.user){
             props.history.push('/dashboard')
         }
     // eslint-disable-next-line
-    }, [props.auth.user])
+    }, [props.user])
 
     return (
         <>
@@ -19,3 +21,13 @@ export default function Home(props) {
         </>
     )
 }
+
+const mapStateToProps = ({ user }) => ({
+    user
+})
+
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -1,7 +1,10 @@
 import React from 'react';
 import { Navbar, Nav, Button, Row, Col, Container, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
-import Swal from "sweetalert2";
+import { connect } from 'react-redux';
+import Swal from 'sweetalert2';
+
+import { setUser } from '../store/actions';
 
 function NavbarHeader(props) {
     const [sideBarOn, setSideBarOn] = props.sideBarCall;
@@ -18,7 +21,7 @@ function NavbarHeader(props) {
         }).then((result) => {
             if (result.value) {
                 localStorage.clear()
-                props.auth.setUser(null);
+                props.setUser(null);
                 props.history.push('/')
             }
         })
@@ -63,7 +66,7 @@ function NavbarHeader(props) {
                                 </Button>
                             </OverlayTrigger>
                             <Nav className='d-flex align-items-center'>
-                                <h5> <b> Welcome, </b> { props.auth.user ? props.auth.user.name : null } </h5>
+                                <h5> <b> Welcome, </b> { props.user ? props.user.name : null } </h5>
                             </Nav>
                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                             <Navbar.Collapse id="basic-navbar-nav">
@@ -78,4 +81,13 @@ function NavbarHeader(props) {
         </>
     );
 }
-export default  withRouter(NavbarHeader)
+
+const mapStateToProps = ({ user }) => ({
+    user
+})
+
+const mapDispatchToProps = {
+    setUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NavbarHeader));

@@ -6,10 +6,18 @@ import Dashboard from './views/Dashboard';
 import Home from './views/Home';
 import axios from './api/database';
 import { Route, Redirect } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store';
+import { setUser } from './store/actions';
 
 function App() {
-  const [user, setUser] = useState(null);
-
+  const [user, setHookUser] = useState(null);
+  
+  store.subscribe(() => {
+    const storeState = store.getState();
+    setHookUser(storeState.user);
+  })
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -19,38 +27,44 @@ function App() {
         .then(({data}) => {
           const { decoded } = data;
 
-          setUser({
+          store.dispatch(setUser({
             name: decoded.name,
             role: decoded.role
-          });
+          }));
         })
         .catch((err) => {
-          setUser(null);
+          store.dispatch(setUser(null));
         })
     } else {
-      setUser(null);
+      store.dispatch(setUser(null));
     }
   }, [user])
 
   return (
-    <>
-        <Route path="/" exact render={props => <Home auth={{ user, setUser }} {...props} />} />
-        <PublicRoute path="/login" auth={{ user, setUser }} component={Login} />
-        <PublicRoute path="/register" auth={{ user, setUser }} component={Register} />
-        <PrivateRoute path="/dashboard" auth={{ user, setUser }} component={Dashboard} />
-    </>
+    <Provider store={store}>
+        <Route path="/" exact render={props => <Home {...props} />} />
+        <PublicRoute path="/login" component={Login} />
+        <PublicRoute path="/register" component={Register} />
+        <PrivateRoute path="/dashboard" component={Dashboard} />
+    </Provider>
   );
 }
 
-function PrivateRoute({ component: Component, auth, ...rest }) {
+function PrivateRoute({ component: Component, ...rest }) {
   const [sideBarOn, setSideBarOn] = useState(true);
+  const [user, setUser] = useState(null);
+  
+  store.subscribe(() => {
+    const storeState = store.getState();
+    setUser(storeState.user);
+  })
 
   return (
     <Route
       {...rest}
       render={props =>
-          auth.user ? (
-          <Component sideBarCall={[sideBarOn, setSideBarOn]} auth={auth} {...props} />
+          user ? (
+          <Component sideBarCall={[sideBarOn, setSideBarOn]} {...props} />
         ) : (
           <Redirect
             to={{
@@ -63,13 +77,20 @@ function PrivateRoute({ component: Component, auth, ...rest }) {
   );
 }
 
-function PublicRoute({ component: Component, auth, ...rest }) {
+function PublicRoute({ component: Component, ...rest }) {
+  const [user, setUser] = useState(null);
+  
+  store.subscribe(() => {
+    const storeState = store.getState();
+    setUser(storeState.user);
+  })
+
   return (
     <Route
       {...rest}
       render={props =>
-          !auth.user ? (
-          <Component auth={auth} {...props} />
+          !user ? (
+          <Component {...props} />
         ) : (
           <Redirect
             to={{
