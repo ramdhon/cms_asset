@@ -38,10 +38,10 @@ function Dashboard(props) {
 
 const mapStateToProps = ({ sidebarOn }) => ({
     sidebarOn
-})
+});
 
 const mapDispatchToProps = {
     setSidebarOn
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

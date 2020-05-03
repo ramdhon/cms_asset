@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { Provider } from 'react-redux';
+import { Route, Redirect } from 'react-router-dom';
+
 import './App.css';
 import Login from './views/Login';
 import Register from './views/Register';
 import Dashboard from './views/Dashboard';
 import Home from './views/Home';
 import axios from './api/database';
-import { Route, Redirect } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import store from './store';
 import { setUser } from './store/actions';
 

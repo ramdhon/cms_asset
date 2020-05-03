@@ -85,11 +85,11 @@ function NavbarHeader(props) {
 const mapStateToProps = ({ user, sidebarOn }) => ({
     user,
     sidebarOn
-})
+});
 
 const mapDispatchToProps = {
     setUser,
     setSidebarOn
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NavbarHeader));
