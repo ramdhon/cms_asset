@@ -24,10 +24,10 @@ function Home(props) {
 
 const mapStateToProps = ({ user }) => ({
     user
-})
+});
 
 const mapDispatchToProps = {
 
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

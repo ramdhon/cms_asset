@@ -1,7 +1,8 @@
-import { SET_USER } from './action-type';
+import { SET_USER, SET_SIDEBARON } from './action-type';
 
 const defaultState = {
-  user: null
+  user: null,
+  sidebarOn: true
 }
 
 function reducer (state = defaultState, action) {
@@ -10,6 +11,11 @@ function reducer (state = defaultState, action) {
       return {
         ...state,
         user: action.payload
+      }
+    case SET_SIDEBARON:
+      return {
+        ...state,
+        sidebarOn: action.payload
       }
     default:
       return state;

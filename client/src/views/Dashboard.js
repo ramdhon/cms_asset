@@ -1,13 +1,16 @@
 import React from 'react';
-import NavbarDashboard from '../components/NavbarDashboard';
+import { connect } from 'react-redux';
 import { Container, Row, Col } from 'react-bootstrap';
+
+import NavbarDashboard from '../components/NavbarDashboard';
 import SidebarDashboard from '../components/SidebarDashboard';
 import { Route } from 'react-router-dom';
 import DashboardContent from '../components/DashBoardContent';
 import DashboardHome from '../components/DashboardHome';
+import { setSidebarOn } from '../store/actions';
 
 function Dashboard(props) {
-    const sideBarOn = props.sideBarCall[0];
+    const { sidebarOn } = props;
 
     return (
         <>
@@ -15,12 +18,12 @@ function Dashboard(props) {
             <Container fluid style={{ position:'absolute', height:'95vh' }}>
                 <Row style={{ height:'100%' }}>
                     {
-                        sideBarOn &&
+                        sidebarOn &&
                             <Col lg={2} style={{ height:'100%', textAlign:'center',padding:'0px', backgroundColor:'#ededed', overflow:'scroll' }} className='shadow-sm'>
                                 <SidebarDashboard {...props}/>
                             </Col>
                     }
-                    <Col lg={sideBarOn ? 10 : 12}  style={{ overflow:'scroll'}}>
+                    <Col lg={sidebarOn ? 10 : 12}  style={{ overflow:'scroll'}}>
                         <Container fluid style={{ height:'95vh' }}>
                             {  props.history.location.pathname === '/dashboard' ? <DashboardHome /> : 
                                 <Route path='/dashboard/:id' component={ DashboardContent }/>
@@ -33,4 +36,12 @@ function Dashboard(props) {
     );
 }
 
-export default Dashboard;
+const mapStateToProps = ({ sidebarOn }) => ({
+    sidebarOn
+})
+
+const mapDispatchToProps = {
+    setSidebarOn
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

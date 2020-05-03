@@ -4,10 +4,10 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2';
 
-import { setUser } from '../store/actions';
+import { setUser, setSidebarOn } from '../store/actions';
 
 function NavbarHeader(props) {
-    const [sideBarOn, setSideBarOn] = props.sideBarCall;
+    const { sidebarOn, setSidebarOn } = props;
 
     function logout(e){
         e.preventDefault()
@@ -28,19 +28,19 @@ function NavbarHeader(props) {
     }
 
     function handleSideBar(e) {
-        setSideBarOn(!sideBarOn);
+        setSidebarOn(!sidebarOn);
     }
     return (
         <>
             <Container fluid>
                 <Row className='shadow-sm'>
                     {
-                        sideBarOn &&
+                        sidebarOn &&
                             <Col lg={2} style={{ textAlign:'center', background:'#00b894' }} className='d-flex align-items-center justify-content-center'>
                                 <div className="LogoDashboard"> <Link to="/dashboard"><h4 style={{  color:'white', verticalAlign:'center', fontWeight:'200', letterSpacing:'2px'}}><b>Trans</b>-Pacific</h4> </Link></div>
                             </Col>
                     }
-                    <Col lg={sideBarOn ? 10 : 12}>
+                    <Col lg={sidebarOn ? 10 : 12}>
                         <Navbar>
                             <OverlayTrigger
                                 placement="right"
@@ -48,7 +48,7 @@ function NavbarHeader(props) {
                                 overlay={(props) => (
                                     <Tooltip {...props}>
                                         {
-                                            sideBarOn ?
+                                            sidebarOn ?
                                                 'Close Menu'
                                             :
                                                 'Open Menu'
@@ -58,7 +58,7 @@ function NavbarHeader(props) {
                             >
                                 <Button onClick={handleSideBar} variant='light'>
                                     {
-                                        sideBarOn ?
+                                        sidebarOn ?
                                             <i className="fas fa-angle-left"></i>
                                         :
                                             <i className="fas fa-bars"></i>
@@ -82,12 +82,14 @@ function NavbarHeader(props) {
     );
 }
 
-const mapStateToProps = ({ user }) => ({
-    user
+const mapStateToProps = ({ user, sidebarOn }) => ({
+    user,
+    sidebarOn
 })
 
 const mapDispatchToProps = {
-    setUser
+    setUser,
+    setSidebarOn
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NavbarHeader));

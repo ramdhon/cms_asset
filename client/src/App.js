@@ -51,7 +51,6 @@ function App() {
 }
 
 function PrivateRoute({ component: Component, ...rest }) {
-  const [sideBarOn, setSideBarOn] = useState(true);
   const [user, setUser] = useState(null);
   
   store.subscribe(() => {
@@ -64,7 +63,7 @@ function PrivateRoute({ component: Component, ...rest }) {
       {...rest}
       render={props =>
           user ? (
-          <Component sideBarCall={[sideBarOn, setSideBarOn]} {...props} />
+          <Component {...props} />
         ) : (
           <Redirect
             to={{

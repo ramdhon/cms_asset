@@ -110,10 +110,10 @@ function Login(props) {
 
 const mapStateToProps = ({ user }) => ({
     user
-})
+});
 
 const mapDispatchToProps = {
     setUser
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)
