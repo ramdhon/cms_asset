@@ -14,9 +14,13 @@ import { setUser } from './store/actions';
 function App() {
   const [user, setHookUser] = useState(null);
   
-  store.subscribe(() => {
+  const unsubscribe = store.subscribe(() => {
     const storeState = store.getState();
     setHookUser(storeState.user);
+  })
+  
+  useEffect(() => {
+    return unsubscribe;
   })
   
   useEffect(() => {
