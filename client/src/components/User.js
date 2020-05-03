@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap'
+import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap';
+import Swal from 'sweetalert2';
+
 import RowTable from './RowTableModelUser';
 import axios from '../api/database';
 import Toast from './ToastComponent';
 import { server } from '../api/database';
 import ImageModal from './ImageModal'
-import Swal from 'sweetalert2';
 
 function User (props) {
 
@@ -117,21 +118,32 @@ function User (props) {
     }
 
     function deleteData(id){
-        axios.delete(`/admin/users/${id}`, { headers: { token:localStorage.getItem('token')}})
-            .then(({data}) => {
-                let tempTable = rowTable.filter((el,index) => {
-                    return el._id !== id
-                })
-                setRowTable(tempTable)
-                setTextToast('delete success')
-                setStatusToast(true)
-                setShowToast(true)
-            })
-            .catch(err => {
-                setTextToast(err.response.data.message)
-                setStatusToast(false)
-                setShowToast(true)
-            })
+        Swal.fire({
+            title: 'Delete data?',
+            text: "You are about to delete selected data, are you sure?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                axios.delete(`/admin/users/${id}`, { headers: { token:localStorage.getItem('token')}})
+                    .then(({data}) => {
+                        let tempTable = rowTable.filter((el,index) => {
+                            return el._id !== id
+                        })
+                        setRowTable(tempTable)
+                        setTextToast('delete success')
+                        setStatusToast(true)
+                        setShowToast(true)
+                    })
+                    .catch(err => {
+                        setTextToast(err.response.data.message)
+                        setStatusToast(false)
+                        setShowToast(true)
+                    })
+            }
+        });
     }
 
     function handleClose() {
@@ -171,7 +183,7 @@ function User (props) {
                 setId(id);
                 setShowModalPass(true);
             }
-        })
+        });
     }
 
     function handleShow() {

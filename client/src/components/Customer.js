@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap'
+import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap';
+import Swal from 'sweetalert2';
+
 import RowTable from './RowTableModelCustomer';
 import axios from '../api/database';
 import Toast from './ToastComponent';
@@ -101,28 +103,39 @@ function Customer (props) {
     }
 
     function deleteData(id){
-        axios.delete(`/rentlists/${id}`, { headers: { token:localStorage.getItem('token')}})
-            .then(({data}) => {
-                const deleted = rowTable.find((el,index) => {
-                    return el._id === id
-                })
-                let tempTable = rowTable.filter((el,index) => {
-                    return el._id !== id
-                })
-                setRowTable(tempTable)
-                setTextToast('delete success')
-                setStatusToast(true)
-                setShowToast(true)
-                return axios.patch(`/cars/${deleted.carId}?editGranted=true`, { status: 'On pool' }, { headers:{ token:localStorage.getItem('token')}})
-            })
-            .then(({data}) => {
-                //
-            })
-            .catch(err => {
-                setTextToast(err.response.data.message)
-                setStatusToast(false)
-                setShowToast(true)
-            })
+        Swal.fire({
+            title: 'Delete data?',
+            text: "You are about to delete selected data, are you sure?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                axios.delete(`/rentlists/${id}`, { headers: { token:localStorage.getItem('token')}})
+                    .then(({data}) => {
+                        const deleted = rowTable.find((el,index) => {
+                            return el._id === id
+                        })
+                        let tempTable = rowTable.filter((el,index) => {
+                            return el._id !== id
+                        })
+                        setRowTable(tempTable)
+                        setTextToast('delete success')
+                        setStatusToast(true)
+                        setShowToast(true)
+                        return axios.patch(`/cars/${deleted.carId}?editGranted=true`, { status: 'On pool' }, { headers:{ token:localStorage.getItem('token')}})
+                    })
+                    .then(({data}) => {
+                        //
+                    })
+                    .catch(err => {
+                        setTextToast(err.response.data.message)
+                        setStatusToast(false)
+                        setShowToast(true)
+                    })
+            }
+        });    
     }
 
     function handleClose() {
