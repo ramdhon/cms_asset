@@ -22,25 +22,28 @@ export default function RowTableNewModel(props) {
         <>
         <tr>
             <td>{ index+1 }</td>
+            <td>{ value._id }</td>
             {
-                Object.keys(value).map( (el, elIndex) => {
-                    return ( el ==='updated' || el ==='created' || el ==='_id' || key_model.includes(el) ? 
+                key_model.map( (el, elIndex) => {
+                    return (
                         <td  align='center' key={ elIndex }> 
                             { 
-                                el ==='created' || el === 'updated' ?  moment(value[el]).format('MMMM Do YYYY, h:mm:ss a') 
-                                : ( type[el] && type[el].toLowerCase() === 'image' && value[el] ?
+                                ( type[el] && type[el].toLowerCase() === 'image' && value[el] ?
                                 <Image width="50px" height='50px'src={ `${server}/uploads/${value[el]}`} 
                                     roundedCircle 
                                     style={{ cursor:'pointer' }}
                                     onClick={(e) => showModalImage(e, el) }
                                 /> 
                                 : ( el === 'price' ? formatNumber(value[el])
-                                : ( type[el] && type[el].toLowerCase() === 'boolean' ? JSON.stringify(value[el]) : value[el]
+                                : ( type[el] && type[el].toLowerCase() === 'boolean' ? JSON.stringify(value[el]) : value[el] || '-'
                                 )))
                             } 
-                        </td> : null  )
+                        </td>
+                    )
                 })
             }
+            <td align='center' >{ moment(value.created).format('MMMM Do YYYY, h:mm:ss a') }</td>
+            <td align='center' >{ moment(value.updated).format('MMMM Do YYYY, h:mm:ss a') }</td>
             <td align='center' colSpan={2}>
                 <Button className='m-1' size='sm' onClick={(e) => props.edit(value)}><i className="fas fa-edit"></i></Button>
                 <Button variant="danger" size='sm' onClick={(e) => props.delete(value._id)}><i className="fas fa-trash"></i></Button>
