@@ -9,6 +9,10 @@ const carSchema = new Schema({
     price: { type: Number },
     currency: { type: String },
     status: { type: String },
+    purchasedYear: { type: Number },
+    machineNo: { type: String },
+    color: { type: String },
+    location: { type: String },
     //sulap-add-models
     //please do not delete comment above
     created: {

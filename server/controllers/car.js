@@ -82,6 +82,9 @@ class CarController {
                 {vin: { $regex: search, $options: 'i' }}, 
                 {currency: { $regex: search, $options: 'i' }}, 
                 {status: { $regex: search, $options: 'i' }}, 
+                {machineNo: { $regex: search, $options: 'i' }}, 
+                {color: { $regex: search, $options: 'i' }}, 
+                {location: { $regex: search, $options: 'i' }}, 
                 //sulap-add-query
             ]}
         }
