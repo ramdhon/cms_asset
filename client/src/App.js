@@ -58,9 +58,13 @@ function App() {
 function PrivateRoute({ component: Component, ...rest }) {
   const [user, setUser] = useState(null);
   
-  store.subscribe(() => {
+  const unsubscribe = store.subscribe(() => {
     const storeState = store.getState();
     setUser(storeState.user);
+  })
+  
+  useEffect(() => {
+    return unsubscribe;
   })
 
   return (
@@ -84,9 +88,13 @@ function PrivateRoute({ component: Component, ...rest }) {
 function PublicRoute({ component: Component, ...rest }) {
   const [user, setUser] = useState(null);
   
-  store.subscribe(() => {
+  const unsubscribe = store.subscribe(() => {
     const storeState = store.getState();
     setUser(storeState.user);
+  })
+
+  useEffect(() => {
+    return unsubscribe;
   })
 
   return (
