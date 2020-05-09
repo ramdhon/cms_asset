@@ -7,7 +7,6 @@ const rentitemSchema = new Schema({
     anually: { type: Number },
     currency: { type: String },
     tax: { type: Number },
-    discount: { type: Number },
     carId: {
         type: Schema.Types.ObjectId, ref: 'Car'
     },
