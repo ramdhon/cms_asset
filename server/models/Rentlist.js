@@ -11,6 +11,7 @@ const rentlistSchema = new Schema({
         required: [true, 'end period must be filled in'],
         type: Date
     },
+    discount: { type: Number },
     rentItemId: {
         type: Schema.Types.ObjectId, ref: 'Rentitem'
     },

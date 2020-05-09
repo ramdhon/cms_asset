@@ -13,12 +13,13 @@ function Customer (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","model":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"date","endPeriod":"date"}
+    const stateType ={"brand":"string","model":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"date","endPeriod":"date","discount":"number"}
     const [ search, setSearch ] = useState('')
     const [ customer, setCustomer] = useState('') 
     const [ type, setType] = useState('') 
     const [ startPeriod, setStartPeriod] = useState(new Date()) 
     const [ endPeriod, setEndPeriod] = useState(new Date()) 
+    const [ discount, setDiscount] = useState(0) 
     const [ rentItemId, setRentItemId] = useState('') 
     
     const [ validated, setValidated] = useState(false)
@@ -38,9 +39,9 @@ function Customer (props) {
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
-    const funcLoop = [setCustomer,setType,setStartPeriod,setEndPeriod] 
+    const funcLoop = [setCustomer,setType,setStartPeriod,setEndPeriod,setDiscount] 
 
-    const stateObj = { customer,type,startPeriod,endPeriod } 
+    const stateObj = { customer,type,startPeriod,endPeriod,discount } 
 
 
     //toast

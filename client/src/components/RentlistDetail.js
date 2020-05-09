@@ -3,7 +3,7 @@ import { Row, Col, Table } from 'react-bootstrap';
 
 function RentlistDetail(props) {
     
-    const modelInfo = {"Customer":"String","Type":"String","StartPeriod":"Date","EndPeriod":"Date","RentItemId":"ObjectId"} 
+    const modelInfo = {"Customer":"String","Type":"String","StartPeriod":"Date","EndPeriod":"Date","Discount":"Number","RentItemId":"ObjectId"} 
 
 
     return (

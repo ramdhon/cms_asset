@@ -10,12 +10,13 @@ function Rentlist (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"customer":"string","type":"string","startPeriod":"string","endPeriod":"string","rentItemId":"string"}
+    const stateType ={"customer":"string","type":"string","startPeriod":"string","endPeriod":"string","discount":"number","rentItemId":"string"}
     const [ search, setSearch ] = useState('')
     const [ customer, setCustomer] = useState('') 
     const [ type, setType] = useState('') 
     const [ startPeriod, setStartPeriod] = useState('') 
     const [ endPeriod, setEndPeriod] = useState('') 
+    const [ discount, setDiscount] = useState(0) 
     const [ rentItemId, setRentItemId] = useState('') 
     
     const [ modalImage, setModalImage ] = useState(false)
@@ -24,9 +25,9 @@ function Rentlist (props) {
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
-    const funcLoop = [setCustomer,setType,setStartPeriod,setEndPeriod,setRentItemId] 
+    const funcLoop = [setCustomer,setType,setStartPeriod,setEndPeriod,setDiscount,setRentItemId] 
 
-    const stateObj = { customer,type,startPeriod,endPeriod,rentItemId } 
+    const stateObj = { customer,type,startPeriod,endPeriod,discount,rentItemId } 
 
 
     //toast
