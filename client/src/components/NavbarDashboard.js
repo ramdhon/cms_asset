@@ -36,7 +36,7 @@ function NavbarHeader(props) {
                 <Row className='shadow-sm'>
                     {
                         sidebarOn &&
-                            <Col lg={2} style={{ textAlign:'center', background:'#00b894' }} className='d-flex align-items-center justify-content-center'>
+                            <Col lg={2} style={{ textAlign:'center', background:'#ff2323' }} className='d-flex align-items-center justify-content-center'>
                                 <div className="LogoDashboard"> <Link to="/dashboard"><h4 style={{  color:'white', verticalAlign:'center', fontWeight:'200', letterSpacing:'2px'}}><b>Trans</b>-Pacific</h4> </Link></div>
                             </Col>
                     }

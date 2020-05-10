@@ -1,31 +1,31 @@
 .App {
   text-align: center;
 }
-
+/* #00b894 */
 .btn-outline-primary {
-  color: #00b894 !important;
-  border-color: #00b894 !important;
+  color: #ff2323 !important;
+  border-color: #ff2323 !important;
 }
 .btn-outline-primary:focus {
-  color: #00b894 !important;
-  border-color: #00b894 !important;
+  color: #ff2323 !important;
+  border-color: #ff2323 !important;
 }
 .btn-primary{
   color: white !important;
-  border-color: #00b894 !important;
-  background-color: #00b894 !important;
+  border-color: #ff2323 !important;
+  background-color: #ff2323 !important;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
   color: #fff !important;
-  background-color: #00b894 !important;
-  border-color: #00b894 !important; /*set the color you want here*/
+  background-color: #ff2323 !important;
+  border-color: #ff2323 !important; /*set the color you want here*/
 }
 
 .btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active, .btn-outline-primary.active, .open>.dropdown-toggle.btn-outline-primary {
   color: #fff !important;
-  background-color: #00b894 !important;
-  border-color: #00b894 !important; /*set the color you want here*/
+  background-color: #ff2323 !important;
+  border-color: #ff2323 !important; /*set the color you want here*/
 }
 
 .App-header {
