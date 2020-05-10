@@ -53,3 +53,6 @@ a:hover{
   color: inherit !important;
 }
 
+.modal-w-90 {
+  max-width: 90vw;
+}

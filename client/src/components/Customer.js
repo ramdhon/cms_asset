@@ -460,11 +460,11 @@ function Customer (props) {
 
         <ImageModal  show={ modalImage } onHide={ setModalImage } title={ imageLink }/>
 
-        <Modal show={showModalPrint} onHide={handleClosePrint} size="lg">
+        <Modal show={showModalPrint} onHide={handleClosePrint} dialogClassName="modal-w-90">
             <Modal.Header closeButton>
                 <Modal.Title>Preview Invoice</Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ background: '#D3D3D3'}}>
+            <Modal.Body style={{ padding: 0 }}>
                 <PdfDownload />
             </Modal.Body>
         </Modal>
