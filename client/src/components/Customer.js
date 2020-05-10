@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import Calendar from 'react-calendar';
 
 import RowTable from './RowTableModelCustomer';
 import axios from '../api/database';
 import Toast from './ToastComponent';
 import { server } from '../api/database';
-import ImageModal from './ImageModal'
-import Calendar from 'react-calendar';
+import ImageModal from './ImageModal';
+import PdfDownload from './PdfDownload.js';
 
 function Customer (props) {
 
@@ -36,6 +37,8 @@ function Customer (props) {
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
     
+    const [ showModalPrint, setShowModalPrint ] = useState(false);
+
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
@@ -173,6 +176,39 @@ function Customer (props) {
         } else {
             fetchRentItems();
         }
+    }
+
+    function handleShowPrint(rowData) {
+        Object.keys(stateObj).forEach((el, index) => {
+            funcLoop[index](rowData[el])
+        });
+        setRentItemId(rowData.rentItemId);
+        setId(rowData._id);
+
+        setShowModalPrint(true);
+
+        if (typeof rowData._id === 'string') {
+            fetchRentItems(rowData._id);
+        } else {
+            fetchRentItems();
+        }
+    }
+
+    function handleClosePrint() {
+        setShowModalPrint(false);
+        Object.keys(stateObj).forEach((el_state,index) => {
+            if(''+stateType[el_state] === 'boolean'){
+                funcLoop[index](false)
+            } else if (''+stateType[el_state] === 'number'){
+                funcLoop[index](0)
+            } else if (''+stateType[el_state] === 'date'){
+                funcLoop[index](new Date());
+            } else {
+                funcLoop[index]('')
+            }
+        });
+        setId('');
+        setRentItemId('');
     }
     
     function submitSearch(e){
@@ -338,7 +374,6 @@ function Customer (props) {
             monthly: null,
             annually: null,
             tax: null,
-            discount: null
         })
     }, [rentItemId, rentItemList])
 
@@ -404,6 +439,7 @@ function Customer (props) {
                                         status={ status }
                                         edit={ editData } 
                                         delete={ deleteData }
+                                        handleShowPrint={ handleShowPrint }
                                         type={ stateType }
                                         />
                                     }) }
@@ -423,6 +459,15 @@ function Customer (props) {
         }
 
         <ImageModal  show={ modalImage } onHide={ setModalImage } title={ imageLink }/>
+
+        <Modal show={showModalPrint} onHide={handleClosePrint} size="lg">
+            <Modal.Header closeButton>
+                <Modal.Title>Preview Invoice</Modal.Title>
+            </Modal.Header>
+            <Modal.Body style={{ background: '#D3D3D3'}}>
+                <PdfDownload />
+            </Modal.Body>
+        </Modal>
 
         <Modal show={showModal} onHide={handleClose} size="lg">
             <Modal.Header closeButton>

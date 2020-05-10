@@ -12,10 +12,13 @@
     "react-bootstrap": "^1.0.0-beta.9",
     "react-calendar": "^3.0.1",
     "react-chartjs-2": "^2.7.6",
+    "react-data-export": "^0.6.0",
     "react-dom": "^16.8.6",
+    "react-export-excel": "^0.5.3",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "react-to-pdf": "^0.0.11",
     "redux": "^4.0.5",
     "sweetalert2": "^9.10.12"
   },

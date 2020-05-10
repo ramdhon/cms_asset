@@ -59,8 +59,9 @@ export default function RowTableNewModel(props) {
             <td align='center'>{ moment(value.updated).format('MMMM Do YYYY, h:mm:ss a') }</td>
             <td align='center' colSpan={2}>
                 <Button className='m-1' size='sm' onClick={(e) => props.edit(value)}><i className="fas fa-edit"></i></Button>
-                <Button size='sm' onClick={(e) => props.delete(value._id)}><i className="fas fa-trash"></i></Button>
-                <Button size='sm' disabled={value.status !== 'On customer'} onClick={(e) => props.status(value)}><i className="fas fa-check"></i></Button>
+                <Button className='m-1' size='sm' onClick={(e) => props.delete(value._id)}><i className="fas fa-trash"></i></Button>
+                <Button className='m-1' size='sm' onClick={(e) => props.handleShowPrint(value)}><i className="fas fa-download"></i></Button>
+                <Button className='m-1' size='sm' disabled={value.status !== 'On customer'} onClick={(e) => props.status(value)}><i className="fas fa-check"></i></Button>
             </td>
         </tr>  
         </>
