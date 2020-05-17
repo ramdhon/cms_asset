@@ -7,7 +7,7 @@ function NavbarHeader(props) {
         <>
             <Navbar bg="light" expand="lg" className='shadow-sm'>
                 <Container>
-                    <Navbar.Brand href=""><b>Trans</b><span style={{ color:'#00b894'}}>-Pacific</span></Navbar.Brand>
+                    <Navbar.Brand href=""><b>Trans</b><span style={{ color:'#ff2323'}}>-Pacific</span></Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ml-auto">
