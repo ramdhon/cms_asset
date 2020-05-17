@@ -1,14 +1,48 @@
 import React from 'react';
 import ReactToPdf from 'react-to-pdf';
-import { Button, Container, Row, Col, Table } from 'react-bootstrap';
+import moment from 'moment';
+import _ from 'lodash';
+import Calendar from 'react-calendar';
+import { Button, Container, Form, Row, Col, Table } from 'react-bootstrap';
 
-function PdfDownload(props) {
+import { formatNumber } from '../helpers'
+
+function PdfDownload({ data }) {
   const ref = React.createRef();
   const options = {
     orientation: 'potrait',
     unit: 'in',
     format: 'a4'
   };
+  
+  function strItemForm(input) {
+    return input || '_______________________';
+  }
+
+  function dateItemForm(input) {
+    return !input ? moment(input).format('dddd, MMMM Do YYYY') : moment(new Date()).format('dddd, MMMM Do YYYY')
+  }
+
+  function subTotal() {
+    return (1 - data.discount / 100) * data.price;
+  }
+
+  function taxPrice() {
+    return data.tax / 100 * data.price;
+  }
+
+  function otherPriceConverter() {
+    return _.map(_.get(data, 'otherExpenses', []), item => item.price);
+  }
+
+  function otherTotal() {
+    return _.reduce(otherPriceConverter(), (sum, n) => sum + n) || 0;
+  }
+
+  function total() {
+    return subTotal() + otherTotal() + taxPrice() + data.delivery || 0 - data.discountFinal || 0
+  }
+
   return (
     <Container fluid>
       <Row>
@@ -38,10 +72,10 @@ function PdfDownload(props) {
                 <span>Alamat</span>
               </Col>
               <Col className="d-flex flex-column" md="5">
-                <span>: __________</span>
-                <span>: __________</span>
-                <span>: __________</span>
-                <span>: __________</span>
+                <span>: {strItemForm(data._id)}</span>
+                <span>: {strItemForm(data.customer)}</span>
+                <span>: {strItemForm(data.pic)}</span>
+                <span>: {strItemForm(data.address)}</span>
               </Col>
               <Col className="d-flex flex-column" md="2">
                 <span>Tanggal</span>
@@ -50,10 +84,10 @@ function PdfDownload(props) {
                 <span>Pool</span>
               </Col>
               <Col className="d-flex flex-column" md="3">
-                <span>: __________</span>
-                <span>: __________</span>
-                <span>: __________</span>
-                <span>: __________</span>
+                <span>: {dateItemForm()}</span>
+                <span>: {strItemForm(data.currency)}</span>
+                <span>: {strItemForm(data.type)}</span>
+                <span>: {strItemForm(data.location)}</span>
               </Col>
             </Row>
             <Row>
@@ -74,13 +108,13 @@ function PdfDownload(props) {
                 </thead>
                 <tbody>
                   <tr>
+                    <td>{strItemForm(`${data.brand} ${data.model} ${data.color || ''} ${data.policeNo}`)}</td>
+                    <td>{dateItemForm(data.startPediod)} - {dateItemForm(data.endPediod)}</td>
+                    <td>{formatNumber(1)}</td>
+                    <td>{strItemForm(formatNumber(data.price))}</td>
+                    <td>{strItemForm(formatNumber(data.discount))} %</td>
                     <td>............</td>
-                    <td>............</td>
-                    <td>............</td>
-                    <td>............</td>
-                    <td>............</td>
-                    <td>............</td>
-                    <td>............</td>
+                    <td>{strItemForm(formatNumber(data.tax))} %</td>
                   </tr>
                 </tbody>
               </Table>
@@ -120,16 +154,16 @@ function PdfDownload(props) {
                   </Col>
                   <Col className="d-flex flex-column" md="5">
                     <Row className="justify-content-end">
-                      <span>________________</span>
+                      <span>{strItemForm(formatNumber(data.discountFinal || 0))}</span>
                     </Row>
                     <Row className="justify-content-end">
-                      <span>________________</span>
+                      <span>{strItemForm(formatNumber(taxPrice()))}</span>
                     </Row>
                     <Row className="justify-content-end">
-                      <span>________________</span>
+                      <span>{strItemForm(formatNumber(data.delivery || 0))}</span>
                     </Row>
                     <Row className="justify-content-end">
-                      <span>________________</span>
+                      <span>{strItemForm(formatNumber(total()))}</span>
                     </Row>
                   </Col>
                 </Row>
@@ -182,6 +216,23 @@ function PdfDownload(props) {
                 </Row>
               )}
             </ReactToPdf>
+            <Form>
+              <Form.Group className='mt-2'>
+                <Form.Label>Enter Customer PIC</Form.Label>
+                <Form.Control required type="text" placeholder={`Enter name`} onChange={ e => data.pic = e.target.value } value={ data.pic }/>
+                <Form.Control.Feedback type="invalid">
+                  Please enter customer name.
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className='mt-2'>
+                <Form.Label>Enter Customer Address</Form.Label>
+                <Form.Control required as="textarea" rows="5" placeholder={`Enter name`} onChange={ e => data.address = e.target.value } value={ data.address }/>
+                <Form.Control.Feedback type="invalid">
+                  Please enter customer name.
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Form>
+            <span>{JSON.stringify(data)}</span>
           </Container>
         </Col>
       </Row>

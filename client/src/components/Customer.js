@@ -26,6 +26,7 @@ function Customer (props) {
     const [ validated, setValidated] = useState(false)
 
     const [ selectedItem, setSelectedItem ] = useState({})
+    const [ selectedRow, setSelectedRow ] = useState({})
 
     const [ rentItemList, setRentItemList ] = useState([])
     
@@ -182,6 +183,7 @@ function Customer (props) {
         Object.keys(stateObj).forEach((el, index) => {
             funcLoop[index](rowData[el])
         });
+        setSelectedRow(rowData);
         setRentItemId(rowData.rentItemId);
         setId(rowData._id);
 
@@ -465,7 +467,7 @@ function Customer (props) {
                 <Modal.Title>Preview Invoice</Modal.Title>
             </Modal.Header>
             <Modal.Body style={{ padding: 0 }}>
-                <PdfDownload />
+                <PdfDownload data={selectedRow} />
             </Modal.Body>
         </Modal>
 
