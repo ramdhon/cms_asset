@@ -15,7 +15,7 @@ const rentlistSchema = new Schema({
     rentItemId: {
         type: Schema.Types.ObjectId, ref: 'Rentitem'
     },
-    customerStatus: { type: Boolean },
+    customerStatus: { type: String },
     //sulap-add-models
     //please do not delete comment above
     created: {

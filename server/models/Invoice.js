@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const carSchema = new Schema({
+const invoiceSchema = new Schema({
   invoiceNo: { type: String },
   printDate: { type: Date },
   finalDiscount: { type: Number },
@@ -16,8 +16,32 @@ const carSchema = new Schema({
   },
   rentListId: {
     required: [true, 'customer id must be provided'],
-    type: Schema.Types.ObjectId, ref: 'Rentlist'
+    type: Schema.Types.ObjectId, ref: 'Rentlist',
+    validate: [
+      {
+        validator: function (v) {
+            return Invoice
+                .findOne({
+                    _id: {
+                        $ne: this._id
+                    },
+                    rentListId: v
+                })
+                .then(found => {
+                    if (found) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                })
+                .catch(err => {
+                    throw err
+                })
+        },
+        message: 'has been made before'
+      }
+    ]
   },
 });
-const Car = mongoose.model('Car', carSchema)
-module.exports = Car
+const Invoice = mongoose.model('Invoice', invoiceSchema)
+module.exports = Invoice

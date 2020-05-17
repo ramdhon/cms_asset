@@ -14,14 +14,14 @@ function Customer (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","model":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"date","endPeriod":"date","discount":"number","customerStatus":"boolean"}
+    const stateType ={"brand":"string","model":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"date","endPeriod":"date","discount":"number","customerStatus":"string"}
     const [ search, setSearch ] = useState('')
     const [ customer, setCustomer] = useState('') 
     const [ type, setType] = useState('') 
     const [ startPeriod, setStartPeriod] = useState(new Date()) 
     const [ endPeriod, setEndPeriod] = useState(new Date()) 
     const [ discount, setDiscount] = useState(0) 
-    const [ customerStatus, setCustomerStatus] = useState(true) 
+    const [ customerStatus, setCustomerStatus] = useState('') 
     const [ rentItemId, setRentItemId] = useState('') 
     
     const [ validated, setValidated] = useState(false)
