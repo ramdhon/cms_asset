@@ -24,7 +24,7 @@ function PdfDownload({ data }) {
   }
 
   function subTotal() {
-    return (1 - data.discount / 100) * data.price;
+    return data.price - data.discount;
   }
 
   function taxPrice() {
@@ -109,10 +109,10 @@ function PdfDownload({ data }) {
                 <tbody>
                   <tr>
                     <td>{strItemForm(`${data.brand} ${data.model} ${data.color || ''} ${data.policeNo}`)}</td>
-                    <td>{dateItemForm(data.startPediod)} - {dateItemForm(data.endPediod)}</td>
+                    <td>{dateItemForm(data.startPeriod)} - {dateItemForm(data.endPeriod)}</td>
                     <td>{formatNumber(1)}</td>
                     <td>{strItemForm(formatNumber(data.price))}</td>
-                    <td>{strItemForm(formatNumber(data.discount))} %</td>
+                    <td>{strItemForm(formatNumber(data.discount))}</td>
                     <td>............</td>
                     <td>{strItemForm(formatNumber(data.tax))} %</td>
                   </tr>
