@@ -12,7 +12,7 @@ function CarList (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","vin":"string","status":"string","daily":"number","weekly":"number","monthly":"number","anually":"number","tax":"number"}
+    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","color":"string","vin":"string","status":"string","daily":"number","weekly":"number","monthly":"number","anually":"number","tax":"number"}
     const [ search, setSearch ] = useState('')
     const [ daily, setDaily] = useState(0) 
     const [ weekly, setWeekly] = useState(0) 

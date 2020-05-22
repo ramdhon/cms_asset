@@ -14,7 +14,7 @@ function Customer (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","model":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"date","endPeriod":"date","discount":"number","customerStatus":"string"}
+    const stateType ={"brand":"string","model":"string","color":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"date","endPeriod":"date","discount":"number","customerStatus":"string"}
     const [ search, setSearch ] = useState('')
     const [ customer, setCustomer] = useState('') 
     const [ type, setType] = useState('') 
@@ -223,6 +223,7 @@ function Customer (props) {
                     const { _id, created, updated, type } = el;
 
                     Object.assign(el, el.rentItemId.carId);
+                    Object.assign(el, el.rentItemId);
                     el._id = _id;
                     el.created = created;
                     el.updated = updated;
@@ -230,6 +231,8 @@ function Customer (props) {
                     el.model = el.rentItemId.carId.type;
                     el.carId = el.rentItemId.carId._id;
                     el.rentItemId = el.rentItemId._id;
+                    delete el.rentItemId;
+
                     return el;
                 }).filter((el) => {
                     return (
@@ -277,6 +280,7 @@ function Customer (props) {
                         const { _id, created, updated, type } = el;
 
                         Object.assign(el, el.rentItemId.carId);
+                        Object.assign(el, el.rentItemId);
                         el._id = _id;
                         el.created = created;
                         el.updated = updated;
@@ -284,6 +288,8 @@ function Customer (props) {
                         el.model = el.rentItemId.carId.type;
                         el.carId = el.rentItemId.carId._id;
                         el.rentItemId = el.rentItemId._id;
+                        delete el.rentItemId;
+
                         return el;
                     })
                     setRowTable(tmp);
