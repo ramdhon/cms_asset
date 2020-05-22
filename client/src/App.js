@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 
 import './App.css';
 import Login from './views/Login';
-import Register from './views/Register';
+// import Register from './views/Register';
 import Dashboard from './views/Dashboard';
 import Home from './views/Home';
 import axios from './api/database';
