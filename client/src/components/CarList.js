@@ -186,10 +186,11 @@ function CarList (props) {
                 if(data.Rentitems){
                     const regex = new RegExp(search, 'gi');
                     let tmp = data.Rentitems.map((el) => {
-                        const { _id, created, updated } = el;
+                        const { _id, currency, created, updated } = el;
 
                         Object.assign(el, el.carId);
                         el._id = _id;
+                        el.currency = currency;
                         el.created = created;
                         el.updated = updated;
                         el.carId = el.carId._id;
