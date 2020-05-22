@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 function formatNumber(amount, decimalCount = 2, decimal = ".", thousands = ",") {
   try {
       decimalCount = Math.abs(decimalCount);
@@ -13,6 +15,36 @@ function formatNumber(amount, decimalCount = 2, decimal = ".", thousands = ",") 
       console.log(e)
   }
 };
+
+function printStr(input) {
+  return input || '-';
+}
+
+function printStrForm(input) {
+  return input || '____________________';
+}
+
+function printDate(input, withTime = true, withDay = false) {
+  const date = input || new Date();
+  let format = 'MMMM Do YYYY';
+  format = format + (withTime ? ', h:mm:ss a' : '');
+  format = (withDay ? 'dddd, ' : '') + format;
+
+  return moment(date).format(format);
+}
+
+function printBlur(input) {
+  if (!input) {
+    return input;
+  }
+
+  const length = input.length > 6 ? 6 : input.length;
+  const startingIndex = Math.round(Math.random() * (input.length - length));
+  const endingIndex = startingIndex + length;
+
+  return '***' + input.slice(startingIndex, endingIndex) + '***';
+}
+
 
 function formatCurrency(input, decimal = '.', thousands = ',') {
   let number = input.split(thousands).join('');
@@ -53,4 +85,4 @@ function currencyInput(input, decimal = '.', thousands = ',') {
   return output.split('').reverse().join('');
 }
 
-module.exports = { formatNumber, formatCurrency, currencyInput };
+module.exports = { formatNumber, formatCurrency, currencyInput, printBlur, printStr, printStrForm, printDate };
