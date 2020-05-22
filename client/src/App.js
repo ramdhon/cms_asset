@@ -21,7 +21,7 @@ function App() {
   
   useEffect(() => {
     return unsubscribe;
-  })
+  }, [])
   
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -43,13 +43,13 @@ function App() {
     } else {
       store.dispatch(setUser(null));
     }
-  }, [user])
+  }, [])
 
   return (
     <Provider store={store}>
         <Route path="/" exact render={props => <Home {...props} />} />
         <PublicRoute path="/login" component={Login} />
-        <PublicRoute path="/register" component={Register} />
+        {/* <PublicRoute path="/register" component={Register} /> */}
         <PrivateRoute path="/dashboard" component={Dashboard} />
     </Provider>
   );
@@ -65,7 +65,7 @@ function PrivateRoute({ component: Component, ...rest }) {
   
   useEffect(() => {
     return unsubscribe;
-  })
+  }, [])
 
   return (
     <Route
@@ -95,7 +95,7 @@ function PublicRoute({ component: Component, ...rest }) {
 
   useEffect(() => {
     return unsubscribe;
-  })
+  }, [])
 
   return (
     <Route
