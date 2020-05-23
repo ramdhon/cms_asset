@@ -5,7 +5,7 @@ import _ from 'lodash';
 import Calendar from 'react-calendar';
 import { Button, Container, Form, Row, Col, Table } from 'react-bootstrap';
 
-import { formatNumber } from '../helpers'
+import { formatNumber, printStrForm, printDate, printStr, inWords } from '../helpers'
 
 function PdfDownload({ data }) {
   const ref = React.createRef();
@@ -14,17 +14,52 @@ function PdfDownload({ data }) {
     unit: 'in',
     format: 'a4'
   };
-  
-  function strItemForm(input) {
-    return input || '_______________________';
-  }
 
-  function dateItemForm(input) {
-    return !input ? moment(input).format('dddd, MMMM Do YYYY') : moment(new Date()).format('dddd, MMMM Do YYYY')
+  function timeDiff() {
+    let perimeter;
+
+    switch (data.type) {
+      case 'annually':
+        perimeter = 'years';
+        break;
+      case 'monthly':
+        perimeter = 'months';
+        break;
+      case 'weekly':
+      case 'daily':
+        perimeter = 'days';
+        break;
+      default:
+        return 0;
+    }
+
+    const momentStart = moment(data.startPeriod);
+    const momentEnd = moment(data.endPeriod);
+
+    if (data.type === 'weekly') {
+      return momentEnd.diff(momentStart, perimeter, true) / 7;
+    }
+
+    return momentEnd.diff(momentStart, perimeter, true);
   }
 
   function subTotal() {
-    return data.price - data.discount;
+    return (100 - data.discount) / 100 * data[data.type] * timeDiff();
+  }
+
+  function splitPointNumber(input) {
+    const str = ''+input;
+    const splitted = str.split('.');
+    splitted[0] = splitted[0].split(',').join('');
+    
+    return _.map(splitted, item => Number(item));
+  }
+
+  function finalWords() {
+    const formatted = formatNumber(subTotal());
+    const splitted = splitPointNumber(formatted);
+
+    return `${inWords(splitted[0]) || 'nol'} koma ${inWords(splitted[1]) || 'nol'}`
   }
 
   function taxPrice() {
@@ -72,10 +107,10 @@ function PdfDownload({ data }) {
                 <span>Alamat</span>
               </Col>
               <Col className="d-flex flex-column" md="5">
-                <span>: {strItemForm(data._id)}</span>
-                <span>: {strItemForm(data.customer)}</span>
-                <span>: {strItemForm(data.pic)}</span>
-                <span>: {strItemForm(data.address)}</span>
+                <span>: {printStrForm(data._id)}</span>
+                <span>: {printStrForm(data.customer)}</span>
+                <span>: {printStrForm(data.pic)}</span>
+                <span>: {printStrForm(data.address)}</span>
               </Col>
               <Col className="d-flex flex-column" md="2">
                 <span>Tanggal</span>
@@ -84,10 +119,10 @@ function PdfDownload({ data }) {
                 <span>Pool</span>
               </Col>
               <Col className="d-flex flex-column" md="3">
-                <span>: {dateItemForm()}</span>
-                <span>: {strItemForm(data.currency)}</span>
-                <span>: {strItemForm(data.type)}</span>
-                <span>: {strItemForm(data.location)}</span>
+                <span>: {printDate(null, false, true)}</span>
+                <span>: {printStrForm(data.currency)}</span>
+                <span>: {printStrForm(data.type)}</span>
+                <span>: {printStrForm(data.location)}</span>
               </Col>
             </Row>
             <Row>
@@ -108,13 +143,13 @@ function PdfDownload({ data }) {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{strItemForm(`${data.brand} ${data.model} ${data.color || ''} ${data.policeNo}`)}</td>
-                    <td>{dateItemForm(data.startPeriod)} - {dateItemForm(data.endPeriod)}</td>
+                    <td>{printStrForm(`${printStr(data.brand)} ${printStr(data.model)} ${printStr(data.year)} ${printStr(data.policeNo)}`)}</td>
+                    <td>{printDate(data.startPeriod, false)} - {printDate(data.endPeriod, false)}</td>
                     <td>{formatNumber(1)}</td>
-                    <td>{strItemForm(formatNumber(data.price))}</td>
-                    <td>{strItemForm(formatNumber(data.discount))}</td>
-                    <td>............</td>
-                    <td>{strItemForm(formatNumber(data.tax))} %</td>
+                    <td>{printStrForm(formatNumber(data[data.type]))}</td>
+                    <td>{printStrForm(formatNumber(data.discount))} %</td>
+                    <td>{printStrForm(formatNumber(subTotal()))}</td>
+                    <td>{printStrForm(formatNumber(data.tax))} %</td>
                   </tr>
                 </tbody>
               </Table>
@@ -123,7 +158,7 @@ function PdfDownload({ data }) {
               <div className="my-2" style={{ height: '1px', width: '100%', background: '#D3D3D3' }} />
             </Row>
             <Row style={{ fontSize: 12 }}>
-              <span>Terbilang: ________________</span>
+              <span>Terbilang: <em>{finalWords()}</em></span>
             </Row>
             <Row>
               <div className="my-2" />
@@ -154,16 +189,16 @@ function PdfDownload({ data }) {
                   </Col>
                   <Col className="d-flex flex-column" md="5">
                     <Row className="justify-content-end">
-                      <span>{strItemForm(formatNumber(data.discountFinal || 0))}</span>
+                      <span>{printStrForm(formatNumber(data.discountFinal || 0))}</span>
                     </Row>
                     <Row className="justify-content-end">
-                      <span>{strItemForm(formatNumber(taxPrice()))}</span>
+                      <span>{printStrForm(formatNumber(taxPrice()))}</span>
                     </Row>
                     <Row className="justify-content-end">
-                      <span>{strItemForm(formatNumber(data.delivery || 0))}</span>
+                      <span>{printStrForm(formatNumber(data.delivery || 0))}</span>
                     </Row>
                     <Row className="justify-content-end">
-                      <span>{strItemForm(formatNumber(total()))}</span>
+                      <span>{printStrForm(formatNumber(total()))}</span>
                     </Row>
                   </Col>
                 </Row>

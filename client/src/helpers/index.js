@@ -45,6 +45,48 @@ function printBlur(input) {
   return '***' + input.slice(startingIndex, endingIndex) + '***';
 }
 
+function inWords(num) {
+  const kamus1 = {
+    0: '',
+    1: 'satu',
+    2: 'dua',
+    3: 'tiga',
+    4: 'empat',
+    5: 'lima',
+    6: 'enam',
+    7: 'tujuh',
+    8: 'delapan',
+    9: 'sembilan',
+    10: 'sepuluh',
+    11: 'sebelas',
+    100: 'seratus',
+    1000: 'seribu'
+  }
+
+  const kamus2 = [
+    [1e12, 'triliun'],
+    [1e9, 'milyar'],
+    [1e6, 'juta'],
+    [1e3, 'ribu'],
+    [1e2, 'ratus'],
+    [1e1, 'puluh']
+  ]
+
+  if(kamus1[num] !== undefined) {
+    return kamus1[num]
+  } else if(num > 11 && num < 20) {
+    return kamus1[num - 10] + ' belas'
+  } else {
+    let kepala = kamus2.find(item => Math.floor(num / item[0]) > 0)
+    let satuan = Math.floor(num / kepala[0])
+    if(kepala[0] * satuan in kamus1) {
+      return `${kamus1[kepala[0] * satuan]} ${inWords(num - (kepala[0] * satuan))}`
+    } else {
+      return `${inWords(satuan)} ${kepala[1]} ${inWords(num - (kepala[0] * satuan))}`
+    }
+  }
+}
+
 
 function formatCurrency(input, decimal = '.', thousands = ',') {
   let number = input.split(thousands).join('');
@@ -85,4 +127,4 @@ function currencyInput(input, decimal = '.', thousands = ',') {
   return output.split('').reverse().join('');
 }
 
-module.exports = { formatNumber, formatCurrency, currencyInput, printBlur, printStr, printStrForm, printDate };
+module.exports = { formatNumber, formatCurrency, currencyInput, printBlur, printStr, printStrForm, printDate, inWords };

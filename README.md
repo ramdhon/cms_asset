@@ -330,7 +330,7 @@ Access the REST API via localhost = `http://localhost:3000`
           "daily": "<number>",
           "weekly": "<number>",
           "monthly": "<number>",
-          "anually": "<number>",
+          "annually": "<number>",
           "currency": "<string>",
           "tax": "<number>",
           "discount": "<number>",
@@ -359,7 +359,7 @@ Access the REST API via localhost = `http://localhost:3000`
     - `daily`:`Number`
     - `weekly`:`Number`
     - `monthly`:`Number`
-    - `anually`:`Number`
+    - `annually`:`Number`
     - `currency`:`String`
     - `tax`:`Number`
     - `discount`:`Number`
@@ -374,7 +374,7 @@ Access the REST API via localhost = `http://localhost:3000`
           "daily": "<number>",
           "weekly": "<number>",
           "monthly": "<number>",
-          "anually": "<number>",
+          "annually": "<number>",
           "currency": "<string>",
           "tax": "<number>",
           "discount": "<number>",
@@ -417,7 +417,7 @@ Access the REST API via localhost = `http://localhost:3000`
           "daily": "<number>",
           "weekly": "<number>",
           "monthly": "<number>",
-          "anually": "<number>",
+          "annually": "<number>",
           "currency": "<string>",
           "tax": "<number>",
           "discount": "<number>",
@@ -450,7 +450,7 @@ Access the REST API via localhost = `http://localhost:3000`
     - `daily`:`Number`
     - `weekly`:`Number`
     - `monthly`:`Number`
-    - `anually`:`Number`
+    - `annually`:`Number`
     - `currency`:`String`
     - `tax`:`Number`
     - `discount`:`Number`
@@ -465,7 +465,7 @@ Access the REST API via localhost = `http://localhost:3000`
           "daily": "<number>",
           "weekly": "<number>",
           "monthly": "<number>",
-          "anually": "<number>",
+          "annually": "<number>",
           "currency": "<string>",
           "tax": "<number>",
           "discount": "<number>",
@@ -519,7 +519,7 @@ Access the REST API via localhost = `http://localhost:3000`
           "daily": "<number>",
           "weekly": "<number>",
           "monthly": "<number>",
-          "anually": "<number>",
+          "annually": "<number>",
           "currency": "<string>",
           "tax": "<number>",
           "discount": "<number>",

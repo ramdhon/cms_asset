@@ -3,7 +3,7 @@ import { Row, Col, Table } from 'react-bootstrap';
 
 function RentitemDetail(props) {
     
-    const modelInfo = {"Daily":"Number","Weekly":"Number","Monthly":"Number","Anually":"Number","Currency":"String","Tax":"Number","CarId":"ObjectId"} 
+    const modelInfo = {"Daily":"Number","Weekly":"Number","Monthly":"Number","Annually":"Number","Currency":"String","Tax":"Number","CarId":"ObjectId"} 
 
 
     return (

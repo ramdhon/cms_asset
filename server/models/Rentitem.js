@@ -4,7 +4,7 @@ const rentitemSchema = new Schema({
     daily: { type: Number },
     weekly: { type: Number },
     monthly: { type: Number },
-    anually: { type: Number },
+    annually: { type: Number },
     currency: { type: String },
     tax: { type: Number },
     carId: {

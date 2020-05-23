@@ -94,8 +94,8 @@
     "id": "Bulanan",
     "tr": "Aylik"
   },
-  "anually": {
-    "en": "Anually",
+  "annually": {
+    "en": "Annually",
     "id": "Tahunan",
     "tr": "Yillik"
   },

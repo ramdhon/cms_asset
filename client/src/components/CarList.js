@@ -12,12 +12,12 @@ function CarList (props) {
 
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","color":"string","vin":"string","status":"string","daily":"number","weekly":"number","monthly":"number","anually":"number","tax":"number"}
+    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","color":"string","vin":"string","status":"string","daily":"number","weekly":"number","monthly":"number","annually":"number","tax":"number"}
     const [ search, setSearch ] = useState('')
     const [ daily, setDaily] = useState(0) 
     const [ weekly, setWeekly] = useState(0) 
     const [ monthly, setMonthly] = useState(0) 
-    const [ anually, setAnually] = useState(0) 
+    const [ annually, setAnnually] = useState(0) 
     const [ currency, setCurrency] = useState('IDR') 
     const [ tax, setTax] = useState(0) 
     const [ carId, setCarId] = useState('')
@@ -34,9 +34,9 @@ function CarList (props) {
     const [ id , setId ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
-    const funcLoop = [setDaily,setWeekly,setMonthly,setAnually,setCurrency,setTax] 
+    const funcLoop = [setDaily,setWeekly,setMonthly,setAnnually,setCurrency,setTax] 
 
-    const stateObj = { daily,weekly,monthly,anually,currency,tax } 
+    const stateObj = { daily,weekly,monthly,annually,currency,tax } 
 
 
     //toast
