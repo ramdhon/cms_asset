@@ -514,6 +514,7 @@ function Customer (props) {
                         : null
                     ))
                 }
+                {/* FIXME: this below loop need to be cheked there is some kind error of controlled uncontrolled component */}
                 { Object.keys(stateObj).map((el, index) => {
                     if ( stateType[el] === 'boolean') {
                         return (<Form.Group key={ index }>
