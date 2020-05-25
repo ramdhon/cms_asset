@@ -41,7 +41,7 @@ export default function RowTableNewModel(props) {
             <td align='center' >{ printStr(printDate(value.created)) }</td>
             <td align='center' >{ printStr(printDate(value.updated)) }</td>
             <td align='center' colSpan={2}>
-                <Button className='m-1' size='sm' onClick={(e) => props.edit(value)}><i className="fas fa-edit"></i></Button>
+                <Button variant="outline-primary" className='m-1' size='sm' onClick={(e) => props.edit(value)}><i className="fas fa-edit"></i></Button>
                 <Button variant="danger" size='sm' onClick={(e) => props.delete(value._id)}><i className="fas fa-trash"></i></Button>
             </td>
         </tr>  

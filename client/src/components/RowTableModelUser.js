@@ -39,7 +39,7 @@ export default function RowTableNewModel(props) {
             <td align='center' >{ printStr(printDate(value.created)) }</td>
             <td align='center' >{ printStr(printDate(value.updated)) }</td>
             <td align='center' colSpan={2}>
-                <Button className='m-1' size='sm' onClick={(e) => props.edit(value)}><i className="fas fa-edit"></i></Button>
+                <Button variant="outline-primary" className='m-1' size='sm' onClick={(e) => props.edit(value)}><i className="fas fa-edit"></i></Button>
                 <Button variant={decode._id === value._id ? 'secondary' : 'danger'} className='m-1' size='sm' onClick={(e) => props.delete(value._id)} disabled={decode._id === value._id}><i className="fas fa-trash"></i></Button>
                 <Button variant="warning" className='m-1' size='sm' onClick={(e) => props.handleShowPass(value._id)}><i className="fas fa-key"></i></Button>
             </td>

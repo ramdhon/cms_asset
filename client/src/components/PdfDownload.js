@@ -73,7 +73,7 @@ function PdfDownload({ data }) {
     const formatted = formatNumber(finalTotal());
     const splitted = splitPointNumber(formatted);
 
-    return `${inWords(splitted[0]) || 'nol'} koma ${inWords(splitted[1]) || 'nol'}`
+    return `${inWords(splitted[0]) || 'nol'} koma ${inWords(splitted[1]) || 'nol'} rupiah`
   }
 
   function taxPrice() {
