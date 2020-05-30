@@ -31,6 +31,7 @@ function App() {
 
           store.dispatch(setUser({
             name: decoded.name,
+            email: decoded.email,
             role: decoded.role
           }));
         })

@@ -1,48 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import { connect } from 'react-redux';
 
 import RowTable from './RowTableModelUser';
 import axios from '../api/database';
 import Toast from './ToastComponent';
 import { server } from '../api/database';
-import ImageModal from './ImageModal'
+import ImageModal from './ImageModal';
+import { setUser } from '../store/actions';
 
 function User (props) {
-
     const [ decode, setDecode ] = useState({});
-    const [ showModal, setShowModal ] = useState(false)
-    const [ showModalPass, setShowModalPass ] = useState(false)
-    const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"name":"string","email":"string","password":"string","role":"string","department":"string"}
-    const [ search, setSearch ] = useState('')
-    const [ name, setName] = useState('') 
-    const [ email, setEmail] = useState('') 
-    const [ password, setPassword] = useState('') 
-    const [ role, setRole] = useState('') 
-    const [ department, setDepartment] = useState('') 
+    const [ showModal, setShowModal ] = useState(false);
+    const [ showModalPass, setShowModalPass ] = useState(false);
+    const [ rowTable, setRowTable ] = useState([]);
+    const stateType ={"name":"string","email":"string","password":"string","role":"string","department":"string"};
+    const [ search, setSearch ] = useState('');
+    const [ name, setName] = useState('');
+    const [ email, setEmail] = useState(''); 
+    const [ password, setPassword] = useState('');
+    const [ role, setRole] = useState('');
+    const [ department, setDepartment] = useState('');
     
-    const [ confirmPassword, setConfirmPassword] = useState('') 
+    const [ confirmPassword, setConfirmPassword] = useState('');
+    const [ roleValidation, setRoleValidation] = useState(false); 
 
-    const [ validated, setValidated] = useState('') 
+    const [ validated, setValidated] = useState('');
     
-    const [ modalImage, setModalImage ] = useState(false)
-    const [ imageLink, setImageLink ] = useState('')
+    const [ modalImage, setModalImage ] = useState(false);
+    const [ imageLink, setImageLink ] = useState('');
     
-    const [ id , setId ] = useState('')
-    const [ loading, setLoading ] = useState(false)
+    const [ id , setId ] = useState('');
+    const [ loading, setLoading ] = useState(false);
 
-    const funcLoop = [setName,setEmail,setPassword,setRole,setDepartment,setConfirmPassword] 
+    const funcLoop = [setName,setEmail,setPassword,setRole,setDepartment,setConfirmPassword];
 
-    const stateObj = { name,email,password,role,department,confirmPassword } 
-
+    const stateObj = { name,email,password,role,department,confirmPassword };
 
     //toast
-    const [ textToast, setTextToast ] = useState('')
-    const [ statusToast, setStatusToast ] = useState(false)
-    const [ showToast, setShowToast ] = useState(false) 
+    const [ textToast, setTextToast ] = useState('');
+    const [ statusToast, setStatusToast ] = useState(false);
+    const [ showToast, setShowToast ] = useState(false);
 
-   function submitForm(e){
+    function toastUp() {
+        setShowToast(true);
+        setTimeout(() => {
+            setShowToast(false);
+        }, 1500)
+    }
+
+    function submitForm(e){
         e.preventDefault()
         const form = e.currentTarget;
         
@@ -67,12 +75,12 @@ function User (props) {
                 setRowTable(tempTable)
                 setTextToast('data updated')
                 setStatusToast(true)
-                setShowToast(true)
+                toastUp()
             })
             .catch(err =>{
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp()
             })
         } else {
             axios.post('/admin/users', stateObj, { headers: { token:localStorage.getItem('token')}})
@@ -80,12 +88,12 @@ function User (props) {
                 setRowTable([...rowTable, data.newUser])
                 setTextToast('success add')
                 setStatusToast(true)
-                setShowToast(true)
+                toastUp()
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp()
             })    
         }
         handleClose()
@@ -106,7 +114,7 @@ function User (props) {
                     setRowTable(tempTable)
                     setTextToast('password successfully reset')
                     setStatusToast(true)
-                    setShowToast(true)
+                    toastUp()
                     if (decode._id === data.updatedUser._id) {
                         localStorage.clear()
                         props.history.push('/')
@@ -115,12 +123,12 @@ function User (props) {
                 .catch(err =>{
                     setTextToast(err.response.data.message)
                     setStatusToast(false)
-                    setShowToast(true)
+                    toastUp()
                 })
         } else {
             setTextToast('your password is not matched!')
             setStatusToast(false)
-            setShowToast(true)
+            toastUp()
         }
         handleClose()
     }
@@ -143,12 +151,12 @@ function User (props) {
                         setRowTable(tempTable)
                         setTextToast('delete success')
                         setStatusToast(true)
-                        setShowToast(true)
+                        toastUp()
                     })
                     .catch(err => {
                         setTextToast(err.response.data.message)
                         setStatusToast(false)
-                        setShowToast(true)
+                        toastUp()
                     })
             }
         });
@@ -207,7 +215,7 @@ function User (props) {
         .catch(err => {
             setTextToast(err.response.data.message)
             setStatusToast(false)
-            setShowToast(true)
+            toastUp()
         })
     }
 
@@ -238,7 +246,7 @@ function User (props) {
         .catch(err =>{
             setTextToast(err.response.data.message)
             setStatusToast(false)
-            setShowToast(true)
+            toastUp()
         })
         .finally(() => {
             setLoading(false)
@@ -250,6 +258,19 @@ function User (props) {
             fetchData()
         }
     }, [search])
+
+    useEffect(() => {
+        const { user } = props;
+
+        if ( !!id && user.role !== role && user.email === email) {
+            setRoleValidation(true);
+            setValidated(true);
+        } else {
+            setRoleValidation(false);
+            setValidated(false);
+        }
+
+    }, [role])
 
     useEffect(() => {
         fetchData()
@@ -386,16 +407,25 @@ function User (props) {
                             return (
                                 <Form.Group key={ index } className='mt-2'>
                                     <Form.Label>Enter {el}</Form.Label>
-                                    <Form.Control required as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
+                                    <Form.Control isInvalid={roleValidation} required as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
                                         <option value="">Select one</option>
                                         <option value="user">user</option>
                                         <option value="dataAdmin">dataAdmin</option>
                                         <option value="admin">admin</option>
                                     </Form.Control>
-                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                                    <Form.Control.Feedback type="invalid">
-                                        Please choose the {el}.
-                                    </Form.Control.Feedback>
+                                    {
+                                        roleValidation ?
+                                        <Form.Control.Feedback type="invalid">
+                                            Please consider when changing your own role, you might lose control the system management!
+                                        </Form.Control.Feedback>
+                                        :
+                                            <>
+                                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                                <Form.Control.Feedback type="invalid">
+                                                    Please choose the {el}.
+                                                </Form.Control.Feedback>
+                                            </>
+                                    }
                                 </Form.Group>
                             )
                         } else if ( el === 'department' ) {
@@ -480,4 +510,12 @@ function User (props) {
     );
 }
 
-export default User
+const mapStateToProps = ({ user }) => ({
+    user
+});
+
+const mapDispatchToProps = {
+    setUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(User);
