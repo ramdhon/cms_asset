@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 function SidebarDashboard(props) {
     const [ sidebarMenu] = useState([ 'car', 'rentItem', 'rentList', /*sidebar-menu*/ ])
+    const [ activeKey, setActiveKey ] = useState(0);
     const role = _.get(props, 'user.role');
     const pathname = _.get(props, 'location.pathname');
 
@@ -14,8 +15,16 @@ function SidebarDashboard(props) {
             <Accordion defaultActiveKey="0">
                 <Card>
                     <Card.Header>
-                    <Accordion.Toggle as={Button} block variant="light" eventKey="0">
-                        <p style={{ margin:'0px', textAlign:'left', padding:'0px 15px', letterSpacing:'1px' }}> <b> Data </b> </p>
+                    <Accordion.Toggle onClick={(e) => setActiveKey(0)} as={Button} block variant="light" eventKey="0">
+                        <p style={{ margin:'0px', textAlign:'left', padding:'0px 15px', letterSpacing:'1px' }}>
+                            {
+                                activeKey === 0 ?
+                                    <i style={{ position: 'relative', right: 5 }} className="fas fa-angle-up"></i>
+                                :
+                                    <i style={{ position: 'relative', right: 5 }} className="fas fa-angle-down"></i>
+                            }
+                            <b> Data </b>
+                        </p>
                     </Accordion.Toggle>
                     </Card.Header>
                     <Accordion.Collapse eventKey="0">
@@ -37,8 +46,16 @@ function SidebarDashboard(props) {
                 </Card>
                 <Card>
                     <Card.Header>
-                    <Accordion.Toggle as={Button} block variant="light" eventKey="1">
-                        <p style={{ margin:'0px', textAlign:'left', padding:'0px 15px', letterSpacing:'1px' }}> <b> Admin Data </b> </p>
+                    <Accordion.Toggle onClick={() => setActiveKey(1)} as={Button} block variant="light" eventKey="1">
+                        <p style={{ margin:'0px', textAlign:'left', padding:'0px 15px', letterSpacing:'1px' }}>
+                            {
+                                activeKey === 1 ?
+                                    <i style={{ position: 'relative', right: 5 }} className="fas fa-angle-up"></i>
+                                :
+                                    <i style={{ position: 'relative', right: 5 }} className="fas fa-angle-down"></i>
+                            }
+                            <b> Admin Data </b>
+                        </p>
                     </Accordion.Toggle>
                     </Card.Header>
                     <Accordion.Collapse eventKey="1">
