@@ -13,6 +13,11 @@ function PdfDownload({ data }) {
   const [address, setAddress] = useState('');
   const [discountFinal, setDiscountFinal] = useState(0);
   const [delivery, setDelivery] = useState(0);
+  const [issueDate, setIssueDate] = useState(new Date());
+  const [otherExpenses, setOtherExpenses] = useState([]);
+
+  const [issueCalendar, setIssueCalendar] = useState(false);
+  const [dateNow, setDateNow] = useState(true);
 
   const ref = React.createRef();
   const options = {
@@ -81,7 +86,7 @@ function PdfDownload({ data }) {
   }
 
   function otherPriceConverter() {
-    return _.map(_.get(data, 'otherExpenses', []), item => Number(item.price));
+    return _.map(otherExpenses, item => Number(item.price));
   }
 
   function otherTotal() {
@@ -96,11 +101,27 @@ function PdfDownload({ data }) {
     return total() + taxPrice();
   }
 
+  function handleShowCalendar() {
+    setIssueCalendar(true);
+  }
+
+  function handleCloseCalendar() {
+    setIssueCalendar(false);
+  }
+
+  function handleDateNow(e) {
+    console.log({e})
+    if (!dateNow) {
+      setIssueDate(new Date());
+    }
+    setDateNow(!dateNow);
+  }
+
   return (
     <Container fluid>
       <Row>
         <Col className="p-4" md="8" style={{ background: '#D3D3D3' }}>
-          <Container className="py-5 px-5 d-flex flex-column" style={{ width: '210mm', height: '297mm', background: '#FFFFFF' }} ref={ref}>
+          <Container id="printPage" className="py-5 px-5 d-flex flex-column" style={{ width: '210mm', height: '297mm', background: '#FFFFFF' }} ref={ref}>
             <Row>
               <Col></Col>
               <Col>
@@ -137,7 +158,7 @@ function PdfDownload({ data }) {
                 <span>Pool</span>
               </Col>
               <Col className="d-flex flex-column" md="3">
-                <span>: {printDate(null, false, true)}</span>
+                <span>: {printDate(issueDate, false, true)}</span>
                 <span>: {printStrForm(data.currency)}</span>
                 <span>: {printStrForm(data.type)}</span>
                 <span>: {printStrForm(data.location)}</span>
@@ -289,9 +310,9 @@ function PdfDownload({ data }) {
               </Form.Group>
               <Form.Group className='mt-2'>
                 <Form.Label>Enter Customer Address</Form.Label>
-                <Form.Control required as="textarea" rows="5" placeholder={`Enter name`} onChange={ e => setAddress(e.target.value) } value={ address }/>
+                <Form.Control required as="textarea" rows="5" placeholder={`Enter address`} onChange={ e => setAddress(e.target.value) } value={ address }/>
                 <Form.Control.Feedback type="invalid">
-                  Please enter customer name.
+                  Please enter customer address.
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className='mt-2'>
@@ -308,6 +329,35 @@ function PdfDownload({ data }) {
                   Please enter delivery.
                 </Form.Control.Feedback>
               </Form.Group>
+              <Form.Group id="formGridCheckbox">
+                <Form.Check checked={dateNow} onChange={handleDateNow} type="checkbox" label="Use current date" />
+              </Form.Group>
+              <Form.Group className='mt-2'>
+                
+              </Form.Group>
+
+              {
+                !dateNow ?
+                  <Form.Group className='mt-2'>
+                    <Form.Label>Enter issue date</Form.Label>
+                    <Form.Control disabled type="text" placeholder={`Enter date`} value={ issueDate }/>
+                    {
+                      !issueCalendar ?
+                        <Button variant="success" onClick={(e) => handleShowCalendar()}>
+                          Open Calendar
+                        </Button>
+                      :
+                        <>
+                          <Button variant="danger" onClick={(e) => handleCloseCalendar()}>
+                            Close Calendar
+                          </Button>
+                          <Calendar onChange={(date) => setIssueDate(date)} value={issueDate} />
+                        </>
+                    }
+                  </Form.Group>
+                :
+                  null
+              }
             </Form>
             <Col>
               <span>{JSON.stringify(data)}</span>
