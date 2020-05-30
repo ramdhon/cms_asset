@@ -10,46 +10,55 @@ import ImageModal from './ImageModal'
 
 function CarList (props) {
 
-    const [ showModal, setShowModal ] = useState(false)
-    const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","color":"string","vin":"string","status":"string","daily":"number","weekly":"number","monthly":"number","annually":"number","tax":"number"}
-    const [ search, setSearch ] = useState('')
-    const [ daily, setDaily] = useState(0) 
-    const [ weekly, setWeekly] = useState(0) 
-    const [ monthly, setMonthly] = useState(0) 
-    const [ annually, setAnnually] = useState(0) 
-    const [ currency, setCurrency] = useState('IDR') 
-    const [ tax, setTax] = useState(0) 
-    const [ carId, setCarId] = useState('')
+    const [ showModal, setShowModal ] = useState(false);
+    const [ rowTable, setRowTable ] = useState([]);
+    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","color":"string","vin":"string","status":"string","daily":"number","weekly":"number","monthly":"number","annually":"number","tax":"number"};
+    const [ search, setSearch ] = useState('');
+    const [ daily, setDaily] = useState(0);
+    const [ weekly, setWeekly] = useState(0);
+    const [ monthly, setMonthly] = useState(0);
+    const [ annually, setAnnually] = useState(0);
+    const [ currency, setCurrency] = useState('IDR');
+    const [ tax, setTax] = useState(0);
+    const [ carId, setCarId] = useState('');
     
-    const [ validated, setValidated] = useState(false)
+    const [ validated, setValidated] = useState(false);
 
-    const [ selectedCar, setSelectedCar ] = useState({})
+    const [ selectedCar, setSelectedCar ] = useState({});
 
-    const [ carList, setCarList ] = useState([])
+    const [ carList, setCarList ] = useState([]);
         
-    const [ modalImage, setModalImage ] = useState(false)
-    const [ imageLink, setImageLink ] = useState('')
+    const [ modalImage, setModalImage ] = useState(false);
+    const [ imageLink, setImageLink ] = useState('');
     
-    const [ id , setId ] = useState('')
-    const [ loading, setLoading ] = useState(false)
+    const [ id , setId ] = useState('');
+    const [ loading, setLoading ] = useState(false);
 
-    const funcLoop = [setDaily,setWeekly,setMonthly,setAnnually,setCurrency,setTax] 
+    const funcLoop = [setDaily,setWeekly,setMonthly,setAnnually,setCurrency,setTax];
 
-    const stateObj = { daily,weekly,monthly,annually,currency,tax } 
+    const stateObj = { daily,weekly,monthly,annually,currency,tax };
 
 
     //toast
-    const [ textToast, setTextToast ] = useState('')
-    const [ statusToast, setStatusToast ] = useState(false)
-    const [ showToast, setShowToast ] = useState(false) 
+    const [ textToast, setTextToast ] = useState('');
+    const [ statusToast, setStatusToast ] = useState(false);
+    const [ showToast, setShowToast ] = useState(false);
 
-   function submitForm(e){
+    function toastUp() {
+        setShowToast(true);
+        setTimeout(() => {
+            setShowToast(false);
+        }, 1500)
+    }
+
+    function submitForm(e){
         e.preventDefault()
 
         const form = e.currentTarget;
-        if (form.checkValidity() === false) {
+        
+        if (!form.checkValidity()) {
             e.stopPropagation();
+            return setValidated(true);
         }
 
         setValidated(true);
@@ -69,7 +78,7 @@ function CarList (props) {
             .catch(err =>{
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp();
             })
             .finally(() => {
                 fetchData();
@@ -80,13 +89,13 @@ function CarList (props) {
                 setRowTable([...rowTable, data.newRentitem])
                 setTextToast('success add')
                 setStatusToast(true)
-                setShowToast(true)
+                toastUp();
                 handleClose()
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp();
             })
             .finally(() => {
                 fetchData();
@@ -112,12 +121,12 @@ function CarList (props) {
                         setRowTable(tempTable)
                         setTextToast('delete success')
                         setStatusToast(true)
-                        setShowToast(true)
+                        toastUp();
                     })
                     .catch(err => {
                         setTextToast(err.response.data.message)
                         setStatusToast(false)
-                        setShowToast(true)
+                        toastUp();
                     })
            }
         });
@@ -165,7 +174,7 @@ function CarList (props) {
             .catch((err) => {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp();
             })
     }
 
@@ -216,7 +225,7 @@ function CarList (props) {
             .catch(err =>{
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp();
             })
         // axios.get(`/rentitems?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
         //     .then(({ data }) =>{
@@ -225,7 +234,7 @@ function CarList (props) {
         //     .catch(err => {
         //         setTextToast(err.response.data.message)
         //         setStatusToast(false)
-        //         setShowToast(true)
+        //         toastUp();
         //     })
     }
 
@@ -266,7 +275,7 @@ function CarList (props) {
         .catch(err =>{
             setTextToast(err.response.data.message)
             setStatusToast(false)
-            setShowToast(true)
+            toastUp();
         })
         .finally(() => {
             setLoading(false)
@@ -392,8 +401,9 @@ function CarList (props) {
                             ))
                         }
                     </Form.Control>
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     <Form.Control.Feedback type="invalid">
-                        Please select a car.
+                        Please choose the car.
                     </Form.Control.Feedback>
                     {
                         !carList.length &&
@@ -448,7 +458,11 @@ function CarList (props) {
                                     placeholder={`Enter ${ el }`}
                                     onChange={ e => funcLoop[index]( e.target.value)}
                                     value={ stateObj[el] }
-                                    />
+                                />
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">
+                                    Please enter the {el}.
+                                </Form.Control.Feedback>
                             </Form.Group> )
                     }
                     else {
@@ -456,6 +470,10 @@ function CarList (props) {
                         <Form.Group key={ index } className='mt-2'>
                             <Form.Label>Enter {el}</Form.Label>
                             <Form.Control required disabled={el === 'currency'} type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">
+                                Please enter the {el}.
+                            </Form.Control.Feedback>
                         </Form.Group> )
                     }
                     }) 
