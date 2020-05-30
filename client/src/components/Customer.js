@@ -295,7 +295,6 @@ function Customer (props) {
                         el.model = el.rentItemId.carId.type;
                         el.carId = el.rentItemId.carId._id;
                         el.rentItemId = el.rentItemId._id;
-                        delete el.rentItemId;
 
                         return el;
                     })
