@@ -193,7 +193,7 @@ function CarList (props) {
         axios.get('/rentitems?populateCar=true', { headers: { token: localStorage.getItem('token')}})
             .then(({data}) => {
                 if(data.Rentitems){
-                    const regex = new RegExp(search, 'gi');
+                    const regex = new RegExp(search, 'i');
                     let tmp = data.Rentitems.map((el) => {
                         const { _id, currency, created, updated } = el;
 

@@ -54,11 +54,19 @@ function Customer (props) {
     const [ statusToast, setStatusToast ] = useState(false)
     const [ showToast, setShowToast ] = useState(false) 
 
-   function submitForm(e){
+    function toastUp() {
+        setShowToast(true);
+        setTimeout(() => {
+            setShowToast(false);
+        }, 1500)
+    }
+
+    function submitForm(e){
         e.preventDefault()
 
         const form = e.currentTarget;
-        if (form.checkValidity() === false) {
+        
+        if (!form.checkValidity()) {
             e.stopPropagation();
             return setValidated(true);
         }
@@ -78,7 +86,7 @@ function Customer (props) {
             .catch(err =>{
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp();
             })
             .finally(() => {
                 fetchData();
@@ -89,7 +97,7 @@ function Customer (props) {
                 setRowTable([...rowTable, data.newRentlist])
                 setTextToast('success add')
                 setStatusToast(true)
-                setShowToast(true)
+                toastUp();
                 return axios.patch(`/cars/${selectedItem.carId}?editGranted=true`, { status: 'On customer' }, { headers:{ token:localStorage.getItem('token')}})
             })
             .then(({data}) => {
@@ -99,7 +107,7 @@ function Customer (props) {
             .catch(err => {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp();
             })
             .finally(() => {
                 fetchData();
@@ -128,7 +136,7 @@ function Customer (props) {
                         setRowTable(tempTable)
                         setTextToast('delete success')
                         setStatusToast(true)
-                        setShowToast(true)
+                        toastUp();
                         return axios.patch(`/cars/${deleted.carId}?editGranted=true`, { status: 'On pool' }, { headers:{ token:localStorage.getItem('token')}})
                     })
                     .then(({data}) => {
@@ -137,7 +145,7 @@ function Customer (props) {
                     .catch(err => {
                         setTextToast(err.response.data.message)
                         setStatusToast(false)
-                        setShowToast(true)
+                        toastUp();
                     })
             }
         });    
@@ -217,7 +225,7 @@ function Customer (props) {
         e.preventDefault()
         axios.get(`/rentlists?populateCar=true&populateItem=true`, { headers:{ token:localStorage.getItem('token')}})
             .then(({ data }) =>{
-                const regex = new RegExp(search, 'gi');
+                const regex = new RegExp(search, 'i');
                 const tmp = data.Rentlists.map((el) => {
                     const { _id, created, updated, type } = el;
 
@@ -250,7 +258,7 @@ function Customer (props) {
             .catch(err => {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp();
             })
     }
 
@@ -297,7 +305,7 @@ function Customer (props) {
             .catch(err =>{
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp();
             })
             .finally(() => {
                 setLoading(false)
@@ -330,7 +338,7 @@ function Customer (props) {
             .catch((err) => {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp();
             })
     }
 
@@ -343,7 +351,7 @@ function Customer (props) {
             .catch(err =>{
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp();
             })
     }
 
