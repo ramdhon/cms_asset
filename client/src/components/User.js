@@ -75,12 +75,12 @@ function User (props) {
                 setRowTable(tempTable)
                 setTextToast('data updated')
                 setStatusToast(true)
-                toastUp()
+                toastUp();
             })
             .catch(err =>{
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                toastUp()
+                toastUp();
             })
         } else {
             axios.post('/admin/users', stateObj, { headers: { token:localStorage.getItem('token')}})
@@ -88,12 +88,12 @@ function User (props) {
                 setRowTable([...rowTable, data.newUser])
                 setTextToast('success add')
                 setStatusToast(true)
-                toastUp()
+                toastUp();
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                toastUp()
+                toastUp();
             })    
         }
         handleClose()
@@ -114,7 +114,7 @@ function User (props) {
                     setRowTable(tempTable)
                     setTextToast('password successfully reset')
                     setStatusToast(true)
-                    toastUp()
+                    toastUp();
                     if (decode._id === data.updatedUser._id) {
                         localStorage.clear()
                         props.history.push('/')
@@ -123,12 +123,12 @@ function User (props) {
                 .catch(err =>{
                     setTextToast(err.response.data.message)
                     setStatusToast(false)
-                    toastUp()
+                    toastUp();
                 })
         } else {
             setTextToast('your password is not matched!')
             setStatusToast(false)
-            toastUp()
+            toastUp();
         }
         handleClose()
     }
@@ -151,12 +151,12 @@ function User (props) {
                         setRowTable(tempTable)
                         setTextToast('delete success')
                         setStatusToast(true)
-                        toastUp()
+                        toastUp();
                     })
                     .catch(err => {
                         setTextToast(err.response.data.message)
                         setStatusToast(false)
-                        toastUp()
+                        toastUp();
                     })
             }
         });
@@ -215,7 +215,7 @@ function User (props) {
         .catch(err => {
             setTextToast(err.response.data.message)
             setStatusToast(false)
-            toastUp()
+            toastUp();
         })
     }
 
@@ -246,7 +246,7 @@ function User (props) {
         .catch(err =>{
             setTextToast(err.response.data.message)
             setStatusToast(false)
-            toastUp()
+            toastUp();
         })
         .finally(() => {
             setLoading(false)

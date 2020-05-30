@@ -72,7 +72,7 @@ function Car (props) {
             .catch(err =>{
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                toastUp()
+                toastUp();
             })
         } else {
             axios.post('/cars', stateObj, { headers: { token:localStorage.getItem('token')}})
@@ -80,12 +80,12 @@ function Car (props) {
                 setRowTable([...rowTable, data.newCar])
                 setTextToast('success add')
                 setStatusToast(true)
-                toastUp()
+                toastUp();
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                toastUp()
+                toastUp();
             })
         }
         handleClose()
@@ -109,12 +109,12 @@ function Car (props) {
                         setRowTable(tempTable)
                         setTextToast('delete success')
                         setStatusToast(true)
-                        toastUp()
+                        toastUp();
                     })
                     .catch(err => {
                         setTextToast(err.response.data.message)
                         setStatusToast(false)
-                        toastUp()
+                        toastUp();
                     })
             }
         });
@@ -156,7 +156,7 @@ function Car (props) {
         .catch(err => {
             setTextToast(err.response.data.message)
             setStatusToast(false)
-            toastUp()
+            toastUp();
         })
     }
 
@@ -187,7 +187,7 @@ function Car (props) {
         .catch(err =>{
             setTextToast(err.response.data.message)
             setStatusToast(false)
-            toastUp()
+            toastUp();
         })
         .finally(() => {
             setLoading(false)
