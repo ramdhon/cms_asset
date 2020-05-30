@@ -9,33 +9,32 @@ import { server } from '../api/database';
 import ImageModal from './ImageModal'
 
 function Car (props) {
-
-    const [ showModal, setShowModal ] = useState(false)
-    const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","vin":"string","price":"number","currency":"string","status":"string","purchasedYear":"number","machineNo":"string","color":"string","location":"string",}
-    const [ search, setSearch ] = useState('')
-    const [ brand, setBrand] = useState('') 
-    const [ type, setType] = useState('') 
-    const [ year, setYear] = useState(0) 
-    const [ policeNo, setPoliceNo] = useState('') 
-    const [ vin, setVin] = useState('') 
-    const [ price, setPrice] = useState(0) 
-    const [ currency, setCurrency] = useState('') 
-    const [ status, setStatus] = useState('') 
-    const [ purchasedYear, setPurchaseYear] = useState('') 
-    const [ machineNo, setMachineNo] = useState('') 
-    const [ color, setColor] = useState('') 
-    const [ location, setLocation] = useState('') 
+    const [ showModal, setShowModal ] = useState(false);
+    const [ rowTable, setRowTable ] = useState([]);
+    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","vin":"string","price":"number","currency":"string","status":"string","purchasedYear":"number","machineNo":"string","color":"string","location":"string"};
+    const [ search, setSearch ] = useState('');
+    const [ brand, setBrand] = useState('');
+    const [ type, setType] = useState('');
+    const [ year, setYear] = useState(0);
+    const [ policeNo, setPoliceNo] = useState('');
+    const [ vin, setVin] = useState('');
+    const [ price, setPrice] = useState(0);
+    const [ currency, setCurrency] = useState('');
+    const [ status, setStatus] = useState('');
+    const [ purchasedYear, setPurchaseYear] = useState('');
+    const [ machineNo, setMachineNo] = useState('');
+    const [ color, setColor] = useState('');
+    const [ location, setLocation] = useState('');
     
-    const [ modalImage, setModalImage ] = useState(false)
-    const [ imageLink, setImageLink ] = useState('')
-    
-    const [ id , setId ] = useState('')
-    const [ loading, setLoading ] = useState(false)
+    const [ validated, setValidated ] = useState(false);
 
-    const funcLoop = [setBrand,setType,setYear,setPoliceNo,setVin,setPrice,setCurrency,setStatus,setPurchaseYear,setMachineNo,setColor,setLocation] 
+    const [ modalImage, setModalImage ] = useState(false);
+    const [ imageLink, setImageLink ] = useState('');    
+    const [ id , setId ] = useState('');
+    const [ loading, setLoading ] = useState(false);
+    const funcLoop = [setBrand,setType,setYear,setPoliceNo,setVin,setPrice,setCurrency,setStatus,setPurchaseYear,setMachineNo,setColor,setLocation];
 
-    const stateObj = { brand,type,year,policeNo,vin,price,currency,status,purchasedYear,machineNo,color,location } 
+    const stateObj = { brand,type,year,policeNo,vin,price,currency,status,purchasedYear,machineNo,color,location };
 
 
     //toast
@@ -43,8 +42,21 @@ function Car (props) {
     const [ statusToast, setStatusToast ] = useState(false)
     const [ showToast, setShowToast ] = useState(false) 
 
-   function submitForm(e){
+    function toastUp() {
+        setShowToast(true);
+        setTimeout(() => {
+            setShowToast(false);
+        }, 1500)
+    }
+
+    function submitForm(e){
         e.preventDefault()
+        const form = e.currentTarget;
+        
+        if (!form.checkValidity()) {
+            e.stopPropagation();
+            return setValidated(true);
+        }
        
         if(id){
             axios.patch(`/cars/${id}`, stateObj  ,{ headers:{ token:localStorage.getItem('token')}})
@@ -60,7 +72,7 @@ function Car (props) {
             .catch(err =>{
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp()
             })
         } else {
             axios.post('/cars', stateObj, { headers: { token:localStorage.getItem('token')}})
@@ -68,12 +80,12 @@ function Car (props) {
                 setRowTable([...rowTable, data.newCar])
                 setTextToast('success add')
                 setStatusToast(true)
-                setShowToast(true)
+                toastUp()
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
                 setStatusToast(false)
-                setShowToast(true)
+                toastUp()
             })
         }
         handleClose()
@@ -97,12 +109,12 @@ function Car (props) {
                         setRowTable(tempTable)
                         setTextToast('delete success')
                         setStatusToast(true)
-                        setShowToast(true)
+                        toastUp()
                     })
                     .catch(err => {
                         setTextToast(err.response.data.message)
                         setStatusToast(false)
-                        setShowToast(true)
+                        toastUp()
                     })
             }
         });
@@ -144,7 +156,7 @@ function Car (props) {
         .catch(err => {
             setTextToast(err.response.data.message)
             setStatusToast(false)
-            setShowToast(true)
+            toastUp()
         })
     }
 
@@ -175,7 +187,7 @@ function Car (props) {
         .catch(err =>{
             setTextToast(err.response.data.message)
             setStatusToast(false)
-            setShowToast(true)
+            toastUp()
         })
         .finally(() => {
             setLoading(false)
@@ -274,7 +286,7 @@ function Car (props) {
                 <Modal.Title>Add Car </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <Form onSubmit={ submitForm }>
+            <Form noValidate validated={validated} onSubmit={ submitForm }>
                 { Object.keys(stateObj).map((el, index) => {
                     if ( stateType[el] === 'boolean') {
                         return (<Form.Group key={ index }>
@@ -320,13 +332,21 @@ function Car (props) {
                             <Form.Group key={ index } className='mt-2'>
                                 <Form.Label>Enter {el}</Form.Label>
                                 <Form.Control required type="number" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">
+                                    Please enter the {el}.
+                                </Form.Control.Feedback>
                             </Form.Group> )
                     }
                     else {
                         return (
                         <Form.Group key={ index } className='mt-2'>
                             <Form.Label>Enter {el}</Form.Label>
-                            <Form.Control type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                            <Form.Control required type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">
+                                Please enter the {el}.
+                            </Form.Control.Feedback>
                         </Form.Group> )
                     }
                     }) 
