@@ -60,9 +60,8 @@ function Customer (props) {
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
             e.stopPropagation();
+            return setValidated(true);
         }
-
-        setValidated(true);
        
         if(id){
             axios.patch(`/rentlists/${id}`, { ...stateObj, rentItemId }  ,{ headers:{ token:localStorage.getItem('token')}})

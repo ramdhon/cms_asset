@@ -24,6 +24,8 @@ function User (props) {
     
     const [ confirmPassword, setConfirmPassword] = useState('') 
 
+    const [ validated, setValidated] = useState('') 
+    
     const [ modalImage, setModalImage ] = useState(false)
     const [ imageLink, setImageLink ] = useState('')
     
@@ -42,6 +44,12 @@ function User (props) {
 
    function submitForm(e){
         e.preventDefault()
+        const form = e.currentTarget;
+        
+        if (!form.checkValidity()) {
+            e.stopPropagation();
+            return setValidated(true);
+        }
        
         if(id){
             axios.patch(`/admin/users/${id}`, stateObj  ,{ headers:{ token:localStorage.getItem('token')}})
@@ -338,7 +346,7 @@ function User (props) {
                 <Modal.Title>Add User </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <Form onSubmit={ submitForm }>
+            <Form noValidate validated={validated} onSubmit={ submitForm }>
                 { Object.keys(stateObj).map((el, index) => {
                     if ( stateType[el] === 'boolean') {
                         return (<Form.Group key={ index }>
@@ -373,25 +381,28 @@ function User (props) {
                                 <Form.Label>Enter {el}</Form.Label>
                                 <Form.Control required type="number" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
                             </Form.Group> )
-                    }
-                    else if ( !id || el !== 'password' ){
+                    } else if ( !id || !(el === 'password' || el === 'confirmPassword')){
                         if ( el === 'role' ) {
                             return (
                                 <Form.Group key={ index } className='mt-2'>
                                     <Form.Label>Enter {el}</Form.Label>
-                                    <Form.Control as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
+                                    <Form.Control required as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
                                         <option value="">Select one</option>
                                         <option value="user">user</option>
                                         <option value="dataAdmin">dataAdmin</option>
                                         <option value="admin">admin</option>
                                     </Form.Control>
+                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please choose the {el}.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             )
                         } else if ( el === 'department' ) {
                             return (
                                 <Form.Group key={ index } className='mt-2'>
                                     <Form.Label>Enter {el}</Form.Label>
-                                    <Form.Control as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
+                                    <Form.Control required as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
                                         <option value="">Select one</option>
                                         <option value="owner">Owner</option>
                                         <option value="marketingBusiness">Marketing and Business</option>
@@ -400,13 +411,21 @@ function User (props) {
                                         <option value="it">IT</option>
                                         <option value="operational">Operational</option>
                                     </Form.Control>
+                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please choose the {el}.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             )
                         } else {
                             return (
                                 <Form.Group key={ index } className='mt-2'>
                                     <Form.Label>Enter {el}</Form.Label>
-                                    <Form.Control type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                                    <Form.Control required type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter the {el}.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             )
                         }
