@@ -96,7 +96,7 @@ function User (props) {
                 toastUp();
             })    
         }
-        handleClose()
+        handleClose();
     }
 
     function resetPassword(e) {

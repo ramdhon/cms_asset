@@ -91,7 +91,7 @@ function Car (props) {
                 toastUp();
             })
         }
-        handleClose()
+        handleClose();
     }
 
     function deleteData(id){

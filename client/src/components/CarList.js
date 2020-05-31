@@ -75,7 +75,6 @@ function CarList (props) {
                 setTextToast('data updated')
                 setStatusToast(true)
                 toastUp();
-                handleClose()
             })
             .catch(err =>{
                 setTextToast(err.response.data.message)
@@ -92,7 +91,6 @@ function CarList (props) {
                 setTextToast('success add')
                 setStatusToast(true)
                 toastUp();
-                handleClose()
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
@@ -103,6 +101,7 @@ function CarList (props) {
                 fetchData();
             })
         }
+        handleClose();
     }
 
     function deleteData(id){

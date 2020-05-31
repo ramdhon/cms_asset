@@ -343,12 +343,12 @@ function PdfDownload({ data }) {
                     <Form.Control disabled type="text" placeholder={`Enter date`} value={ issueDate }/>
                     {
                       !issueCalendar ?
-                        <Button variant="success" onClick={(e) => handleShowCalendar()}>
+                        <Button className="my-3" variant="success" onClick={(e) => handleShowCalendar()}>
                           Open Calendar
                         </Button>
                       :
                         <>
-                          <Button variant="danger" onClick={(e) => handleCloseCalendar()}>
+                          <Button className="my-3" variant="danger" onClick={(e) => handleCloseCalendar()}>
                             Close Calendar
                           </Button>
                           <Calendar onChange={(date) => setIssueDate(date)} value={issueDate} />

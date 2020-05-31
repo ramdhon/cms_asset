@@ -9,6 +9,7 @@ import Toast from './ToastComponent';
 import { server } from '../api/database';
 import ImageModal from './ImageModal';
 import PdfDownload from './PdfDownload.js';
+import { printStr } from '../helpers';
 
 function Customer (props) {
 
@@ -84,7 +85,6 @@ function Customer (props) {
                 setTextToast('data updated')
                 setStatusToast(true)
                 toastUp();
-                handleClose()
             })
             .catch(err =>{
                 setTextToast(err.response.data.message)
@@ -105,7 +105,6 @@ function Customer (props) {
             })
             .then(({data}) => {
                 fetchData();
-                handleClose()
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
@@ -116,6 +115,7 @@ function Customer (props) {
                 fetchData();
             })
         }
+        handleClose();
     }
 
     function deleteData(id){
@@ -509,8 +509,9 @@ function Customer (props) {
                             ))
                         }
                     </Form.Control>
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     <Form.Control.Feedback type="invalid">
-                        Please select a car.
+                        Please choose the car.
                     </Form.Control.Feedback>
                     {
                         !rentItemList.length &&
@@ -522,7 +523,7 @@ function Customer (props) {
                         el !== 'created' && el !== 'updated' && el !== 'refId' && el !== '__v' ?
                         <Form.Group key={index} className='mt-2'>
                             <Form.Label>{el}</Form.Label>
-                            <Form.Control disabled type="text" placeholder={el} value={selectedItem[el] || '-'} />
+                            <Form.Control disabled type="text" placeholder={el} value={printStr(selectedItem[el])} />
                         </Form.Group>
                         : null
                     ))
@@ -561,6 +562,10 @@ function Customer (props) {
                             <Form.Group key={ index } className='mt-2'>
                                 <Form.Label>Enter {el}</Form.Label>
                                 <Form.Control required type="number" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">
+                                    Please enter the {el}.
+                                </Form.Control.Feedback>
                             </Form.Group> )
                     } else if( el === 'type' ){
                         return (
@@ -573,8 +578,9 @@ function Customer (props) {
                                     <option value='monthly'>Monthly</option>
                                     <option value='annually'>Annually</option>
                                 </Form.Control>
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                                 <Form.Control.Feedback type="invalid">
-                                    Please select type of customer.
+                                    Please choose the {el}.
                                 </Form.Control.Feedback>
                             </Form.Group> )
                     } else if( stateType[el] === 'date' ){
@@ -608,8 +614,9 @@ function Customer (props) {
                                     <option value='canceled-changeCar'>Canceled - Change Car</option>
                                     <option value='canceled-changePeriod'>Canceled - Change Period</option>
                                 </Form.Control>
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                                 <Form.Control.Feedback type="invalid">
-                                    Please select type of customer.
+                                    Please choose the {el}.
                                 </Form.Control.Feedback>
                             </Form.Group> )
                     }
@@ -618,8 +625,9 @@ function Customer (props) {
                         <Form.Group key={ index } className='mt-2'>
                             <Form.Label>Enter {el}</Form.Label>
                             <Form.Control required type="text" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }/>
+                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                             <Form.Control.Feedback type="invalid">
-                                Please enter customer name.
+                                Please enter the {el}.
                             </Form.Control.Feedback>
                         </Form.Group> )
                     }
