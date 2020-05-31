@@ -10,7 +10,6 @@ import ImageModal from './ImageModal';
 import { printStr } from '../helpers';
 
 function CarList (props) {
-
     const [ showModal, setShowModal ] = useState(false);
     const [ rowTable, setRowTable ] = useState([]);
     const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","color":"string","vin":"string","status":"string","daily":"number","weekly":"number","monthly":"number","annually":"number","tax":"number"};
@@ -38,7 +37,6 @@ function CarList (props) {
     const funcLoop = [setDaily,setWeekly,setMonthly,setAnnually,setCurrency,setTax];
 
     const stateObj = { daily,weekly,monthly,annually,currency,tax };
-
 
     //toast
     const [ textToast, setTextToast ] = useState('');
