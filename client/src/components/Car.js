@@ -68,6 +68,9 @@ function Car (props) {
                     return el;
                 })
                 setRowTable(tempTable)
+                setTextToast('data updated')
+                setStatusToast(true)
+                toastUp();
             })
             .catch(err =>{
                 setTextToast(err.response.data.message)

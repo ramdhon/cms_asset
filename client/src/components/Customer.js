@@ -81,6 +81,9 @@ function Customer (props) {
                     return el;
                 })
                 setRowTable(tempTable)
+                setTextToast('data updated')
+                setStatusToast(true)
+                toastUp();
                 handleClose()
             })
             .catch(err =>{
@@ -171,7 +174,11 @@ function Customer (props) {
     
     function editData(rowData){
         Object.keys(stateObj).forEach((el, index) => {
-            funcLoop[index](rowData[el])
+            if (''+stateType[el] === 'date') {
+                funcLoop[index](new Date(rowData[el]));
+            } else {
+                funcLoop[index](rowData[el])
+            }
         })
         setRentItemId(rowData.rentItemId)
         setId(rowData._id)
@@ -577,17 +584,33 @@ function Customer (props) {
                                 <Form.Control disabled type="text" placeholder={`Enter ${ el }`} value={ stateObj[el] }/>
                                 {
                                     !calendarShow[el] ?
-                                        <Button variant="success" onClick={(e) => handleShowCalendar(el)}>
+                                        <Button className="my-3" variant="success" onClick={(e) => handleShowCalendar(el)}>
                                             Open Calendar
                                         </Button>
                                     :
                                         <>
-                                            <Button variant="danger" onClick={(e) => handleCloseCalendar(el)}>
+                                            <Button className="my-3" variant="danger" onClick={(e) => handleCloseCalendar(el)}>
                                                 Close Calendar
                                             </Button>
                                             <Calendar onChange={(date) => funcLoop[index](date)} value={stateObj[el]} />
                                         </>
                                 }
+                            </Form.Group> )
+                    } else if( el === 'customerStatus' ){
+                        return (
+                            <Form.Group key={ index } className='mt-2'>
+                                <Form.Label>Enter {el}</Form.Label>
+                                <Form.Control required as="select" placeholder={`Enter ${ el }`} onChange={ e => funcLoop[index]( e.target.value)} value={ stateObj[el] }>
+                                    <option value=''>Select one</option>
+                                    <option value='completed'>Completed</option>
+                                    <option value='active'>Active</option>
+                                    <option value='canceled-changeType'>Canceled - Change Type</option>
+                                    <option value='canceled-changeCar'>Canceled - Change Car</option>
+                                    <option value='canceled-changePeriod'>Canceled - Change Period</option>
+                                </Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    Please select type of customer.
+                                </Form.Control.Feedback>
                             </Form.Group> )
                     }
                     else {

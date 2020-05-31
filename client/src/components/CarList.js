@@ -72,6 +72,9 @@ function CarList (props) {
                     return el;
                 })
                 setRowTable(tempTable)
+                setTextToast('data updated')
+                setStatusToast(true)
+                toastUp();
                 handleClose()
             })
             .catch(err =>{
