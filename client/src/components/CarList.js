@@ -6,7 +6,8 @@ import RowTable from './RowTableModelCarList';
 import axios from '../api/database';
 import Toast from './ToastComponent';
 import { server } from '../api/database';
-import ImageModal from './ImageModal'
+import ImageModal from './ImageModal';
+import { printStr } from '../helpers';
 
 function CarList (props) {
 
@@ -415,7 +416,7 @@ function CarList (props) {
                         el !== 'created' && el !== 'updated' && el !== 'refId' && el !== '__v' ?
                         <Form.Group key={index} className='mt-2'>
                             <Form.Label>{el}</Form.Label>
-                            <Form.Control disabled type="text" placeholder={el} value={selectedCar[el] || '-'} />
+                            <Form.Control disabled type="text" placeholder={el} value={printStr(selectedCar[el])} />
                         </Form.Group>
                         : null
                     ))
