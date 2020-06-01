@@ -142,6 +142,14 @@ function PdfDownload({ data }) {
     )
   }
 
+  function moveIndex(from, to) {
+    const fromExpense = otherExpenses.find((item, index) => index === from);
+    const deletedExpenses = otherExpenses.filter((item, index) => index !== from);
+    const newExpenses = [...deletedExpenses];
+    newExpenses.splice(to, 0, fromExpense);
+    setOtherExpenses(newExpenses);
+  }
+
   return (
     <Container fluid>
       <Row>
@@ -371,9 +379,6 @@ function PdfDownload({ data }) {
               <Form.Group id="formGridCheckbox">
                 <Form.Check checked={dateNow} onChange={handleDateNow} type="checkbox" label="Use current date" />
               </Form.Group>
-              <Form.Group className='mt-2'>
-                
-              </Form.Group>
               {
                 !dateNow ?
                   <Form.Group className='mt-2'>
@@ -406,6 +411,13 @@ function PdfDownload({ data }) {
                     {
                       otherExpenses.map((item, index) => (
                         <Form.Row key={index}>
+                          <Button disabled={index === 0} className='mt-2 mb-4' size="sm" variant="link" onClick={(e) => moveIndex(index, index - 1)}>
+                            <i style={{ color: 'black' }} className="fas fa-angle-up"></i>
+                          </Button>
+                          <Button disabled={index === otherExpenses.length - 1} className='mt-2 mb-4' size="sm" variant="link" onClick={(e) => moveIndex(index, index + 1)}>
+                            <i style={{ color: 'black' }} className="fas fa-angle-down"></i>
+                          </Button>
+
                           <Form.Group className='mt-2' as={Col}>
                             <Form.Control value={item.item} onChange={(e) => onChangeExpenses(e, index, 'item')} type="text" placeholder="Enter item" />
                           </Form.Group>
@@ -426,7 +438,7 @@ function PdfDownload({ data }) {
               }
             </Form>
             <Col>
-              <span>{JSON.stringify(data)}</span>
+              {/* <span>{JSON.stringify(data)}</span> */}
             </Col>
           </Container>
         </Col>
