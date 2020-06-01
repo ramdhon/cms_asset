@@ -16,7 +16,7 @@ function PdfDownload({ data }) {
   const [issueDate, setIssueDate] = useState(new Date());
   const [otherExpenses, setOtherExpenses] = useState([]);
 
-  const [validated, setValidated] = useState(true);
+  const [validated, setValidated] = useState(false);
 
   const [issueCalendar, setIssueCalendar] = useState(false);
   const [dateNow, setDateNow] = useState(true);
@@ -112,11 +112,34 @@ function PdfDownload({ data }) {
   }
 
   function handleDateNow(e) {
-    console.log({e})
     if (!dateNow) {
       setIssueDate(new Date());
     }
     setDateNow(!dateNow);
+  }
+
+  function addOtherExpenses() {
+    if (otherExpenses.length === 0 || !!otherExpenses[otherExpenses.length - 1].item) {
+      setOtherExpenses([
+        ...otherExpenses,
+        {
+          item: '',
+          price: 0
+        }
+      ])
+    }
+  }
+
+  function deleteOtherExpenses(id) {
+    setOtherExpenses(
+      otherExpenses.filter((item, index) => index !== id)
+    )
+  }
+
+  function onChangeExpenses(e, id, key) {
+    setOtherExpenses(
+      otherExpenses.map((item, index) => index === id ? { ...item, [key]: e.target.value } : item)
+    )
   }
 
   return (
@@ -189,9 +212,18 @@ function PdfDownload({ data }) {
                     <td>{formatNumber(1)}</td>
                     <td>{printStrForm(formatNumber(data[data.type]))}</td>
                     <td>{printStrForm(formatNumber(data.discount))} %</td>
-                    <td>{printStrForm(formatNumber(subTotal()))}</td>
+                    <td className="d-flex flex-column align-items-end">{printStrForm(formatNumber(subTotal()))}</td>
                     <td>{printStrForm(formatNumber(data.tax))} %</td>
                   </tr>
+                  {
+                    otherExpenses.map((item, index) => (
+                      <tr key={index}>
+                        <td colSpan="5">{item.item}</td>
+                        <td className="d-flex flex-column align-items-end">{formatNumber(item.price)}</td>
+                        <td />
+                      </tr>
+                    ))
+                  }
                 </tbody>
               </Table>
             </Row>
@@ -363,6 +395,34 @@ function PdfDownload({ data }) {
                   </Form.Group>
                 :
                   null
+              }
+              <Button className="my-3" variant="light" onClick={(e) => addOtherExpenses()}>
+                <i style={{ position: 'relative', right: 5 }} className="fas fa-plus"></i>
+                Add Expenses
+              </Button>
+              {
+                otherExpenses.length ?
+                  <>
+                    {
+                      otherExpenses.map((item, index) => (
+                        <Form.Row key={index}>
+                          <Form.Group className='mt-2' as={Col}>
+                            <Form.Control value={item.item} onChange={(e) => onChangeExpenses(e, index, 'item')} type="text" placeholder="Enter item" />
+                          </Form.Group>
+    
+                          <Form.Group className='mt-2' as={Col}>
+                            <Form.Control value={item.price} onChange={(e) => onChangeExpenses(e, index, 'price')} type="number" placeholder="Enter price" />
+                          </Form.Group>
+    
+                          <Button className='mt-2 mb-4' size="sm" variant="link" onClick={(e) => deleteOtherExpenses(index)}>
+                            <i style={{ color: 'black' }} className="fas fa-times"></i>
+                          </Button>
+                        </Form.Row>
+                      ))
+                    }
+                  </>
+                :
+                  <span className="ml-3">No other expenses</span>
               }
             </Form>
             <Col>
