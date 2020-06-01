@@ -64,7 +64,6 @@ function Customer (props) {
 
     function submitForm(e){
         e.preventDefault()
-
         const form = e.currentTarget;
         
         if (!form.checkValidity()) {

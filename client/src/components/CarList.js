@@ -52,7 +52,6 @@ function CarList (props) {
 
     function submitForm(e){
         e.preventDefault()
-
         const form = e.currentTarget;
         
         if (!form.checkValidity()) {
@@ -60,8 +59,6 @@ function CarList (props) {
             return setValidated(true);
         }
 
-        setValidated(true);
-       
         if(id){
             axios.patch(`/rentitems/${id}`, { ...stateObj, carId }  ,{ headers:{ token:localStorage.getItem('token')}})
             .then(({data}) => {

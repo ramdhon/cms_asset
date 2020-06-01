@@ -16,6 +16,8 @@ function PdfDownload({ data }) {
   const [issueDate, setIssueDate] = useState(new Date());
   const [otherExpenses, setOtherExpenses] = useState([]);
 
+  const [validated, setValidated] = useState(true);
+
   const [issueCalendar, setIssueCalendar] = useState(false);
   const [dateNow, setDateNow] = useState(true);
 
@@ -293,10 +295,11 @@ function PdfDownload({ data }) {
                 </Row>
               )}
             </ReactToPdf>
-            <Form>
+            <Form noValidate validated={validated}>
               <Form.Group className='mt-2'>
                 <Form.Label>Enter Employee Name</Form.Label>
                 <Form.Control required type="text" placeholder={`Enter name`} onChange={ e => setHostName(e.target.value) } value={ hostName }/>
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
                   Please enter employee name.
                 </Form.Control.Feedback>
@@ -304,6 +307,7 @@ function PdfDownload({ data }) {
               <Form.Group className='mt-2'>
                 <Form.Label>Enter Customer PIC</Form.Label>
                 <Form.Control required type="text" placeholder={`Enter name`} onChange={ e => setName(e.target.value) } value={ name }/>
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
                   Please enter customer name.
                 </Form.Control.Feedback>
@@ -311,6 +315,7 @@ function PdfDownload({ data }) {
               <Form.Group className='mt-2'>
                 <Form.Label>Enter Customer Address</Form.Label>
                 <Form.Control required as="textarea" rows="5" placeholder={`Enter address`} onChange={ e => setAddress(e.target.value) } value={ address }/>
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
                   Please enter customer address.
                 </Form.Control.Feedback>
@@ -318,6 +323,7 @@ function PdfDownload({ data }) {
               <Form.Group className='mt-2'>
                 <Form.Label>Enter Discount Final</Form.Label>
                 <Form.Control required type="number" rows="5" placeholder={`Enter number`} onChange={ handleDiscountFinal } value={ discountFinal }/>
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
                   Please enter final discount.
                 </Form.Control.Feedback>
@@ -325,6 +331,7 @@ function PdfDownload({ data }) {
               <Form.Group className='mt-2'>
                 <Form.Label>Enter Delivery Fee</Form.Label>
                 <Form.Control required type="number" rows="5" placeholder={`Enter number`} onChange={ e => setDelivery(e.target.value) } value={ delivery }/>
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
                   Please enter delivery.
                 </Form.Control.Feedback>
@@ -335,7 +342,6 @@ function PdfDownload({ data }) {
               <Form.Group className='mt-2'>
                 
               </Form.Group>
-
               {
                 !dateNow ?
                   <Form.Group className='mt-2'>
