@@ -54,7 +54,7 @@ function CarList (props) {
         e.preventDefault()
         const form = e.currentTarget;
         
-        if (!form.checkValidity()) {
+        if (!form.checkValidity() || !carId) {
             e.stopPropagation();
             return setValidated(true);
         }
@@ -478,6 +478,12 @@ function CarList (props) {
                 }
                 <Row className='mt-5'>
                     <Col className='d-flex justify-content-end'>
+                        {
+                            validated && !carId ?
+                                <span className="mx-3 my-2">Please select the car, if available!</span>
+                            :
+                                null
+                        }
                         <Button variant="secondary" onClick={handleClose}>
                             Close
                         </Button>
