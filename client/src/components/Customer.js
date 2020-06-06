@@ -12,47 +12,47 @@ import PdfDownload from './PdfDownload.js';
 import { printStr } from '../helpers';
 
 function Customer (props) {
-    const [ showModal, setShowModal ] = useState(false)
-    const [ rowTable, setRowTable ] = useState([])
-    const stateType ={"brand":"string","model":"string","color":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"date","endPeriod":"date","discount":"number","customerStatus":"string"}
-    const [ search, setSearch ] = useState('')
-    const [ customer, setCustomer] = useState('') 
-    const [ type, setType] = useState('') 
-    const [ startPeriod, setStartPeriod] = useState(new Date()) 
-    const [ endPeriod, setEndPeriod] = useState(new Date()) 
-    const [ discount, setDiscount] = useState(0) 
-    const [ customerStatus, setCustomerStatus] = useState('') 
-    const [ rentItemId, setRentItemId] = useState('') 
+    const [ showModal, setShowModal ] = useState(false);
+    const [ rowTable, setRowTable ] = useState([]);
+    const stateType ={"brand":"string","model":"string","color":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"date","endPeriod":"date","discount":"number","customerStatus":"string"};
+    const [ search, setSearch ] = useState('');
+    const [ customer, setCustomer] = useState('');
+    const [ type, setType] = useState('');
+    const [ startPeriod, setStartPeriod] = useState(new Date());
+    const [ endPeriod, setEndPeriod] = useState(new Date());
+    const [ discount, setDiscount] = useState(0);
+    const [ customerStatus, setCustomerStatus] = useState('');
+    const [ rentItemId, setRentItemId] = useState('');
     
-    const [ validated, setValidated] = useState(false)
+    const [ validated, setValidated] = useState(false);
 
-    const [ selectedItem, setSelectedItem ] = useState({})
-    const [ selectedRow, setSelectedRow ] = useState({})
+    const [ selectedItem, setSelectedItem ] = useState({});
+    const [ selectedRow, setSelectedRow ] = useState({});
 
-    const [ rentItemList, setRentItemList ] = useState([])
+    const [ rentItemList, setRentItemList ] = useState([]);
     
     const [ calendarShow, setCalendarShow ] = useState({
         startPeriod: false,
         endPeriod: false
     });
 
-    const [ modalImage, setModalImage ] = useState(false)
-    const [ imageLink, setImageLink ] = useState('')
+    const [ modalImage, setModalImage ] = useState(false);
+    const [ imageLink, setImageLink ] = useState('');
     
     const [ showModalPrint, setShowModalPrint ] = useState(false);
 
-    const [ id , setId ] = useState('')
-    const [ loading, setLoading ] = useState(false)
+    const [ id , setId ] = useState('');
+    const [ loading, setLoading ] = useState(false);
 
-    const funcLoop = [setCustomer,setType,setStartPeriod,setEndPeriod,setDiscount,setCustomerStatus] 
+    const funcLoop = [setCustomer,setType,setStartPeriod,setEndPeriod,setDiscount,setCustomerStatus] ;
 
-    const stateObj = { customer,type,startPeriod,endPeriod,discount,customerStatus } 
+    const stateObj = { customer,type,startPeriod,endPeriod,discount,customerStatus };
 
 
     //toast
-    const [ textToast, setTextToast ] = useState('')
-    const [ statusToast, setStatusToast ] = useState(false)
-    const [ showToast, setShowToast ] = useState(false) 
+    const [ textToast, setTextToast ] = useState('');
+    const [ statusToast, setStatusToast ] = useState(false);
+    const [ showToast, setShowToast ] = useState(false);
 
     function toastUp() {
         setShowToast(true);
