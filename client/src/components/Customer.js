@@ -12,7 +12,6 @@ import PdfDownload from './PdfDownload.js';
 import { printStr } from '../helpers';
 
 function Customer (props) {
-
     const [ showModal, setShowModal ] = useState(false)
     const [ rowTable, setRowTable ] = useState([])
     const stateType ={"brand":"string","model":"string","color":"string","policeNo":"string","vin":"string","customer":"string","type":"string","startPeriod":"date","endPeriod":"date","discount":"number","customerStatus":"string"}
