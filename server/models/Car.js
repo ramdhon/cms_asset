@@ -6,8 +6,6 @@ const carSchema = new Schema({
     year: { type: Number },
     policeNo: { type: String },
     vin: { type: String },
-    price: { type: Number },
-    currency: { type: String },
     status: { type: String },
     purchasedYear: { type: Number },
     machineNo: { type: String },
@@ -22,7 +20,7 @@ const carSchema = new Schema({
         type: Date,
     },
     refId: {
-        required: [true, 'user must be logged in'],
+        // required: [true, 'user must be logged in'],
         type: Schema.Types.ObjectId, ref: 'User'
     },
 });

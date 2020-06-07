@@ -11,15 +11,13 @@ import ImageModal from './ImageModal'
 function Car (props) {
     const [ showModal, setShowModal ] = useState(false);
     const [ rowTable, setRowTable ] = useState([]);
-    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","vin":"string","price":"number","currency":"string","status":"string","purchasedYear":"number","machineNo":"string","color":"string","location":"string"};
+    const stateType ={"brand":"string","type":"string","year":"number","policeNo":"string","vin":"string","status":"string","purchasedYear":"number","machineNo":"string","color":"string","location":"string"};
     const [ search, setSearch ] = useState('');
     const [ brand, setBrand] = useState('');
     const [ type, setType] = useState('');
     const [ year, setYear] = useState(0);
     const [ policeNo, setPoliceNo] = useState('');
     const [ vin, setVin] = useState('');
-    const [ price, setPrice] = useState(0);
-    const [ currency, setCurrency] = useState('');
     const [ status, setStatus] = useState('');
     const [ purchasedYear, setPurchaseYear] = useState('');
     const [ machineNo, setMachineNo] = useState('');
@@ -32,9 +30,9 @@ function Car (props) {
     const [ imageLink, setImageLink ] = useState('');    
     const [ id , setId ] = useState('');
     const [ loading, setLoading ] = useState(false);
-    const funcLoop = [setBrand,setType,setYear,setPoliceNo,setVin,setPrice,setCurrency,setStatus,setPurchaseYear,setMachineNo,setColor,setLocation];
+    const funcLoop = [setBrand,setType,setYear,setPoliceNo,setVin,setStatus,setPurchaseYear,setMachineNo,setColor,setLocation];
 
-    const stateObj = { brand,type,year,policeNo,vin,price,currency,status,purchasedYear,machineNo,color,location };
+    const stateObj = { brand,type,year,policeNo,vin,status,purchasedYear,machineNo,color,location };
 
 
     //toast
