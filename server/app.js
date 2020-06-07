@@ -5,12 +5,12 @@ const cors = require('cors')
 const app = express();
 const { PORT = 3000, COMPANY } = process.env;
 const router = require('./routes');
-const { mongoUrl } = require('./config');
+const { mongoUrl, mongoAtlas } = require('./config');
 const errorHandler = require('./middlewares/errorhandler');
 const log = require('./utils/log');
 
-log('Connecting db localhost...');
-mongoose.connect(mongoUrl, {useNewUrlParser:true})
+log(`Connecting db ${mongoAtlas ? 'MONGOATLAS' : 'localhost'}...`);
+mongoose.connect(mongoAtlas || mongoUrl, {useNewUrlParser:true})
     .then(connection => {
         log('database connected');
     })

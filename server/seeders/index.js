@@ -3,9 +3,10 @@ const Papa = require('papaparse');
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
-const log = require('../utils/log');
-
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
+const log = require('../utils/log');
+const { mongoUrl, mongoAtlas } = require('../config');
+
 let connectionInstance;
 const dctimeout = 5000;
 async function seeder() {
@@ -16,10 +17,9 @@ async function seeder() {
     const carDataJson = carRaw.data;
     
     const CreatePromises = [];
-    const mongoUrlAtlas = process.env.MONGOATLAS;
 
-    log('Connecting db MONGOATLAS for seeding process...');
-    const connection = await mongoose.connect(mongoUrlAtlas, {useNewUrlParser:true})
+    log(`Connecting db ${mongoAtlas ? 'MONGOATLAS' : 'localhost'} for seeding process...`);
+    const connection = await mongoose.connect(mongoAtlas || mongoUrl, {useNewUrlParser:true})
     connectionInstance = connection;
     log('Db connected while seeding process');
 

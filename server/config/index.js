@@ -10,5 +10,6 @@ module.exports = {
         //else /* databaseName*/ will be replaced with user's input
         //database below is for testing
         'mongodb://localhost:27017/sulap-example_'+ process.env.NODE_ENV
-        )
+        ),
+    mongoAtlas: process.env.MONGOATLAS
 }
