@@ -373,7 +373,7 @@ function PdfDownload({ data }) {
                 <Form.Control required type="number" rows="5" placeholder={`Enter number`} onChange={ e => setDelivery(e.target.value) } value={ delivery }/>
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
-                  Please enter delivery.
+                  Please enter delivery fee.
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group id="formGridCheckbox">
