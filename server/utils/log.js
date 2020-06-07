@@ -6,7 +6,7 @@ const Log = require('../models/Log');
 
 function log(...args) {
   const now = new Date();
-  const momentFormat = 'MMMM-DD-YYYY, HH:mm:ss';
+  const momentFormat = 'MMM-DD-YYYY, HH:mm:ss';
 
   const logDir = path.join(__dirname, './logs');
   const logFilename = moment(now).format('MMMM-DD-YYYY') + '.dat';
