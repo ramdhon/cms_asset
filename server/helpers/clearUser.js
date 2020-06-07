@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const log = require('../utils/log');
 
 module.exports = function(done) {
   if (process.env.NODE_ENV === 'test') {
@@ -8,7 +9,7 @@ module.exports = function(done) {
         done();
       })
       .catch(function(err) {
-        console.log(err);
+        log(err);
       });
   }
 };

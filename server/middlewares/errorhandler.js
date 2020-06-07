@@ -1,10 +1,11 @@
+const log = require('../utils/log');
 module.exports = (err, req, res, next) => {
   const { error, status, message, name } = err;
 
-  console.log('ERROR LOG:', err);
+  log('ERROR LOG:', err);
   
   if (error) {
-    console.log({ message: 'ERROR AT TRY CATCH', error });
+    log({ message: 'ERROR AT TRY CATCH', error });
   }
   if (status) {
     res.status(status).json({ message });

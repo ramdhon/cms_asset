@@ -7,13 +7,15 @@ const { PORT = 3000, COMPANY } = process.env;
 const router = require('./routes');
 const { mongoUrl } = require('./config');
 const errorHandler = require('./middlewares/errorhandler');
+const log = require('./utils/log');
 
+log('Connecting db localhost...');
 mongoose.connect(mongoUrl, {useNewUrlParser:true})
     .then(connection => {
-        console.log('database connected');
+        log('database connected');
     })
     .catch(err => {
-        console.log('database not connected');
+        log('database not connected');
     })
 
 //body parser
@@ -34,5 +36,5 @@ app.use(errorHandler);
 module.exports = app;
 
 app.listen(PORT, () => {
-    console.log('app is listening on port,', PORT)
+    log('app is listening on port,', PORT)
 })

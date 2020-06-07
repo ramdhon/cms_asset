@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const { sign } = require('../helpers/jwt');
 const { decrypt } = require('../helpers/bcrypt');
-
+const log = require('../utils/log');
 class AuthController {
   static registerAdmin(req, res, next) {
     const { name, email, password, department } = req.body;
@@ -63,7 +63,7 @@ class AuthController {
 
             const newDate = new Date();
             foundUser.lastLogin = newDate;
-            foundUser.update({ lastLogin: newDate }).then((info) => console.log('LOGGED IN', { foundUser, info }));
+            foundUser.update({ lastLogin: newDate }).then((info) => log('LOGGED IN', { foundUser, info }));
 
             res
               .status(200)
