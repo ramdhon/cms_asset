@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap';
+import { Container, Table, Button, Row, Col, Modal, Form, Spinner, ButtonToolbar, ButtonGroup, InputGroup, FormControl } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import _ from 'lodash';
 
 import RowTable from './RowTableModelCar';
 import axios from '../api/database';
@@ -26,6 +27,10 @@ function Car (props) {
     
     const [ validated, setValidated ] = useState(false);
 
+    const dataPerPage = 5;
+    const [ page, setPage ] = useState(1);
+    const [ pageDataRow, setPageDataRow ] = useState([]);
+
     const [ modalImage, setModalImage ] = useState(false);
     const [ imageLink, setImageLink ] = useState('');    
     const [ id , setId ] = useState('');
@@ -39,6 +44,59 @@ function Car (props) {
     const [ textToast, setTextToast ] = useState('')
     const [ statusToast, setStatusToast ] = useState(false)
     const [ showToast, setShowToast ] = useState(false) 
+
+    function setDataPage(data = [...rowTable], currentPage = page, totalPageValue = totalPage()) {
+        const index = currentPage - 1;
+
+        if (index < 0) {
+            return;
+        }
+
+        if (index > totalPageValue) {
+            return;
+        }
+
+        const start = index * dataPerPage;
+        const end = currentPage === totalPageValue ? totalPageValue : currentPage * dataPerPage;
+        const sliced = _.slice(data, start, end);
+
+        setPageDataRow(sliced);
+    }
+
+    function setThePage(page) {
+        const totalPageValue = totalPage();
+        
+        if (page < 0) {
+            return setPage(1);
+        }
+
+        if (page === 0) {
+            return setPage(1);
+        }
+        
+        if (page > totalPageValue) {
+            return setPage(totalPageValue);
+        }
+        
+        setPage(page);
+        setDataPage(undefined, page);
+    }
+    
+    function onChangePagination(e) {
+        setThePage(e.target.value);
+    }
+
+    function prevPage() {
+        setThePage(page - 1);
+    }
+
+    function nextPage() {
+        setThePage(page + 1);
+    }
+
+    function totalPage() {
+        return Math.ceil(rowTable.length / dataPerPage)
+    }
 
     function toastUp() {
         setShowToast(true);
@@ -152,7 +210,10 @@ function Car (props) {
         e.preventDefault()
         axios.get(`/cars?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
         .then(({ data }) =>{
-            setRowTable(data.Cars ? [...data.Cars] : [])
+            const output = _.get(data, 'Cars', []); 
+            setRowTable(output)
+            setDataPage(output, 1, Math.ceil(output.length / dataPerPage));
+            setPage(1);
         })
         .catch(err => {
             setTextToast(err.response.data.message)
@@ -182,7 +243,11 @@ function Car (props) {
         axios.get('/cars', { headers: { token: localStorage.getItem('token')}})
         .then(({data}) => {
             if(data.Cars){
-                setRowTable(data.Cars)
+                const output = _.get(data, 'Cars', []); 
+
+                setRowTable(output)
+                setDataPage(output, 1, Math.ceil(output.length / dataPerPage));
+                setPage(1);
             }
         })
         .catch(err =>{
@@ -240,7 +305,29 @@ function Car (props) {
                                 </Col>
                             </Row>
                         </Form>
-                
+
+                        <Row className='d-flex justify-content-center'>
+                            <ButtonToolbar>
+                                <ButtonGroup>
+                                    <Button disabled={page === 1} variant='outline-primary' onClick={prevPage}><i className='fas fa-angle-left'></i> Previous</Button>
+                                </ButtonGroup>
+                                <InputGroup className='mx-2'>
+                                    <FormControl
+                                        type='number'
+                                        placeholder='Page'
+                                        onChange={onChangePagination}
+                                        value={page}
+                                    />
+                                    <InputGroup.Append>
+                                        <InputGroup.Text>/ {totalPage()}</InputGroup.Text>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                                <ButtonGroup>
+                                    <Button disabled={page === totalPage()} onClick={nextPage}>Next <i className='fas fa-angle-right'></i></Button>
+                                </ButtonGroup>
+                            </ButtonToolbar>
+                        </Row>
+
                         <div className='shadow-sm mt-3' style={{ overflowX: 'scroll' }}>
                             <Table striped bordered hover>
                                 <thead>
@@ -252,12 +339,12 @@ function Car (props) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    { rowTable.map( (row, index) => {
+                                    { pageDataRow.map( (row, index) => {
                                         return <RowTable 
                                         value={ row } 
                                         imageLink={setImageLink} 
-                                        index={index} 
-                                        key={ index } 
+                                        index={page > 0 ? index + (page - 1)*dataPerPage : index} 
+                                        key={ index + (page - 1)*dataPerPage } 
                                         showImage={(e) => setModalImage(e)}//setModalImage} 
                                         key_model={ Object.keys(stateType) } 
                                         edit={ editData } 
