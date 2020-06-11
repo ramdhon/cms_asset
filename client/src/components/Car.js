@@ -57,7 +57,7 @@ function Car (props) {
         }
 
         const start = index * dataPerPage;
-        const end = currentPage === totalPageValue ? totalPageValue : currentPage * dataPerPage;
+        const end = currentPage === totalPageValue ? data.length : currentPage * dataPerPage;
         const sliced = _.slice(data, start, end);
 
         setPageDataRow(sliced);
