@@ -2,13 +2,11 @@ const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
 
-const Log = require('../models/Log');
-
 function log(...args) {
   const now = new Date();
   const momentFormat = 'MMM-DD-YYYY, HH:mm:ss';
 
-  const logDir = path.join(__dirname, './logs');
+  const logDir = path.join(__dirname, '../logs');
   const logFilename = moment(now).format('MMMM-DD-YYYY') + '.dat';
   const logFileDir = path.join(logDir, logFilename);
 
@@ -26,20 +24,20 @@ function log(...args) {
   const printoutlog = `[${moment(now).format(momentFormat)}]:\t${args.join(' ')}`;
 
   console.log(printoutlog);
-
   logs.push(printoutlog);
-  fs.writeFileSync(logFileDir, logs.join(delimiter));
 
-  Log.create({ args: printoutlog, created: new Date() })
-    .then(newArgs => {
-      console.log(`[${moment(new Date()).format(momentFormat)}][LOC]:\t[SUC] Saved the log.`, newArgs._id);
-    })
-    .catch(err => {
-      const errorStatus = '[ERROR saving log on the cloud]'
-      console.log(`[${moment(new Date()).format(momentFormat)}][LOC]:\t[ERR] Error saving the log.`, err);
-      logs.push(printoutlog + ` ${errorStatus}`);
-      fs.writeFileSync(logFileDir, logs.join(delimiter));
-    })
+  let flagObj = false;
+  args.forEach(arg => {
+    if (typeof arg === 'object') {
+      flagObj = true;
+    }
+  })
+  if (flagObj) {
+    console.log(args);
+    logs.push(JSON.stringify(args));
+  }
+
+  fs.writeFileSync(logFileDir, logs.join(delimiter));
 }
 
 module.exports = log;

@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors')
+const cors = require('cors');
+const path = require('path');
 const app = express();
 const { PORT = 3000, COMPANY } = process.env;
 const router = require('./routes');
@@ -23,7 +24,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-app.use('/uploads',express.static('uploads'));
+app.use('/logs', express.static(path.join(__dirname, 'logs')));
+app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 
 app.get('/', (req, res, next) => {
     res.json({ message: `Welcome to ${COMPANY}` });
