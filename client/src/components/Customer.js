@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap';
+import { Container, Table, Button, Row, Col, Modal, Form, Spinner, ButtonToolbar, ButtonGroup, InputGroup, FormControl } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import Calendar from 'react-calendar';
+import _ from 'lodash';
 
 import RowTable from './RowTableModelCustomer';
 import axios from '../api/database';
@@ -25,6 +26,10 @@ function Customer (props) {
     const [ rentItemId, setRentItemId] = useState('');
     
     const [ validated, setValidated] = useState(false);
+
+    const dataPerPage = 5;
+    const [ page, setPage ] = useState(1);
+    const [ pageDataRow, setPageDataRow ] = useState([]);
 
     const [ selectedItem, setSelectedItem ] = useState({});
     const [ selectedRow, setSelectedRow ] = useState({});
@@ -53,6 +58,59 @@ function Customer (props) {
     const [ textToast, setTextToast ] = useState('');
     const [ statusToast, setStatusToast ] = useState(false);
     const [ showToast, setShowToast ] = useState(false);
+
+    function setDataPage(data = [...rowTable], currentPage = page, totalPageValue = totalPage()) {
+        const index = currentPage - 1;
+
+        if (index < 0) {
+            return;
+        }
+
+        if (index > totalPageValue) {
+            return;
+        }
+
+        const start = index * dataPerPage;
+        const end = currentPage === totalPageValue ? data.length : currentPage * dataPerPage;
+        const sliced = _.slice(data, start, end);
+
+        setPageDataRow(sliced);
+    }
+
+    function setThePage(page) {
+        const totalPageValue = totalPage();
+        
+        if (page < 0) {
+            return setPage(1);
+        }
+
+        if (page === 0) {
+            return setPage(1);
+        }
+        
+        if (page > totalPageValue) {
+            return setPage(totalPageValue);
+        }
+        
+        setPage(page);
+        setDataPage(undefined, page);
+    }
+    
+    function onChangePagination(e) {
+        setThePage(e.target.value);
+    }
+
+    function prevPage() {
+        setThePage(page - 1);
+    }
+
+    function nextPage() {
+        setThePage(page + 1);
+    }
+
+    function totalPage() {
+        return Math.ceil(rowTable.length / dataPerPage)
+    }
 
     function toastUp() {
         setShowToast(true);
@@ -436,6 +494,28 @@ function Customer (props) {
                                 </Col>
                             </Row>
                         </Form>
+
+                        <Row className='d-flex justify-content-center'>
+                            <ButtonToolbar>
+                                <ButtonGroup>
+                                    <Button disabled={page === 1} variant='outline-primary' onClick={prevPage}><i className='fas fa-angle-left'></i> Previous</Button>
+                                </ButtonGroup>
+                                <InputGroup className='mx-2'>
+                                    <FormControl
+                                        type='number'
+                                        placeholder='Page'
+                                        onChange={onChangePagination}
+                                        value={page}
+                                    />
+                                    <InputGroup.Append>
+                                        <InputGroup.Text>/ {totalPage()}</InputGroup.Text>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                                <ButtonGroup>
+                                    <Button disabled={page === totalPage()} onClick={nextPage}>Next <i className='fas fa-angle-right'></i></Button>
+                                </ButtonGroup>
+                            </ButtonToolbar>
+                        </Row>
                 
                         <div className='shadow-sm mt-3' style={{ overflowX: 'scroll' }}>
                             <Table striped bordered hover>
@@ -448,7 +528,7 @@ function Customer (props) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    { rowTable.map( (row, index) => {
+                                    { pageDataRow.map( (row, index) => {
                                         return <RowTable 
                                         value={ row } 
                                         imageLink={setImageLink} 
