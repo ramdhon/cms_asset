@@ -2,10 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const invoiceSchema = new Schema({
   invoiceNo: { type: String },
-  printDate: { type: Date },
+  issueDate: { type: Date },
   finalDiscount: { type: Number },
   delivery: { type: Number },
   otherExpenses: { type: String },
+  employeeName: { type: String },
+  picName: { type: String },
+  address: { type: String },
+  bankInfo: { type: String },
   //sulap-add-models
   //please do not delete comment above
   created: {
