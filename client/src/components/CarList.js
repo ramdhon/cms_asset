@@ -55,7 +55,7 @@ function CarList (props) {
             return;
         }
 
-        if (index > totalPageValue) {
+        if (index > totalPageValue - 1) {
             return;
         }
 
@@ -68,17 +68,23 @@ function CarList (props) {
 
     function setThePage(page) {
         const totalPageValue = totalPage();
-        
+
         if (page < 0) {
-            return setPage(1);
+            setPage(1);
+            setDataPage(undefined, 1);
+            return;
         }
 
         if (page === 0) {
-            return setPage(1);
+            setPage(1);
+            setDataPage(undefined, 1);
+            return;
         }
         
         if (page > totalPageValue) {
-            return setPage(totalPageValue);
+            setPage(totalPageValue);
+            setDataPage(undefined, totalPageValue);
+            return;
         }
         
         setPage(page);
