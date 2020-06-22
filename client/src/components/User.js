@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Button, Row, Col, Modal, Form, Spinner } from 'react-bootstrap';
+import { Container, Table, Button, Row, Col, Modal, Form, Spinner, ButtonToolbar, ButtonGroup, InputGroup, FormControl } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import RowTable from './RowTableModelUser';
 import axios from '../api/database';
@@ -28,6 +29,10 @@ function User (props) {
 
     const [ validated, setValidated] = useState('');
     
+    const dataPerPage = 5;
+    const [ page, setPage ] = useState(1);
+    const [ pageDataRow, setPageDataRow ] = useState([]);
+
     const [ modalImage, setModalImage ] = useState(false);
     const [ imageLink, setImageLink ] = useState('');
     
@@ -42,6 +47,65 @@ function User (props) {
     const [ textToast, setTextToast ] = useState('');
     const [ statusToast, setStatusToast ] = useState(false);
     const [ showToast, setShowToast ] = useState(false);
+
+    function setDataPage(data = [...rowTable], currentPage = page, totalPageValue = totalPage()) {
+        const index = currentPage - 1;
+
+        if (index < 0) {
+            return;
+        }
+
+        if (index > totalPageValue - 1) {
+            return;
+        }
+
+        const start = index * dataPerPage;
+        const end = currentPage === totalPageValue ? data.length : currentPage * dataPerPage;
+        const sliced = _.slice(data, start, end);
+
+        setPageDataRow(sliced);
+    }
+
+    function setThePage(page) {
+        const totalPageValue = totalPage();
+
+        if (page < 0) {
+            setPage(1);
+            setDataPage(undefined, 1);
+            return;
+        }
+
+        if (page === 0) {
+            setPage(1);
+            setDataPage(undefined, 1);
+            return;
+        }
+        
+        if (page > totalPageValue) {
+            setPage(totalPageValue);
+            setDataPage(undefined, totalPageValue);
+            return;
+        }
+        
+        setPage(page);
+        setDataPage(undefined, page);
+    }
+    
+    function onChangePagination(e) {
+        setThePage(e.target.value);
+    }
+
+    function prevPage() {
+        setThePage(page - 1);
+    }
+
+    function nextPage() {
+        setThePage(page + 1);
+    }
+
+    function totalPage() {
+        return Math.ceil(rowTable.length / dataPerPage)
+    }
 
     function toastUp() {
         setShowToast(true);
@@ -210,7 +274,9 @@ function User (props) {
         e.preventDefault()
         axios.get(`/admin/users/?search=${search}`, { headers:{ token:localStorage.getItem('token')}})
         .then(({ data }) =>{
-            setRowTable(data.users ? [...data.users] : [])
+            setRowTable(data.users ? [...data.users] : []);
+            setDataPage(data.users, 1, Math.ceil(data.users.length / dataPerPage));
+            setPage(1);
         })
         .catch(err => {
             setTextToast(err.response.data.message)
@@ -240,7 +306,9 @@ function User (props) {
         axios.get('/admin/users', { headers: { token: localStorage.getItem('token')}})
         .then(({data}) => {
             if(data.users){
-                setRowTable(data.users)
+                setRowTable(data.users);
+                setDataPage(data.users, 1, Math.ceil(data.users.length / dataPerPage));
+                setPage(1);
             }
         })
         .catch(err =>{
@@ -319,6 +387,28 @@ function User (props) {
                             </Row>
                         </Form>
                 
+                        <Row className='d-flex justify-content-center'>
+                            <ButtonToolbar>
+                                <ButtonGroup>
+                                    <Button disabled={page === 1} variant='outline-primary' onClick={prevPage}><i className='fas fa-angle-left'></i> Previous</Button>
+                                </ButtonGroup>
+                                <InputGroup className='mx-2'>
+                                    <FormControl
+                                        type='number'
+                                        placeholder='Page'
+                                        onChange={onChangePagination}
+                                        value={page}
+                                    />
+                                    <InputGroup.Append>
+                                        <InputGroup.Text>/ {totalPage()}</InputGroup.Text>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                                <ButtonGroup>
+                                    <Button disabled={page === totalPage()} onClick={nextPage}>Next <i className='fas fa-angle-right'></i></Button>
+                                </ButtonGroup>
+                            </ButtonToolbar>
+                        </Row>
+
                         <div className='shadow-sm mt-3' style={{ overflowX: 'scroll' }}>
                             <Table striped bordered hover>
                                 <thead>
