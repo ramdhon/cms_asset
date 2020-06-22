@@ -275,6 +275,8 @@ function CarList (props) {
                         )
                     });
                     setRowTable(tmp);
+                    setDataPage(tmp, 1, Math.ceil(tmp.length / dataPerPage));
+                    setPage(1);
                 }
             })
             .catch(err =>{
@@ -325,6 +327,8 @@ function CarList (props) {
                     return el;
                 })
                 setRowTable(tmp);
+                setDataPage(tmp, 1, Math.ceil(tmp.length / dataPerPage));
+                setPage(1);
             }
         })
         .catch(err =>{

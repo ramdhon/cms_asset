@@ -317,6 +317,8 @@ function Customer (props) {
                     )
                 });
                 setRowTable(tmp);
+                setDataPage(tmp, 1, Math.ceil(tmp.length / dataPerPage));
+                setPage(1);
             })
             .catch(err => {
                 setTextToast(err.response.data.message)
@@ -362,6 +364,8 @@ function Customer (props) {
                         return el;
                     })
                     setRowTable(tmp);
+                    setDataPage(tmp, 1, Math.ceil(tmp.length / dataPerPage));
+                    setPage(1);
                 }
             })
             .catch(err =>{
