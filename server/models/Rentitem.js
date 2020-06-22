@@ -19,7 +19,7 @@ const rentitemSchema = new Schema({
         type: Date,
     },
     refId: {
-        required: [true, 'user must be logged in'],
+        // required: [true, 'user must be logged in'],
         type: Schema.Types.ObjectId, ref: 'User'
     },
 });
