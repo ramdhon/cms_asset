@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "NODE_ENV=development nodemon -L app.js",
+    "start": "node ./bin/httpServer.js",
+    "dev": "NODE_ENV=development nodemon ./bin/httpServer.js",
     "test": "NODE_ENV=test mocha --exit"
   },
   "keywords": [],
