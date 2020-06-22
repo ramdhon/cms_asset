@@ -430,7 +430,7 @@ function CarList (props) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    { rowTable.map( (row, index) => {
+                                    { pageDataRow.map( (row, index) => {
                                         return <RowTable 
                                         value={ row } 
                                         imageLink={setImageLink} 
