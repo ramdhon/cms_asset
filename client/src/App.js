@@ -13,13 +13,6 @@ import store from './store';
 import { setUser } from './store/actions';
 
 function App() {
-  const setHookUser = useState(null)[1];
-  
-  const unsubscribe = store.subscribe(() => {
-    const storeState = store.getState();
-    setHookUser(storeState.user);
-  })
-  
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -41,7 +34,6 @@ function App() {
     } else {
       store.dispatch(setUser(null));
     }
-    return unsubscribe;
   }, [])
 
   return (
